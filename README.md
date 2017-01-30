@@ -3,4 +3,4 @@
 # SEP Server
 
 ## Using the Server
-Since we are deplying using Heroku, you will not have to run the server locally. The only time you should run it locally is for development and testing. For testing the api, using postman is the way to go.
+Since we are deploying using Heroku, you will not have to run the server locally. The only time you should run it locally is for development and testing. For testing the api, using postman is the way to go.
