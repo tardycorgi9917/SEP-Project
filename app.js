@@ -4,16 +4,6 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var mysql = require('mysql')
-
-var connection = mysql.createConnection({
-  host: 'localhost:3306',
-  database: 'sep_db',
-  user: 'root',
-  password: 'root'
-})
-
-connection.connect()
 
 var index = require('./routes/index');
 var users = require('./routes/users');
