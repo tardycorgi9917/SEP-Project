@@ -5,7 +5,11 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-console.log(process.env.NODE_ENV)
+if(process.env.NODE_ENV === "production"){
+  console.log("***********************************************************")
+  console.log("WARNING: YOU ARE IN PRODUCTION MODE! ALL CHANGES WILL AFFECT PRODUCTION DATABASE")
+  console.log("***********************************************************")
+}
 
 // add database setup module
 var db = require('./database/db.js')
