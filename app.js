@@ -5,6 +5,8 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+console.log(process.env.NODE_ENV)
+
 // add database setup module
 var db = require('./database/db.js')
 

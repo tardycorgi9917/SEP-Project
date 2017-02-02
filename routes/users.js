@@ -8,7 +8,14 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/create-user', function(req, res, next) {
- 
+  exports.getAll = function(done) {
+    db.get().query('SELECT * FROM users', function (err, rows) {
+      if (err) return done(err)
+      res.send(rows)
+      done(null, rows)
+    })
+  }
+
  res.send("route working");
 
 });
