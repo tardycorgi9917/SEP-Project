@@ -1,6 +1,7 @@
 var express = require('express');
-var router = express.Router();
+var user = require('../models/users.js');
 var db = require('./../database/db.js')
+var router = express.Router();
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -8,16 +9,8 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/create-user', function(req, res, next) {
-  exports.getAll = function(done) {
-    db.get().query('SELECT * FROM users', function (err, rows) {
-      if (err) return done(err)
-      res.send(rows)
-      done(null, rows)
-    })
-  }
-
- res.send("route working");
-
+  user.create("thomas", "karatzas", "thomas.karatzas@mail.mcgill.ca", function(){});
+  res.send("route working");
 });
 
 module.exports = router;
