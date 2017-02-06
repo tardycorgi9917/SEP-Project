@@ -22,13 +22,18 @@ db.connect(db, function(err) {
     process.exit(1)
   } else {
     console.log("DB CONNECTED");
+
+    //if(args.length && args[0] == "DB=up"){
+    if(true){
+      db.up();
+      process.exit(0);
+    } 
+    else if(args.length && args[0] == "DB=down"){
+      db.down();
+      process.exit(0);
+    }
   }
 })
-
-if(args.length && args[0] == "DB=up"){
-  db.up();
-  process.exit(0);
-}
 
 var index = require('./routes/index');
 var users = require('./routes/users');

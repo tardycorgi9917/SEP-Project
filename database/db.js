@@ -29,32 +29,35 @@ db.get = function() {
 
 db.up = function(done) {
   console.log("****************************BEGINNING MIGRATION********************************");
+
   var pool = state.pool;
   if(!pool) return;
 
   for (var table in schema) {
     if (schema.hasOwnProperty(table)) {
-      var query = "CREATE TABLE IF NOT EXISTS `" + schema[table].name  + "` (";
+      var qstr = "CREATE TABLE IF NOT EXISTS `" + schema[table].name  + "` (";
       for(var field in schema[table].fields){
         if (schema[table].fields.hasOwnProperty(field)) {
-           query += field + " ";
-           query += schema[table].fields[field];
-           query += ", ";
+           qstr += "`" + field + "` "; // column name
+           qstr += schema[table].fields[field]; // column options
+           qstr += ", ";
         }
       }
-      query = query.slice(0, -2); // remove last comma
-      query += ")";
-      console.log(query);
+
+      qstr = qstr.slice(0, -2); // remove last comma
+      qstr += ");";
+      console.log(qstr);
+
+      pool.query(qstr, function(err, result) {
+        var i = 0;
+        if(err){
+          console.log("it fucked up " + err);
+        } else {
+          console.log("Table " + schema[table].name +" created Succesfully");
+        }
+      })
     }
   }
-
-  // pool.query("", function(err, result) {
-  //       if(err){
-  //         console.log(err);
-  //       } else {
-  //         console.log("Table Uploaded Succesfully");
-  //       }
-  //     })
 
   console.log("****************************FINISHED MIGRATION********************************");
 }
@@ -64,7 +67,20 @@ db.down = function(done){
   var pool = state.pool;
   if(!pool) return;
 
+  for (var table in schema) {
+    if (schema.hasOwnProperty(table)) {
+      var query = "DROP TABLE `" + schema[table].name + "`;";
+      pool.query(query, [], function(err, result) {
+        if(err){
+          console.log("it fucked up " + err);
+        } else {
+          console.log("Table" + schema[table].name +" Removed Succesfully");
+        }
+      })
+    }
+  }
 
+  console.log("****************************FINISHED DROPPING TABLES********************************");
 }
 
 
