@@ -1,8 +1,9 @@
+var env = process.env.NODE_ENV || 'development';
 var mysql = require('mysql')
   , async = require('async')
+  , config = require('./config')[env]
+  , schema = require('./schema');
 
-var env = process.env.NODE_ENV || 'development';
-var config = require('./config')[env];
 var db = {}
 
 var state = {
@@ -31,16 +32,29 @@ db.up = function(done) {
   var pool = state.pool;
   if(!pool) return;
 
-  // Add SQL for Creating tables here! Below is an example for the users table
-  pool.query("", function(err, result) {
-    if(err){
-      console.log(err);
-    } else {
-      console.log("Table Uploaded Succesfully");
+  for (var table in schema) {
+    if (schema.hasOwnProperty(table)) {
+      var query = "CREATE TABLE IF NOT EXISTS `" + schema[table].name  + "` (";
+      for(var field in schema[table].fields){
+        if (schema[table].fields.hasOwnProperty(field)) {
+           query += field + " ";
+           query += schema[table].fields[field];
+           query += ", ";
+        }
+      }
+      query = query.slice(0, -2); // remove last comma
+      query += ")";
+      console.log(query);
     }
-  })
+  }
 
-  // End of example
+  // pool.query("", function(err, result) {
+  //       if(err){
+  //         console.log(err);
+  //       } else {
+  //         console.log("Table Uploaded Succesfully");
+  //       }
+  //     })
 
   console.log("****************************FINISHED MIGRATION********************************");
 }
@@ -50,13 +64,6 @@ db.down = function(done){
   var pool = state.pool;
   if(!pool) return;
 
-  pool.query("", function(err, result) {
-    if(err){
-      console.log(err);
-    } else {
-      console.log("Table Uploaded Succesfully");
-    }
-  })
 
 }
 
