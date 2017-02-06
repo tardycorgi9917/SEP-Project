@@ -3,13 +3,14 @@ var mysql = require('mysql')
 
 var env = process.env.NODE_ENV || 'development';
 var config = require('./config')[env];
+var db = {}
 
 var state = {
   pool: null,
   mode: null,
 }
 
-exports.connect = function(mode, done) {
+db.connect = function(mode, done) {
   state.pool = mysql.createPool({
     host: config.database.host,
     user: config.database.user,
@@ -21,30 +22,43 @@ exports.connect = function(mode, done) {
   done()
 }
 
-exports.get = function() {
+db.get = function() {
   return state.pool
 }
 
-exports.fixtures = function(data) {
-  var pool = state.pool
-  if (!pool) return done(new Error('Missing database connection.'))
+db.up = function(done) {
+  console.log("****************************BEGINNING MIGRATION********************************");
+  var pool = state.pool;
+  if(!pool) return;
 
-  var names = Object.keys(data.tables)
-  async.each(names, function(name, cb) {
-    async.each(data.tables[name], function(row, cb) {
-      var keys = Object.keys(row)
-        , values = keys.map(function(key) { return "'" + row[key] + "'" })
+  // Add SQL for Creating tables here! Below is an example for the users table
+  pool.query("", function(err, result) {
+    if(err){
+      console.log(err);
+    } else {
+      console.log("Table Uploaded Succesfully");
+    }
+  })
 
-      pool.query('INSERT INTO ' + name + ' (' + keys.join(',') + ') VALUES (' + values.join(',') + ')', cb)
-    }, cb)
-  }, done)
+  // End of example
+
+  console.log("****************************FINISHED MIGRATION********************************");
 }
 
-exports.drop = function(tables, done) {
-  var pool = state.pool
-  if (!pool) return done(new Error('Missing database connection.'))
+db.down = function(done){
+  console.log("****************************DROPPING ALL TABLES********************************");
+  var pool = state.pool;
+  if(!pool) return;
 
-  async.each(tables, function(name, cb) {
-    pool.query('DELETE * FROM ' + name, cb)
-  }, done)
+  pool.query("", function(err, result) {
+    if(err){
+      console.log(err);
+    } else {
+      console.log("Table Uploaded Succesfully");
+    }
+  })
+
 }
+
+
+module.exports = db;

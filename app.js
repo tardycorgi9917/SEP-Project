@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var args = process.argv.slice(2);
 
 if(process.env.NODE_ENV === "production"){
   console.log("***********************************************************")
@@ -23,6 +24,11 @@ db.connect(db, function(err) {
     console.log("DB CONNECTED");
   }
 })
+
+if(args.length && args[0] == "DB=up"){
+  db.up();
+  process.exit(0);
+}
 
 var index = require('./routes/index');
 var users = require('./routes/users');
