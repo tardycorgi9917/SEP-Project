@@ -28,7 +28,11 @@ var config = {
 };
 module.exports = config;
 
+
 where development is your local DB and production will have to credentials for the AWS MySQL server. 
 Choosing between development and production will be chosen using environment variables.
+
+In order to push the schema, run:  npm start DB=up
+In order to bring down the schema, run:  npm start DB=down
 
 NOTE: It seems that the default MySQL port it looks for os 3306. If yours is different, simply add a field in the array.
