@@ -19,10 +19,10 @@ var config = {
     },
     production: {
         database: {
-            host: '',
-            user: '',
-            password: '',
-            db:    ''
+            host: 'scuntprod.coua71lt8vnx.us-west-2.rds.amazonaws.com:3306',
+            user: 'thomask',
+            password: 'SEPecse428',
+            db:    'scuntProd'
         }
     }
 };

@@ -1,21 +1,49 @@
-var data = {
-  tables: {
-    users: [
-     {first_name: "John"},
-     {first_name: "Peter"},
-    ],
-    cars: [
-      {id: 1, brand: "Jeep", model: "Cherokee", owner_id: 2},
-      {id: 2, brand: "BMW", model: "X5", owner_id: 2},
-      {id: 3, brand: "Volkswagen", model: "Polo", owner_id: 1},
-    ],
-  },
+var schema = require('./schema');
+var db = require('./db');
+var seed = {};
+
+seed.up = function(done) {
+  for (var table in schema) {
+    if (schema.hasOwnProperty(table)) {
+      var qstr = "CREATE TABLE IF NOT EXISTS `" + schema[table].name  + "` (";
+      for(var field in schema[table].fields){
+        if (schema[table].fields.hasOwnProperty(field)) {
+           qstr += "`" + field + "` "; // column name
+           qstr += schema[table].fields[field]; // column options
+           qstr += ", ";
+        }
+      }
+
+      qstr = qstr.slice(0, -2); // remove last comma
+      qstr += ");";
+
+      db.get().query(qstr, [], function(err, result) {
+        var i = 0;
+        if(err){
+          console.log("it fucked up " + err);
+        } else {
+          console.log("Table " + schema[table].name +" created Succesfully");
+        }
+        done();
+      })
+    }
+  }
 }
 
-var db = require('./db')
-db.connect(db.MODE_PRODUCTION, function() {
-  db.fixtures(data, function(err) {
-    if (err) return console.log(err)
-    console.log('Data has been loaded...')
-  })
-})
+seed.down = function(done){
+  for (var table in schema) {
+    if (schema.hasOwnProperty(table)) {
+      var query = "DROP TABLE `" + schema[table].name + "`;";
+      db.get().query(query, [], function(err, result) {
+        if(err){
+          console.log("it fucked up " + err);
+        } else {
+          console.log("Table " + schema[table].name +" Removed Succesfully");
+        }
+         done();
+      })
+    }
+  }
+}
+
+module.exports = seed;

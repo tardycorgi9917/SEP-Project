@@ -14,6 +14,7 @@ if(process.env.NODE_ENV === "production"){
 
 // add database setup module
 var db = require('./database/db.js')
+var seed = require('./database/seeders.js');
 
 // Connect to database on start
 db.connect(db, function(err) {
@@ -22,18 +23,23 @@ db.connect(db, function(err) {
     process.exit(1)
   } else {
     console.log("DB CONNECTED");
-
-    //if(args.length && args[0] == "DB=up"){
-    if(true){
-      db.up();
-      process.exit(0);
-    } 
-    else if(args.length && args[0] == "DB=down"){
-      db.down();
-      process.exit(0);
-    }
   }
 })
+
+if(args.length && args[0] == "DB=up"){
+  console.log("****************************BEGINNING MIGRATION********************************");
+  seed.up(function() {
+    console.log("****************************FINISHED MIGRATION********************************");
+    process.exit(0);
+  });
+} 
+else if(args.length && args[0] == "DB=down"){
+  console.log("****************************DROPPING ALL TABLES********************************");
+  seed.down(function() {
+    console.log("****************************FINISHED DROPPING TABLES********************************");
+    process.exit(0);
+  });
+}
 
 var index = require('./routes/index');
 var users = require('./routes/users');
