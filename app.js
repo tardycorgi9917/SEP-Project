@@ -27,6 +27,7 @@ db.connect(db, function(err) {
 })
 
 if(args.length && args[0] == "DB=up"){
+// if(true){
   console.log("****************************BEGINNING MIGRATION********************************");
   seed.up(function() {
     console.log("****************************FINISHED MIGRATION********************************");

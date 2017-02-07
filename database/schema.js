@@ -3,7 +3,7 @@ var schema = {};
 schema.users = {
     "name": "users",
     "fields" : {
-        "id" : "int(11) NOT NULL AUTO_INCREMENT",
+        "id" : "int(11) NOT NULL",
         "firstName": "varchar(200) NOT NULL",
         "lastName" : "varchar(200) NOT NULL",
         "email" : "varchar(200) NOT NULL",
@@ -14,16 +14,15 @@ schema.users = {
         "updatedAt" : "datetime NOT NULL"
     },
     "constraints": [
-        "PRIMARY KEY (id)"
+        "ALTER TABLE `users` ADD PRIMARY KEY (id)",
+        "ALTER TABLE `users` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT"
     ],
-    "post" : [
-    ]
 };
 
 schema.teams = {
     "name": "teams",
     "fields": {
-        "id": "int(11) NOT NULL AUTO_INCREMENT",
+        "id": "int(11) NOT NULL",
         "name": "varchar(50) NOT NULL",
         "points": "int(10) NOT NULL",
         "scuntId": "int(11) NOT NULL",
@@ -34,14 +33,12 @@ schema.teams = {
         "PRIMARY KEY (id)",
         "FOREIGN KEY (scunt) REFERENCES scunt(id)"
     ],
-    "post" : [
-    ]
 };
 
 schema.tasks = {
     "name": "tasks",
     "fields": {
-        "id": "int(11) NOT NULL AUTO_INCREMENT",
+        "id": "int(11) NOT NULL",
         "name": "varchar(50) NOT NULL",
         "description": "varchar(500)",
         "points": "int(10) NOT NULL",
@@ -53,14 +50,12 @@ schema.tasks = {
         "PRIMARY KEY (id)",
         "FOREIGN KEY (scuntId) REFERENCES scunt(id)"
     ],
-    "post" : [
-    ]
 };
 
 schema.scunt = {
     "name": "scunt",
     "fields": {
-        "id": "int(11) NOT NULL AUTO_INCREMENT",
+        "id": "int(11) NOT NULL",
         "name" : "varchar(50) NOT NULL",
         "description" : "varchar(500) NOT NULL",
         "startTime": "datetime",
@@ -71,8 +66,6 @@ schema.scunt = {
     "constraints": [
         "PRIMARY KEY (id)"
     ],
-    "post" : [
-    ]
 };
 
 schema.teamUserRel = {
@@ -90,8 +83,6 @@ schema.teamUserRel = {
         "FOREIGN KEY (userId) REFERENCES users(id)",
         "CONSTRAINT teamUserId UNIQUE (teamId,userId)"
     ],
-    "post" : [
-    ]
 };
 
 schema.scuntUserRel = {
@@ -108,8 +99,6 @@ schema.scuntUserRel = {
         "FOREIGN KEY (userId) REFERENCES users(id)",
         "CONSTRAINT scuntUserId UNIQUE (scuntId,userId)"
     ],
-    "post" : [
-    ]
 };
 
 
