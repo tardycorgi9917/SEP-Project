@@ -13,12 +13,12 @@ schema.users = {
         "createdAt" : "datetime NOT NULL",
         "updatedAt" : "datetime NOT NULL"
     },
-    "constraints": {
+    "constraints": [
         "PRIMARY KEY (id)"
-    },
+    ],
     "post" : [
     ]
-}
+};
 
 schema.teams = {
     "name": "teams",
@@ -30,13 +30,13 @@ schema.teams = {
         "createdAt" : "datetime NOT NULL",
         "updatedAt" : "datetime NOT NULL"
     },
-    "constraints": {
+    "constraints": [
         "PRIMARY KEY (id)",
         "FOREIGN KEY (scunt) REFERENCES scunt(id)"
-    },
+    ],
     "post" : [
     ]
-}
+};
 
 schema.tasks = {
     "name": "tasks",
@@ -49,13 +49,13 @@ schema.tasks = {
         "createdAt" : "datetime NOT NULL",
         "updatedAt" : "datetime NOT NULL"
     },
-    "constraints": {
+    "constraints": [
         "PRIMARY KEY (id)",
         "FOREIGN KEY (scuntId) REFERENCES scunt(id)"
-    },
+    ],
     "post" : [
     ]
-}
+};
 
 schema.scunt = {
     "name": "scunt",
@@ -68,12 +68,12 @@ schema.scunt = {
         "createdAt" : "datetime NOT NULL",
         "updatedAt" : "datetime NOT NULL"
     },
-    "constraints": {
+    "constraints": [
         "PRIMARY KEY (id)"
-    },
+    ],
     "post" : [
     ]
-}
+};
 
 schema.teamUserRel = {
     "name": "teamUserRel",
@@ -86,15 +86,15 @@ schema.teamUserRel = {
         "createdAt" : "datetime NOT NULL",
         "updatedAt" : "datetime NOT NULL"
     },
-    "constraints": {
+    "constraints": [
         "PRIMARY KEY (id)",
         "FOREIGN KEY (teamId) REFERENCES teams(id)",
         "FOREIGN KEY (userId) REFERENCES users(id)",
         "CONSTRAINT teamUserId UNIQUE (teamId,userId)"
-    },
+    ],
     "post" : [
     ]
-}
+};
 
 schema.scuntUserRel = {
     "name": "scuntUserRel",
@@ -104,15 +104,15 @@ schema.scuntUserRel = {
         "createdAt" : "datetime NOT NULL",
         "updatedAt" : "datetime NOT NULL"
     },
-    "constraints": {
+    "constraints": [
         "PRIMARY KEY (id)",
         "FOREIGN KEY (scuntId) REFERENCES scunt(id)",
         "FOREIGN KEY (userId) REFERENCES users(id)",
         "CONSTRAINT scuntUserId UNIQUE (scuntId,userId)"
-    },
+    ],
     "post" : [
     ]
-}
+};
 
 
 
