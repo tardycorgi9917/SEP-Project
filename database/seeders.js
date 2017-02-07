@@ -16,9 +16,16 @@ seed.up = function(done) {
            qstr += ", ";
         }
       }
-
+      
+      for(var constraint in schema[table].constraints){
+        qstr += schema[table].constraints[constraint]; // constraint
+        qstr += ", ";
+      }
+      
       qstr = qstr.slice(0, -2); // remove last comma
       qstr += ");";
+
+
 
       db.get().query(qstr, [], function(err, result) { //query for table structure
         var i = 0;
@@ -28,15 +35,15 @@ seed.up = function(done) {
           console.log("Table " + schema[table].name +" created Succesfully");
         }
 
-        async.each(schema[table].constraints, function(constraint) {
-          db.get().query(constraint, [], function(err, result) { //query for table constraints
-            if(err){
-              console.log("it fucked up " + err);
-            } else {
-              console.log("Constraint '" + constraint +"' created Succesfully");
-            }
-          })
-        });
+        // async.each(schema[table].constraints, function(constraint) {
+        //   db.get().query(constraint, [], function(err, result) { //query for table constraints
+        //     if(err){
+        //       console.log("it fucked up " + err);
+        //     } else {
+        //       console.log("Constraint '" + constraint +"' created Succesfully");
+        //     }
+        //   })
+        // });
       })
     }
   }, done);

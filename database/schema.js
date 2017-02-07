@@ -3,7 +3,7 @@ var schema = {};
 schema.users = {
     "name": "users",
     "fields" : {
-        "id" : "int(11) NOT NULL",
+        "id" : "int(11) NOT NULL AUTO_INCREMENT",
         "firstName": "varchar(200) NOT NULL",
         "lastName" : "varchar(200) NOT NULL",
         "email" : "varchar(200) NOT NULL",
@@ -14,41 +14,7 @@ schema.users = {
         "updatedAt" : "datetime NOT NULL"
     },
     "constraints": [
-        "ALTER TABLE `users` ADD PRIMARY KEY (id)",
-        "ALTER TABLE `users` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT"
-    ],
-};
-
-schema.teams = {
-    "name": "teams",
-    "fields": {
-        "id": "int(11) NOT NULL",
-        "name": "varchar(50) NOT NULL",
-        "points": "int(10) NOT NULL",
-        "scuntId": "int(11) NOT NULL",
-        "createdAt" : "datetime NOT NULL",
-        "updatedAt" : "datetime NOT NULL"
-    },
-    "constraints": [
-        "PRIMARY KEY (id)",
-        "FOREIGN KEY (scunt) REFERENCES scunt(id)"
-    ],
-};
-
-schema.tasks = {
-    "name": "tasks",
-    "fields": {
-        "id": "int(11) NOT NULL",
-        "name": "varchar(50) NOT NULL",
-        "description": "varchar(500)",
-        "points": "int(10) NOT NULL",
-        "scuntId": "int(11) NOT NULL",
-        "createdAt" : "datetime NOT NULL",
-        "updatedAt" : "datetime NOT NULL"
-    },
-    "constraints": [
-        "PRIMARY KEY (id)",
-        "FOREIGN KEY (scuntId) REFERENCES scunt(id)"
+        "PRIMARY KEY (id)"
     ],
 };
 
@@ -68,6 +34,39 @@ schema.scunt = {
     ],
 };
 
+schema.teams = {
+    "name": "teams",
+    "fields": {
+        "id": "int(11) NOT NULL AUTO_INCREMENT",
+        "name": "varchar(50) NOT NULL",
+        "points": "int(10) NOT NULL",
+        "scuntId": "int(11) NOT NULL",
+        "createdAt" : "datetime NOT NULL",
+        "updatedAt" : "datetime NOT NULL"
+    },
+    "constraints": [
+        "PRIMARY KEY (id)",
+        "FOREIGN KEY (scuntId) REFERENCES scunt(id)"
+    ],
+};
+
+schema.tasks = {
+    "name": "tasks",
+    "fields": {
+        "id": "int(11) NOT NULL AUTO_INCREMENT",
+        "name": "varchar(50) NOT NULL",
+        "description": "varchar(500)",
+        "points": "int(10) NOT NULL",
+        "scuntId": "int(11) NOT NULL",
+        "createdAt" : "datetime NOT NULL",
+        "updatedAt" : "datetime NOT NULL"
+    },
+    "constraints": [
+        "PRIMARY KEY (id)",
+        "FOREIGN KEY (scuntId) REFERENCES scunt(id)"
+    ],
+};
+
 schema.teamUserRel = {
     "name": "teamUserRel",
     "fields": {
@@ -78,7 +77,6 @@ schema.teamUserRel = {
         "updatedAt" : "datetime NOT NULL"
     },
     "constraints": [
-        "PRIMARY KEY (id)",
         "FOREIGN KEY (teamId) REFERENCES teams(id)",
         "FOREIGN KEY (userId) REFERENCES users(id)",
         "CONSTRAINT teamUserId UNIQUE (teamId,userId)"
@@ -94,7 +92,6 @@ schema.scuntUserRel = {
         "updatedAt" : "datetime NOT NULL"
     },
     "constraints": [
-        "PRIMARY KEY (id)",
         "FOREIGN KEY (scuntId) REFERENCES scunt(id)",
         "FOREIGN KEY (userId) REFERENCES users(id)",
         "CONSTRAINT scuntUserId UNIQUE (scuntId,userId)"
