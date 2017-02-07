@@ -16,7 +16,8 @@ db.connect = function(mode, done) {
     host: config.database.host,
     user: config.database.user,
     password: config.database.password,
-    database: config.database.db
+    database: config.database.db,
+    multipleStatements: true
   }, function() {
     state.mode = mode
     done()
