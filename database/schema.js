@@ -7,7 +7,7 @@ schema.users = {
         "firstName": "varchar(200) NOT NULL",
         "lastName" : "varchar(200) NOT NULL",
         "email" : "varchar(200) NOT NULL",
-        "password" : "varchar(50) NOT NULL",
+        "password" : "varchar(255) NOT NULL",
         "phoneNumber" : "varchar(50)",
         "profilePicture" : "BLOB",
         "createdAt" : "datetime NOT NULL",
