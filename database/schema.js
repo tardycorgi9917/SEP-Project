@@ -78,9 +78,7 @@ schema.scunt = {
 schema.teamUserRel = {
     "name": "teamUserRel",
     "fields": {
-        // TODO foreign key to team id
         "teamId" : "int(11) NOT NULL",
-        // TODO foreign key to user id
         "userId" : "int(11) NOT NULL",
         "userType" : "varchar(50) NOT NULL",
         "createdAt" : "datetime NOT NULL",
