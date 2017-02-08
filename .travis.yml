@@ -1,3 +1,22 @@
 language: node_js
+
 node_js:
 - '6'
+
+services:
+  - mysql
+
+env:
+    - NODE_ENV=test
+
+before_install:
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS sep_test;'
+
+install:
+  - npm install
+
+test:
+  adapter: mysql2
+  database: sep_test
+  username: travis
+  encoding: utf8
