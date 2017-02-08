@@ -46,7 +46,7 @@ schema.teams = {
     },
     "constraints": [
         "PRIMARY KEY (id)",
-        "FOREIGN KEY (scuntId) REFERENCES scunt(id)"
+        "FOREIGN KEY (scuntId) REFERENCES scunt(id) ON DELETE CASCADE"
     ],
 };
 
@@ -63,7 +63,7 @@ schema.tasks = {
     },
     "constraints": [
         "PRIMARY KEY (id)",
-        "FOREIGN KEY (scuntId) REFERENCES scunt(id)"
+        "FOREIGN KEY (scuntId) REFERENCES scunt(id) ON DELETE CASCADE"
     ],
 };
 
@@ -77,8 +77,8 @@ schema.teamUserRel = {
         "updatedAt" : "datetime NOT NULL"
     },
     "constraints": [
-        "FOREIGN KEY (teamId) REFERENCES teams(id)",
-        "FOREIGN KEY (userId) REFERENCES users(id)",
+        "FOREIGN KEY (teamId) REFERENCES teams(id) ON DELETE CASCADE",
+        "FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE",
         "CONSTRAINT teamUserId UNIQUE (teamId,userId)"
     ],
 };
@@ -92,8 +92,8 @@ schema.scuntUserRel = {
         "updatedAt" : "datetime NOT NULL"
     },
     "constraints": [
-        "FOREIGN KEY (scuntId) REFERENCES scunt(id)",
-        "FOREIGN KEY (userId) REFERENCES users(id)",
+        "FOREIGN KEY (scuntId) REFERENCES scunt(id) ON DELETE CASCADE",
+        "FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE",
         "CONSTRAINT scuntUserId UNIQUE (scuntId,userId)"
     ],
 };
