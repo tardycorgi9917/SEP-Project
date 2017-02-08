@@ -6,10 +6,8 @@ node_js:
 services:
   - mysql
 
-env:
-    - NODE_ENV=test
-
 before_install:
+  - cp ./database/config.travis.js ./database/config.js
   - mysql -e 'CREATE DATABASE IF NOT EXISTS sep_test;'
 
 install:
