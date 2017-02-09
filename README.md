@@ -35,4 +35,4 @@ Choosing between development and production will be chosen using environment var
 In order to push the schema, run:  npm start DB=up
 In order to bring down the schema, run:  npm start DB=down
 
-NOTE: It seems that the default MySQL port it looks for os 3306. If yours is different, simply add a field in the array.
+NOTE: It seems that the default MySQL port it looks for os 3306. If yours is different, simply add a field in the array in the config file.
