@@ -27,12 +27,13 @@ describe('Database', function() {
       });
     });
   });
-});
 
-describe('Array', function() {
-  describe('#indexOf()', function() {
-    it('should return -1 when the value is not present', function() {
-      assert.equal(-1, [1,2,3].indexOf(4));
+  describe('Take down the schema and make sure DB is empty', function() {
+    it('It should remove all tables', function() {
+      seed.down();
+      db.get().query("SHOW TABLES", [], function(err, result){
+        assert.equal(result.length, 0);
+      });
     });
   });
 });
