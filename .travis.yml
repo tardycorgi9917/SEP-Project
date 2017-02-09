@@ -1,3 +1,23 @@
 language: node_js
+
 node_js:
 - '6'
+
+services:
+  - mysql
+
+before_install:
+  - cp ./database/config.travis.js ./database/config.js
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS sep_test;'
+
+install:
+  - npm install
+
+test:
+  adapter: mysql2
+  database: sep_test
+  username: travis
+  encoding: utf8
+
+script:
+    - npm test

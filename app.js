@@ -4,6 +4,43 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var args = process.argv.slice(2);
+
+if(process.env.NODE_ENV === "production"){
+  console.log("***********************************************************")
+  console.log("WARNING: YOU ARE IN PRODUCTION MODE! ALL CHANGES WILL AFFECT PRODUCTION DATABASE")
+  console.log("***********************************************************")
+}
+
+// add database setup module
+var db = require('./database/db.js')
+var seed = require('./database/seeders.js');
+
+// Connect to database on start
+db.connect(db, function(err) {
+  if (err) {
+    console.log('Unable to connect to MySQL.')
+    process.exit(1)
+  } else {
+    console.log("DB CONNECTED");
+  }
+})
+
+if(args.length && args[0] == "DB=up"){
+// if(true){
+  console.log("****************************BEGINNING MIGRATION********************************");
+  seed.up(function() {
+    console.log("****************************FINISHED MIGRATION********************************");
+    process.exit(0);
+  });
+} 
+else if(args.length && args[0] == "DB=down"){
+  console.log("****************************DROPPING ALL TABLES********************************");
+  seed.down(function() {
+    console.log("****************************FINISHED DROPPING TABLES********************************");
+    process.exit(0);
+  });
+}
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -14,8 +51,6 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
