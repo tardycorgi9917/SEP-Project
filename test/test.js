@@ -5,6 +5,7 @@ var seed = require("../database/seeders");
 describe('Database', function() {
   describe('schemaUp', function() {
     it('It should upload database schema is up', function() {
+      
       db.connect(db, function(err) {
         if (err) {
           console.log('Unable to connect to MySQL.')
@@ -14,10 +15,9 @@ describe('Database', function() {
         }
       })
 
-      db.get().query("", [], function(){
-        
+      db.get().query("SHOW TABLES", [], function(err, result){
+        assert.equal(result.length, 0);
       });
-      assert.equal(-1, [1,2,3].indexOf(4));
     });
   });
 });
