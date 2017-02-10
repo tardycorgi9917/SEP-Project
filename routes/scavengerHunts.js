@@ -1,15 +1,15 @@
 var express = require('express');
-//var user = require('../models/users.js');
-//var db = require('./../database/db.js')
+var scunt = require('../models/scavengerHunts');
+var db = require('./../database/db.js')
 var router = express.Router();
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  res.send('this is the users app');
+  res.send('this is the scunt app');
 });
 
 router.post('/create-ScavengerHunt', function(req, res, next) {
-  //user.create("thomas", "karatzas", "thomas.karatzas@mail.mcgill.ca", function(){});
+  scunt.create("frosh", "fresh meat", new Date(),new Date(), function(){});
   res.send("route working");
 });
 
