@@ -25,4 +25,4 @@ scunt.update = function(id , name, description, startTime, endTime, done){
 
 }
 
-module.exports = scavengerHunts;
+module.exports = scunt;
