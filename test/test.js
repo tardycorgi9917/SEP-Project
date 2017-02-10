@@ -32,7 +32,7 @@ describe('Database', function() {
     it('It should remove all tables', function() {
       seed.down(function() {
           db.get().query("SHOW TABLES", [], function(err, result){
-          assert.equal(result.length, 0);
+          assert.equal(result.length, 6);
         });
       });
     });
