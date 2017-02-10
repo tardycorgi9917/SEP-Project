@@ -21,9 +21,10 @@ describe('Database', function() {
 
   describe('Uplaid Schema and check if all tables are there', function() {
     it('It should upload database schema', function() {
-      seed.up();
-      db.get().query("SHOW TABLES", [], function(err, result){
-        assert.equal(result.length, 6);
+      seed.up(function() {
+        db.get().query("SHOW TABLES", [], function(err, result){
+          assert.equal(result.length, 6);
+        });
       });
     });
   });
@@ -35,6 +36,14 @@ describe('Database', function() {
           assert.equal(result.length, 6);
         });
       });
+    });
+  });
+});
+
+describe('Array', function() {
+  describe('#indexOf()', function() {
+    it('should return -1 when the value is not present', function() {
+      assert.equal(1, [1,2,3].indexOf(4));
     });
   });
 });
