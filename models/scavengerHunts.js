@@ -2,7 +2,7 @@ var db = require("../database/db.js");
 
 var scunt = {}
 
-scunt.create = function(name, description, startTime, endTime) {
+scunt.create = function(name, description, startTime, endTime, done) {
     var values = [name, description, startTime.toISOString(0,19).replace('T', ' '),endTime.toISOString(0,19).replace('T', ' '), 
                                     new Date().toISOString().slice(0, 19).replace('T', ' '),new Date().toISOString().slice(0, 19).replace('T', ' ')];
 
@@ -13,7 +13,7 @@ scunt.create = function(name, description, startTime, endTime) {
     })
 }
 
-scunt.update = function(id , name, description, startTime, endTime){
+scunt.update = function(id , name, description, startTime, endTime, done){
     var values = [name, description, startTime.toISOString(0,19).replace('T', ' '),endTime.toISOString(0,19).replace('T', ' '), 
                                                                         new Date().toISOString().slice(0, 19).replace('T', ' '), id];
     
