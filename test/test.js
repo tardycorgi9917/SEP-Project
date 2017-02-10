@@ -20,7 +20,7 @@ describe('Database', function() {
   });
 
   describe('Uplaid Schema and check if all tables are there', function() {
-    it('It should upload database schema is up', function() {
+    it('It should upload database schema', function() {
       seed.up();
       db.get().query("SHOW TABLES", [], function(err, result){
         assert.equal(result.length, 6);
@@ -30,9 +30,10 @@ describe('Database', function() {
 
   describe('Take down the schema and make sure DB is empty', function() {
     it('It should remove all tables', function() {
-      seed.down();
-      db.get().query("SHOW TABLES", [], function(err, result){
-        assert.equal(result.length, 0);
+      seed.down(function() {
+          db.get().query("SHOW TABLES", [], function(err, result){
+          assert.equal(result.length, 0);
+        });
       });
     });
   });

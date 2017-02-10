@@ -49,17 +49,16 @@ seed.down = function(done){
 			query += "DROP TABLE `" + schema[table].name + "`; ";
 		}
 	}, function(){
-		done();
-	});
-	console.log("****** query to drop tables: " + query);
+    console.log("****** query to drop tables: " + query);
 
-	db.get().query(query, [], function(err, result) {
-		if(err){
-			console.log("it fucked up " + err);
-			console.log("it fucked up with " + query);
-		} else {
-			console.log("---- Tables Removed Succesfully ----");
-		}
+    db.get().query(query, [], function(err, result) {
+      if(err){
+        console.log("it fucked up " + err);
+       } else {
+        console.log("---- Tables Removed Succesfully ----");
+      }
+      done();
+    });
 	});
 }
 
