@@ -11,9 +11,13 @@ router.post('/create-team', function(req, res, next) {
     var name = req.query.name;
     var scuntId = req.query.scuntId;
 
-    teams.create(name, scuntId);
-
-    res.send("route working");
+    teams.create(name, scuntId, function(err, id) {
+        if (err) {
+            res.status(500).send("An error occurred");
+        } else {
+            res.send(id.toString());
+        }
+    });
 });
 
 module.exports = router;
