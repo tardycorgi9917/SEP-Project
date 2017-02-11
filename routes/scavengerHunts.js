@@ -25,4 +25,25 @@ router.post('/create-ScavengerHunt', function(req, res, next) {
 });
 
 
+router.put('/modify-ScavengerHunt', function(req,res,next){
+    var id = req.query.id;
+    var newScuntName = req.query.name;
+    var newScuntDesc = req.query.description;
+    var newScuntStart = new Date(Date.parse(req.query.startTime));
+    var newScuntEnd = new Date(Date.parse(req.query.endTime));
+
+
+    scunt.update(id,newScuntName, newScuntDesc, newScuntStart,newScuntEnd, function(err, id){
+    if(err)
+    {
+      res.status(500).send("An error occurred");
+    }else{
+      res.send(id.toString());
+    }
+   });
+
+
+});
+
+
 module.exports = router;
