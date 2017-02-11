@@ -37,6 +37,7 @@ seed.up = function(done) {
 		} else {
 			console.log("---- Table created Succesfully ----");
 		}
+		done();
 	});
 }
 
@@ -46,21 +47,25 @@ seed.down = function(done){
 	var query = "";
 	async.each(tables, function(table) {
 		if (schema.hasOwnProperty(table)) {
-			query += "DROP TABLE `" + schema[table].name + "`; ";
+			query += "DROP TABLE IF EXISTS `" + schema[table].name + "`; ";
 		}
 	}, function(){
 		done();
 	});
 	console.log("****** query to drop tables: " + query);
 
-	db.get().query(query, [], function(err, result) {
-		if(err){
-			console.log("it fucked up " + err);
-			console.log("it fucked up with " + query);
-		} else {
-			console.log("---- Tables Removed Succesfully ----");
-		}
-	});
+	var dbpool = db.get();
+	if (dbpool)	{
+		dbpool.query(query, [], function (err, result) {
+			if (err) {
+				console.log("it fucked up " + err);
+				console.log("it fucked up with " + query);
+			} else {
+				console.log("---- Tables Removed Succesfully ----");
+			}
+			done();
+		});
+	}
 }
 
 module.exports = seed;
