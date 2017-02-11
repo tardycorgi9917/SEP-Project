@@ -27,15 +27,14 @@ seed.up = function (done) {
 			qstr += ");";
 		}
 	});
-	console.log("****** query to create tables: " + qstr);
+	//console.log("****** query to create tables: " + qstr);
 
 	db.get().query(qstr, [], function (err, result) { //query for table structure
 		var i = 0;
 		if (err) {
-			console.log("****** it fucked up " + err);
-			console.log("****** it fucked up with " + qstr);
+			//console.log("****** it fucked up " + err);
 		} else {
-			console.log("---- Table created Succesfully ----");
+			//console.log("---- Table created Succesfully ----");
 		}
 
 		done();
@@ -51,12 +50,12 @@ seed.down = function (done) {
 			query += "DROP TABLE `" + schema[table].name + "`; ";
 		}
 	} 
-	console.log("****** query to drop tables: " + query);
+	//console.log("****** query to drop tables: " + query);
 	db.get().query(query, [], function (err, result) {
 		if (err) {
-			console.log("it fucked up " + err);
+			//console.log("it fucked up " + err);
 		} else {
-			console.log("---- Tables Removed Succesfully ----");
+			//console.log("---- Tables Removed Succesfully ----");
 		}
 		done();
 	});
