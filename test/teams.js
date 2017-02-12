@@ -6,7 +6,7 @@ var teams = require('../models/teams');
 
 describe('Teams Tests', function () {
     before(function (done) {
-        db.connect(function () {
+        db.connect(db, function () {
             seed.down(function () {
                 seed.up(function () {
                     done();
@@ -17,11 +17,15 @@ describe('Teams Tests', function () {
 
     describe('Check for successful and unsuccessful team creation', function () {
         it('Team should be created successfully', function () {
-            // TODO Need create scavenger hunt to be complete here
+            // TODO Need create scavenger hunt and user to be complete here
             var name = 'testteamname';
             var scuntId = '0';
             teams.create(name, scuntId, function (err, id) {
                 assert.strictEqual(err, undefined);
+
+                SELECT 
+
+                db.get().query(query, values, function (err, result) {
             });
         });
 
@@ -29,12 +33,11 @@ describe('Teams Tests', function () {
             var name = 'testteamname';
             var scuntId = '1';
             teams.create(name, scuntId, function (err, id) {
+                console.log(err);
                 assert.strictEqual(id, undefined);
             });
         })
     });
-
-    seed.down(function () { });
 })
 
 describe('Array', function () {

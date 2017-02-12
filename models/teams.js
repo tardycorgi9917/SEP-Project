@@ -2,7 +2,20 @@ var db = require("../database/db.js");
 
 var teams = {}
 
-teams.create = function(name, scuntId, done) {
+teams.createTeamUserRel = function(teamId, userId, type, done) {
+    var now = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    var values = [teamId, userId, type, now, now];
+
+    db.get().query('INSERT INTO teamUserRel (teamId, userId, userType, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?)', values, function(err, result) {
+        if (err) {
+            done(err, undefined);
+        } else {
+            done(undefined, result.insertId);
+        }
+    })
+}
+
+teams.create = function(name, scuntId, leaderId, done) {
     var now = new Date().toISOString().slice(0, 19).replace('T', ' ');
     var values = [name, scuntId, now, now];
 
@@ -10,9 +23,16 @@ teams.create = function(name, scuntId, done) {
         if (err) {
             done(err, undefined);
         } else {
-            done(undefined, result.insertId);
+            var teamId = result.insertId;
+            teams.createTeamUserRel(teamId, leaderId, 'leader', function(err, result) {
+                if (err) {
+                    done(err, undefined)
+                } else {
+                    done(undefined, teamId);
+                }
+            })
         }
-    })
+    });
 }
 
 module.exports = teams;
