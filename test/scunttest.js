@@ -9,17 +9,6 @@ var scunt = require('../models/scavengerHunts');
 
 describe('Scunt test', function() {
 
-    before(function (done) {
-        db.connect(db, function () {
-            seed.down(function () {
-                seed.up(function () {
-                    done();
-                });
-            });
-        });
-    });
-
-
 
 
   describe('Check if scunt create is succesful', function(done) {
@@ -31,32 +20,18 @@ describe('Scunt test', function() {
         var startTime = new Date("September 1, 2016 11:13:00");
         var endTime = new Date("September 13, 2016 11:13:00");
 
-        scunt.create(name, description, startTime, endTime , function(err, id){
+        scunt.create(name, description, startTime, endTime , function(err, Result){
           assert.strictEqual(err, undefined);
 
-          var query = "SELECT * FROM scunt WHERE id = ?";
-
-          var values = [scuntID];
-
-          db.get().query(query, values, function (err, result) {
-            assert.strictEqual(err,undefined);
-
-            assert.strictEqual(result.id, scuntID);
-            assert.strictEqual(result.description,description);
-            assert.strictEqual(result.startTime, startTime.toISOString().slice(0,19).replace('T', ' '));
-            assert.strictEqual(result.endTime, startTime.toISOString().slice(0,19).replace('T', ' '));
-            assert.strictEqual(result.createdAt, result.updatedAt);
-
-          });
+          assert.strictEqual(Result.id,scuntID);
+          assert.strictEqual(Result.description, description);
+          assert.strictEqual(Result.startTime, startTime.toISOString().slice(0,19).replace('T', ' '));
+          assert.strictEqual(Result.endTime, endTime.toISOString().slice(0,19).replace('T', ' '));               
           
-
         });       
 
       });
-  });
 
-
-  describe('Check if scunt update is successfull', function(done){
     it('Scunt update Succresstul', function(){
 
       scunt.create('fish frosh', 'jesus loves you', new Date("September 1, 2016 11:13:00"),new Date("September 13, 2016 11:13:00") , function(err, createResult){
@@ -82,7 +57,8 @@ describe('Scunt test', function() {
 
       });
 
-    });
+    });      
   });
+
 
 });
