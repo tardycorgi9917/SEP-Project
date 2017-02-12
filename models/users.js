@@ -7,7 +7,9 @@ users.create = function(firstname, lastname, email, done) {
 
     db.get().query('INSERT INTO users (firstname, lastname, email, createdAt) VALUES(?, ?, ?, ?)', values, function(err, result) {
         if (err) {
-            console.log(err)
+            done(err, undefined);
+        } else {
+            done(err, result.insertId);
         }
     })
 }

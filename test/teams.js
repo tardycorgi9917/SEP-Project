@@ -20,30 +20,26 @@ describe('Teams Tests', function () {
             // TODO Need create scavenger hunt and user to be complete here
             var name = 'testteamname';
             var scuntId = '0';
-            teams.create(name, scuntId, function (err, id) {
+            var leaderId = '1'
+            teams.create(name, scuntId, leaderId, function (err, id) {
                 assert.strictEqual(err, undefined);
-
-                SELECT 
-
-                db.get().query(query, values, function (err, result) {
             });
+
+            it('Team should not be created successfully', function () {
+                var name = 'testteamname';
+                var scuntId = '1';
+                teams.create(name, scuntId, function (err, id) {
+                    assert.strictEqual(id, undefined);
+                });
+            })
         });
+    })
 
-        it('Team should not be created successfully', function () {
-            var name = 'testteamname';
-            var scuntId = '1';
-            teams.create(name, scuntId, function (err, id) {
-                console.log(err);
-                assert.strictEqual(id, undefined);
+    describe('Array', function () {
+        describe('#indexOf()', function () {
+            it('should return -1 when the value is not present', function () {
+                assert.equal(-1, [1, 2, 3].indexOf(4));
             });
-        })
-    });
-})
-
-describe('Array', function () {
-    describe('#indexOf()', function () {
-        it('should return -1 when the value is not present', function () {
-            assert.equal(-1, [1, 2, 3].indexOf(4));
         });
     });
 });

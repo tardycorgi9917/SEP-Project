@@ -9,8 +9,17 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/create-user', function(req, res, next) {
-  user.create("thomas", "karatzas", "thomas.karatzas@mail.mcgill.ca", function(){});
-  res.send("route working");
+  var firstName = req.query.firstName;
+  var lastName = req.query.lastName;
+  var email = req.query.email;
+
+  user.create(firstName, lastName, email, function (err, id) {
+    if (err) {
+      res.status(500).send("An error occurred");
+    } else {
+      res.send(id.toString());
+    }
+  });
 });
 
 module.exports = router;
