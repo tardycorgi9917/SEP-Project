@@ -9,10 +9,10 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/create-ScavengerHunt', function(req, res, next) {
-    var ScuntName = req.query.name;
-    var ScuntDesc = req.query.description;
-    var ScuntStart = new Date(Date.parse(req.query.startTime));
-    var ScuntEnd  = new Date(Date.parse(req.query.endTime));
+    var ScuntName = req.body.name;
+    var ScuntDesc = req.body.description;
+    var ScuntStart = new Date(Date.parse(req.body.startTime));
+    var ScuntEnd  = new Date(Date.parse(req.body.endTime));
 
   scunt.create(ScuntName, ScuntDesc, ScuntStart,ScuntEnd, function(err, id){
     if(err)
@@ -26,11 +26,11 @@ router.post('/create-ScavengerHunt', function(req, res, next) {
 
 
 router.put('/modify-ScavengerHunt', function(req,res,next){
-    var id = req.query.id;
-    var newScuntName = req.query.name;
-    var newScuntDesc = req.query.description;
-    var newScuntStart = new Date(Date.parse(req.query.startTime));
-    var newScuntEnd = new Date(Date.parse(req.query.endTime));
+    var id = req.body.id;
+    var newScuntName = req.body.name;
+    var newScuntDesc = req.body.description;
+    var newScuntStart = new Date(Date.parse(req.body.startTime));
+    var newScuntEnd = new Date(Date.parse(req.body.endTime));
 
 
     scunt.update(id,newScuntName, newScuntDesc, newScuntStart,newScuntEnd, function(err, id){
