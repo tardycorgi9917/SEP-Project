@@ -3,7 +3,7 @@ var assert = require('assert');
 var db = require('../database/db');
 var seed = require("../database/seeders");
 
-var scunt = require('../models/teams');
+var scunt = require('../models/scavengerHunts');
 
 
 
@@ -38,7 +38,7 @@ describe('Scunt test', function() {
 
           var values = [scuntID];
 
-          db.get().query(query, , function (err, result) {
+          db.get().query(query, values, function (err, result) {
             assert.strictEqual(err,undefined);
 
             assert.strictEqual(result.id, scuntID);
