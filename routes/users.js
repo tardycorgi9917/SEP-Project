@@ -12,14 +12,28 @@ router.post('/create-user', function(req, res, next) {
   var firstName = req.body.firstName;
   var lastName = req.body.lastName;
   var email = req.body.email;
-
-  user.create(firstName, lastName, email, function (err, id) {
-    if (err) {
-      res.status(500).send("An error occurred");
-    } else {
-      res.send(id.toString());
-    }
-  });
+  var password = req.body.password;
+  var phoneNumber = req.body.phoneNumber || "";
+  var profilePicture = "";
+  var date = new Date().toISOString().slice(0, 19).replace('T', ' ');
+  user.create(
+      firstName,
+      lastName,
+      email,
+      password,
+      phoneNumber,
+      profilePicture,
+      date,
+      function(err, result){
+          if(err){
+              console.log(err);
+              res.status(500).send(err);
+          }
+          else {
+              console.log("User Created Successfully")
+              res.send(result.insertId.toString());
+          }
+      });
 });
 
 module.exports = router;
