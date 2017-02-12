@@ -18,10 +18,9 @@ db.connect = function(mode, done) {
     password: config.database.password,
     database: config.database.db,
     multipleStatements: true
-  }, function() {
-    state.mode = mode
-    done()
   });
+  state.mode = mode;
+  done();
 }
 
 db.get = function() {
