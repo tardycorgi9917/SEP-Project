@@ -8,7 +8,7 @@
             "name": "Launch Program",
             "type": "node2",
             "request": "launch",
-            "program": "${workspaceRoot}\\bin\\www",
+            "program": "${workspaceRoot}/bin/www",
             "cwd": "${workspaceRoot}"
         },
         {
@@ -16,6 +16,13 @@
             "type": "node2",
             "request": "attach",
             "port": 9229
-        }
+        },
+        {
+           "type": "node",
+           "request": "launch",
+           "name": "test",
+           "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+           "cwd": "${workspaceRoot}"
+       }
     ]
 }
