@@ -4,8 +4,8 @@ var async = require('async');
 var teams = {}
 
 // Initial values
-teams.maxmembers = 20
-teams.points = 0
+teams.maxmembers = 2;
+teams.points = 0;
 
 teams.createTeamUserRel = function(teamId, userId, type, done) {
     var query = 'INSERT INTO teamUserRel (teamId, userId, userType, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?)';
@@ -26,6 +26,21 @@ teams.create = function(name, scuntId, leaderId, done) {
     var now = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
     async.waterfall([
+        function(callback) {
+            // Check if there is a team with the same name
+            var query = 'SELECT COUNT(*) AS duplicateTeam FROM teams WHERE name = ? AND scuntId = ?';
+            var values = [name, scuntId];
+
+            db.get().query(query, values, function(err, result) {
+                if (err) {
+                    callback(err);
+                } else if (result[0].duplicateTeam > 0) {
+                    callback('A team with this name already exists in this scavenger hunt');
+                } else {
+                    callback(null);
+                }
+            });
+        },
         function(callback) {
             // Check if user that already has a team is creating another team
             var query = 'SELECT COUNT(*) AS userAlreadyInTeam '
@@ -49,11 +64,15 @@ teams.create = function(name, scuntId, leaderId, done) {
             // Create teams entry
             var query = 'INSERT INTO teams (name, points, maxmembers, scuntId, createdAt, updatedAt) '
                         + 'VALUES(?, ?, ?, ?, ?, ?)';
-            var values = [name, scuntId, teams.points, teams.maxmembers, now, now];
+            var values = [name, teams.points, teams.maxmembers, scuntId, now, now];
                         
             db.get().query(query, values, function (err, result) {
-                var teamId = result.insertId;
-                callback(err, teamId);
+                if (err) {
+                    callback(err);
+                } else {
+                    var teamId = result.insertId;
+                    callback(undefined, teamId)
+                }
             });
         },
         function(teamId, callback) {
@@ -103,13 +122,12 @@ teams.join = function (userId, teamId, allowswitch, done) {
             var query = 'SELECT maxmembers - teamcount.teamcount AS spaceleft FROM teams '
                         + 'JOIN (SELECT COUNT(*) AS teamcount FROM teamUserRel WHERE teamUserRel.teamId = ?) AS teamcount '
                         + 'WHERE teams.id = ?'
-            var values = [teamId];
+            var values = [teamId, teamId];
             
             db.get().query(query, values, function (err, result) {
-                var spaceleft = result[0].spaceleft;
                 if (err) {
                    callback(err);
-                } else if (spaceleft > 0) {
+                } else if (result[0].spaceleft <= 0) {
                     callback('Team is at max capacity');
                 } else {
                     callback(null);

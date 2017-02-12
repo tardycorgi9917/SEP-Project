@@ -9,9 +9,9 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/create-user', function(req, res, next) {
-  var firstName = req.query.firstName;
-  var lastName = req.query.lastName;
-  var email = req.query.email;
+  var firstName = req.body.firstName;
+  var lastName = req.body.lastName;
+  var email = req.body.email;
 
   user.create(firstName, lastName, email, function (err, id) {
     if (err) {

@@ -8,28 +8,21 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/create-team', function(req, res, next) {
-    var name = req.query.name;
-    var scuntId = req.query.scuntId;
-    var leaderId = req.query.leaderId;
+    var name = req.body.name;
+    var scuntId = req.body.scuntId;
+    var leaderId = req.body.leaderId;
 
-    teamsvalidation.createTeamValidation(name, scuntId, leaderId, function(err) {
+    teams.create(name, scuntId, leaderId, function (err, id) {
         if (err) {
             res.status(500).send(err);
-            return;
+        } else {
+            res.send(id.toString());
         }
-        
-        teams.create(name, scuntId, leaderId, function (err, id) {
-            if (err) {
-                res.status(500).send(err);
-            } else {
-                res.send(id.toString());
-            }
-        });
     })
 });
 
 router.delete('/delete-team', function(req, res, next) {
-    var teamId = req.query.teamId;
+    var teamId = req.body.teamId;
 
     teams.delete(teamId, function(err) {
         if (err) {
@@ -41,8 +34,8 @@ router.delete('/delete-team', function(req, res, next) {
 });
 
 router.post('/add-to-team', function(req, res, next) {
-    var userId = req.query.userId;
-    var teamId = req.query.teamId;
+    var userId = req.body.userId;
+    var teamId = req.body.teamId;
 
     teams.join(userId, teamId, false, function(err) {
         if (err) {
@@ -54,8 +47,8 @@ router.post('/add-to-team', function(req, res, next) {
 });
 
 router.post('/join-team', function(req, res, next) {
-    var userId = req.query.userId;
-    var teamId = req.query.teamId;
+    var userId = req.body.userId;
+    var teamId = req.body.teamId;
 
     teams.join(userId, teamId, true, function(err) {
         if (err) {
