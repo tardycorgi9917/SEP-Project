@@ -98,7 +98,6 @@ schema.scuntUserRel = {
     ],
 };
 
-// Defines the order in which these tables can be dropped without violating foreign key constraints
 schema.droplist = [
     schema.teamUserRel.name,
     schema.scuntUserRel.name,
