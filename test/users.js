@@ -17,8 +17,7 @@ describe('User Tests', function(){
             users.create(firstName, lastName, email, password, phoneNumber, profilePicture, date, date,
                 function(err, result){
                     assert(err, undefined);
-                    console.log(result.insertId);
-                    assert(result.insertId, 7);
+                    assertNotEqual(result.insertId, undefined);
                 }
             );
 

@@ -7,11 +7,8 @@ describe('Database', function() {
 
   before(function(done){
     db.connect(db, function(err) {
-      if (err) {
+      if (err)
         console.log('Unable to connect to MySQL.')
-      } else {
-        console.log("DB CONNECTED");
-      }
       done();
     })
   });
@@ -19,7 +16,6 @@ describe('Database', function() {
   describe('Check If DB is empty', function() {
     it('It should ensure DB is empty before seed is called', function() {
       db.get().query("SHOW TABLES", [], function(err, result){
-        console.log(result);
         assert.equal(result.length, -1);
       });
     });
@@ -27,13 +23,12 @@ describe('Database', function() {
 
   describe('Upload Schema and check if all tables are there', function() {
     it('It should upload database schema', function() {
+      // TODO do waterfall test
       seed.up(function() {
         db.get().query("SHOW TABLES", [], function(err, result){
-          console.log(JSON.stringify(result));
           assert.equal(result.length, 6);
           seed.down(function() {
               db.get().query("SHOW TABLES", [], function(err, result){
-                  console.log(JSON.stringify(result));
                   assert.equal(result.length, 0);
               });
           });
