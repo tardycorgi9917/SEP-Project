@@ -21,7 +21,7 @@ schema.users = {
 schema.scunt = {
     "name": "scunt",
     "fields": {
-        "id": "int(11) NOT NULL",
+        "id": "int(11) NOT NULL AUTO_INCREMENT",
         "name" : "varchar(50) NOT NULL",
         "description" : "varchar(500) NOT NULL",
         "startTime": "datetime",
