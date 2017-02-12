@@ -14,8 +14,9 @@ describe('User Tests', function(){
             });
         });
     });
+    
+    describe('User Creation', function(){
 
-    describe('User creation', function(){
         it('should create user successfully', function(){
             var firstName = "FirstName";
             var lastName = "LastName";
@@ -27,25 +28,26 @@ describe('User Tests', function(){
             users.create(firstName, lastName, email, password, phoneNumber, profilePicture, date, date,
                 function(err, result){
                     assert(err, undefined);
-                    assert(result.insertId, 1);
+                    console.log(result.insertId);
+                    assert(result.insertId, 7);
                 }
             );
 
-        })
-    });
+        });
 
-    describe('User should not be created', function(){
-        var firstName = null;
-        var lastName = "LastName";
-        var email = "firstname.lastname@gmail.com";
-        var password = "ilikethehabs";
-        var phoneNumber = "(514) 911-1234";
-        var profilePicture = "";
-        var date = new Date().toISOString().slice(0, 19).replace('T', ' ');
-        users.create(firstName, lastName, email, password, phoneNumber, profilePicture, date, date,
-            function(err, result){
-                assert.notStrictEqual(err, undefined);
-            }
-        );
+        it('should not be create user', function(){
+            var firstName = null;
+            var lastName = "LastName";
+            var email = "firstname.lastname@gmail.com";
+            var password = "ilikethehabs";
+            var phoneNumber = "(514) 911-1234";
+            var profilePicture = "";
+            var date = new Date().toISOString().slice(0, 19).replace('T', ' ');
+            users.create(firstName, lastName, email, password, phoneNumber, profilePicture, date, date,
+                function(err, result){
+                    assert.notEqual(err, undefined);
+                }
+            );
+        });
     });
 });

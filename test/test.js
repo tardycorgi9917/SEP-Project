@@ -28,19 +28,27 @@ describe('Database', function() {
     it('It should upload database schema', function() {
       seed.up(function() {
         db.get().query("SHOW TABLES", [], function(err, result){
+          console.log(JSON.stringify(result));
           assert.equal(result.length, 6);
+          seed.down(function() {
+              db.get().query("SHOW TABLES", [], function(err, result){
+                  console.log(JSON.stringify(result));
+                  assert.equal(result.length, 0);
+              });
+          });
         });
       });
     });
   });
 
-  describe('Take down the schema and make sure DB is empty', function() {
-    it('It should remove all tables', function() {
-      seed.down(function() {
-          db.get().query("SHOW TABLES", [], function(err, result){
-          assert.equal(result.length, 6);
-        });
-      });
-    });
-  });
+  // describe('Take down the schema and make sure DB is empty', function() {
+  //   it('It should remove all tables', function() {
+  //     seed.down(function() {
+  //         db.get().query("SHOW TABLES", [], function(err, result){
+  //             console.log(JSON.stringify(result));
+  //             //assert.equal(result.length, 0);
+  //         });
+  //     });
+  //   });
+  // });
 });
