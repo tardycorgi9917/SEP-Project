@@ -5,18 +5,7 @@ var seed = require("../database/seeders");
 var users = require('../models/users');
 
 describe('User Tests', function(){
-    before(function(done){
-        db.connect(db, function(){
-            seed.down(function(){
-                seed.up(function(){
-                    done();
-                });
-            });
-        });
-    });
-    
     describe('User Creation', function(){
-
         it('should create user successfully', function(){
             var firstName = "FirstName";
             var lastName = "LastName";
