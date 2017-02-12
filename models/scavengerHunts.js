@@ -33,7 +33,7 @@ scunt.update = function(id , name, description, startTime, endTime, done){
         if (err) {
             done(err, undefined);
         }else{
-            done(undefined, 'success');
+            done(undefined, result);
         }
     })
 
