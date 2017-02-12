@@ -45,17 +45,16 @@ seed.down = function (done) {
 	var tables = Object.keys(schema);
 	tables.reverse();
 	var query = "";
-	for(var table in schema) {
-		if (schema.hasOwnProperty(table)) {
-			query += "DROP TABLE `" + schema[table].name + "`; ";
-		}
+	for(var i in schema.droplist) {
+		query += "DROP TABLE IF EXISTS `" + schema.droplist[i] + "`; ";
 	} 
+
 	//console.log("****** query to drop tables: " + query);
 	db.get().query(query, [], function (err, result) {
 		if (err) {
-			//console.log("it fucked up " + err);
+			// console.log("it fucked up " + err);
 		} else {
-			//console.log("---- Tables Removed Succesfully ----");
+			// console.log("---- Tables Removed Succesfully ----");
 		}
 		done();
 	});
