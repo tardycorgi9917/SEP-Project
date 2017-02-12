@@ -33,12 +33,12 @@ router.put('/modify-ScavengerHunt', function(req,res,next){
     var newScuntEnd = new Date(Date.parse(req.body.endTime));
 
 
-    scunt.update(id,newScuntName, newScuntDesc, newScuntStart,newScuntEnd, function(err, id){
+    scunt.update(id,newScuntName, newScuntDesc, newScuntStart,newScuntEnd, function(err, result){
     if(err)
     {
       res.status(500).send("An error occurred");
     }else{
-      res.send(id.toString());
+      res.sendStatus(200);
     }
    });
 
