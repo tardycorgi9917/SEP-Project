@@ -2,19 +2,45 @@ var assert = require('assert');
 var db = require('../database/db');
 var seed = require("../database/seeders");
 
-// describe('Database', function() {
-//   describe('schemaUp', function() {
-//     it('It should upload database schema is up', function() {
+describe('Database', function() {
 
-//       assert.equal(-1, [1,2,3].indexOf(4));
-//     });
-//   });
-// });
+  before(function(done){
+    db.connect(db, function(err) {
+      if (err) {
+        console.log('Unable to connect to MySQL.')
+      } else {
+        console.log("DB CONNECTED");
+      }
+      done();
+    })
+  });
 
-describe('Array', function() {
-  describe('#indexOf()', function() {
-    it('should return -1 when the value is not present', function() {
-      assert.equal(-1, [1,2,3].indexOf(4));
+  describe('Check If DB is empty', function() {
+    it('It should ensure DB is empty before seed is called', function() {
+      db.get().query("SHOW TABLES", [], function(err, result){
+        console.log(result);
+        assert.equal(result.length, -1);
+      });
+    });
+  });
+
+  describe('Upload Schema and check if all tables are there', function() {
+    it('It should upload database schema', function() {
+      seed.up(function() {
+        db.get().query("SHOW TABLES", [], function(err, result){
+          assert.equal(result.length, 6);
+        });
+      });
+    });
+  });
+
+  describe('Take down the schema and make sure DB is empty', function() {
+    it('It should remove all tables', function() {
+      seed.down(function() {
+          db.get().query("SHOW TABLES", [], function(err, result){
+          assert.equal(result.length, 6);
+        });
+      });
     });
   });
 });
