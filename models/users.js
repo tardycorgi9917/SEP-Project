@@ -2,14 +2,19 @@ var db = require("../database/db.js");
 
 var users = {}
 
-users.create = function(firstname, lastname, email, done) {
-    var values = [firstname, lastname, email, new Date().toISOString().slice(0, 19).replace('T', ' ')];
-
-    db.get().query('INSERT INTO users (firstname, lastname, email, createdAt) VALUES(?, ?, ?, ?)', values, function(err, result) {
-        if (err) {
-            console.log(err)
+users.create = function(firstName, lastName, email, password, phoneNumber, profilePicture, date, done) {
+    var query = 'INSERT INTO users (firstName, lastName, email, password, phoneNumber, profilePicture, createdAt, updatedAt) VALUES(?,?,?,?,?,?,?,?)';
+    var values = [firstName, lastName, email, password, phoneNumber, profilePicture, date, date]
+    db.get().query(query, values, function(err, result){
+        if(err){
+            done(err);
         }
-    })
+        else {
+            console.log("User Created Successfully")
+            // console.log(result)
+            done(null, result);
+        }
+    });
 }
 
 module.exports = users;
