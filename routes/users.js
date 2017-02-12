@@ -31,7 +31,7 @@ router.post('/create-user', function(req, res, next) {
           }
           else {
               console.log("User Created Successfully")
-              res.send(result.toString());
+              res.send(result.insertId.toString());
           }
       });
 });
