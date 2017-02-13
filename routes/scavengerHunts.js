@@ -12,7 +12,11 @@ router.post('/create-ScavengerHunt', function(req, res, next) {
     var ScuntName = req.body.name;
     var ScuntDesc = req.body.description;
     var ScuntStart = new Date(Date.parse(req.body.startTime));
+    echo ScuntStart
+
     var ScuntEnd  = new Date(Date.parse(req.body.endTime));
+    echo ScuntEnd
+
 
   scunt.create(ScuntName, ScuntDesc, ScuntStart,ScuntEnd, function(err, id){
     if(err)

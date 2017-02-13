@@ -39,4 +39,19 @@ scunt.update = function(id , name, description, startTime, endTime, done){
 
 }
 
+
+scunt.delete = function(id, done){
+    var scuntId = id;
+    var query = 'DELETE from scunt WHERE id = ?'
+
+
+    db.get().query(query, scuntId, function(err, result) {
+        if (err) {
+            done(err, undefined);
+        }else{
+            done(undefined, result);
+        }
+    })
+}
+
 module.exports = scunt;
