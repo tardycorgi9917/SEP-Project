@@ -12,6 +12,10 @@ var state = {
 }
 
 db.connect = function(mode, done) {
+  if (state.pool != null) {
+    return done();
+  }
+  
   state.pool = mysql.createPool({
     host: config.database.host,
     user: config.database.user,
