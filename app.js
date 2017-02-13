@@ -44,6 +44,8 @@ else if(args.length && args[0] == "DB=down"){
 
 var index = require('./routes/index');
 var users = require('./routes/users');
+var teams = require('./routes/teams');
+var scavengerHunts = require('./routes/scavengerHunts');
 
 var app = express();
 
@@ -59,6 +61,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/users', users);
+app.use('/teams', teams);
+app.use('/scavengerHunts', scavengerHunts)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

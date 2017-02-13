@@ -22,8 +22,8 @@ describe('User Tests', function(){
                 }
             );
         });
-
-        // it('should not create duplicate user', function(){
+      
+      // it('should not create duplicate user', function(){
         //     users.create(firstName, lastName, email, password, phoneNumber, profilePicture, date, date,
         //         function(err, result){
         //             assert.notEqual(err, undefined);
@@ -39,8 +39,8 @@ describe('User Tests', function(){
                 }
             );
         });
-
-        // TODO change
+      
+                // TODO change
 
         it('should change phone number', function(){
             var email = "eduardo.coronado@hotmail.com";
@@ -71,6 +71,5 @@ describe('User Tests', function(){
                 assert(result.changedRows, 1);
             });
         });
-
     });
 });

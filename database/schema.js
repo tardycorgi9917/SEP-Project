@@ -21,7 +21,7 @@ schema.users = {
 schema.scunt = {
     "name": "scunt",
     "fields": {
-        "id": "int(11) NOT NULL",
+        "id": "int(11) NOT NULL AUTO_INCREMENT",
         "name" : "varchar(50) NOT NULL",
         "description" : "varchar(500) NOT NULL",
         "startTime": "datetime",
@@ -40,6 +40,7 @@ schema.teams = {
         "id": "int(11) NOT NULL AUTO_INCREMENT",
         "name": "varchar(50) NOT NULL",
         "points": "int(10) NOT NULL",
+        "maxmembers": "int(10) NOT NULL",
         "scuntId": "int(11) NOT NULL",
         "createdAt" : "datetime NOT NULL",
         "updatedAt" : "datetime NOT NULL"
