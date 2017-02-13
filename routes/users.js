@@ -29,7 +29,7 @@ router.post('/create-user', function(req, res, next) {
               res.status(500).send(err);
           }
           else {
-              res.send(result.resultId.toString());
+              res.send(result.toString());
           }
       });
 });

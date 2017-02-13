@@ -6,6 +6,14 @@ var seed = require("../database/seeders");
 var users = require('../models/users');
 
 describe('User Tests', function(){
+    before(function (done) {
+        db.connect(db, function (err) {
+            seed.up(function () {
+                done();
+            });
+        });
+    });
+
     describe('User Creation', function(){
         var firstName = "Eduardo";
         var lastName = "Coronado";
@@ -45,16 +53,9 @@ describe('User Tests', function(){
                     assert(err, null);
                     done();
             });
-
         });
 
-      // it('should not create duplicate user', function(){
-        //     users.create(firstName, lastName, email, password, phoneNumber, profilePicture, date, date,
-        //         function(err, result){
-        //             assert.notEqual(err, undefined);
-        //         }
-        //     );
-        // })
+        // TODO check for duplicate errors
 
         it('should not create user with null name', function(done){
             async.waterfall([
@@ -63,7 +64,7 @@ describe('User Tests', function(){
                     errorEmail = "error@email.com";
                     users.create(nullName, lastName, errorEmail, password, phoneNumber, profilePicture, date, date,
                         function(err, result){
-                            assert.notEqual(err, null);
+                            assert.notStrictEqual(err, null);
                             callback(null, errorEmail);
                         }
                     );
@@ -107,14 +108,12 @@ describe('User Tests', function(){
             async.waterfall([
                 function(callback){
                     users.update(email, fields, values, function(err, result){
-                        assert.notEqual(err, null);
                         assert(result.affectedRows, 1);
                         assert(result.changedRows, 1);
                         callback(null);
                     });
                 }, function(callback){
                     users.findByEmail(email, function(err, result){
-                        assert.notEqual(err, null);
                         assert(result.length, 1);
                         assert(result[0].phoneNumber, values[0]);
                         callback(null)
@@ -133,14 +132,12 @@ describe('User Tests', function(){
             async.waterfall([
                 function(callback){
                     users.update(email, fields, values, function(err, result){
-                        assert.notEqual(err, null);
                         assert(result.affectedRows, 1);
                         assert(result.changedRows, 1);
                         callback(null);
                     });
                 }, function(callback){
                     users.findByEmail(email, function(err, result){
-                        assert.notEqual(err, undefined);
                         assert(result.length, 1);
                         assert(result[0].firstName, values[0]);
                         assert(result[0].lastName, values[1]);
@@ -152,14 +149,13 @@ describe('User Tests', function(){
             });
         });
 
-        it('should change password', function(){
+        it('should change password', function(done){
             var email = "eduardo.coronado@hotmail.com";
             var fields = ["password"];
             var values = ["vivamexico"];
             async.waterfall([
                 function(callback){
                     users.update(email, fields, values, function(err, result){
-                        assert.notEqual(err, undefined);
                         assert(result.affectedRows, 1);
                         assert(result.changedRows, 1);
                         callback(null);
