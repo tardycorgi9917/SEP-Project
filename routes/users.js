@@ -36,4 +36,19 @@ router.post('/create-user', function(req, res, next) {
       });
 });
 
+router.post('/update-user', function(req, res, next){
+    var email = req.body.email;
+    var fields = req.body.fields;
+    var values = req.body.values;
+    user.update(email, fields, values, function(err, result){
+        if(err) {
+            console.log(err);
+            res.status(500).send(err);
+        } else {
+            console.log("Updated User Successfully");
+            res.send(result);
+        }
+    });
+});
+
 module.exports = router;
