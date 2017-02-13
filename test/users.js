@@ -7,10 +7,8 @@ var users = require('../models/users');
 describe('User Tests', function () {
     before(function (done) {
         db.connect(db, function (err) {
-            seed.down(function () {
-                seed.up(function () {
-                    done();
-                });
+            seed.up(function () {
+                done();
             });
         });
     });
