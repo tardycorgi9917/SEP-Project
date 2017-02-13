@@ -29,7 +29,7 @@ router.post('/create-user', function(req, res, next) {
               res.status(500).send(err);
           }
           else {
-              res.send(result.toString());
+              res.send(result.resultId.toString());
           }
       });
 });
@@ -40,7 +40,6 @@ router.post('/update-user', function(req, res, next){
     var values = req.body.values;
     user.update(email, fields, values, function(err, result){
         if(err) {
-            console.log(err);
             res.status(500).send(err);
         } else {
             console.log("Updated User Successfully");
@@ -48,5 +47,13 @@ router.post('/update-user', function(req, res, next){
         }
     });
 });
+
+router.get('/find-email/:email', function(req, res){
+    var email = req.params.email;
+    user.findByEmail(email, function(err, result){
+        if(err) res.status(500).send(err);
+        else res.send(result);
+    })
+})
 
 module.exports = router;

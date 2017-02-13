@@ -1,4 +1,5 @@
 var assert = require('assert');
+var async = require('async');
 
 var db = require('../database/db');
 var seed = require("../database/seeders");
@@ -14,15 +15,39 @@ describe('User Tests', function(){
         var profilePicture = "";
         var date = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
-        it('should create user successfully', function(){
-            users.create(firstName, lastName, email, password, phoneNumber, profilePicture, date, date,
-                function(err, result){
-                    assert(err, undefined);
-                    assertNotEqual(result.insertId, undefined);
-                }
-            );
+        it('should create user successfully', function(done){
+            async.waterfall([
+                function(callback){
+                    users.create(firstName, lastName, email, password, phoneNumber, profilePicture, date, date,
+                        function(err, result){
+                            assert(err, undefined);
+                            assertNotEqual(result.insertId, undefined);
+                            callback(null, result);
+                        }
+                    );
+                }, function(result, callback){
+                    var id = result.insertId;
+                    users.findById(id, function(err, result){
+                        if(err) callback(err);
+                        else callback(null, result);
+                    });
+                }, function(result, callback){
+                    assert(result.length, 1);
+                    var user = result[0];
+                    assert(user.firstName, firstName);
+                    assert(user.lastName, lastName);
+                    assert(user.email, email);
+                    assert(user.phoneNumber, phoneNumber);
+                    assert(user.createdAt, date);
+                    callback(null);
+                }],
+                function(err){
+                    assert(err, null);
+                    done();
+            });
+
         });
-      
+
       // it('should not create duplicate user', function(){
         //     users.create(firstName, lastName, email, password, phoneNumber, profilePicture, date, date,
         //         function(err, result){
@@ -31,34 +56,99 @@ describe('User Tests', function(){
         //     );
         // })
 
-        it('should not create user with null name', function(){
-            nullName = null;
-            users.create(nullName, lastName, email, password, phoneNumber, profilePicture, date, date,
-                function(err, result){
-                    assert.notEqual(err, undefined);
+        it('should not create user with null name', function(done){
+            async.waterfall([
+                function(callback){
+                    nullName = null;
+                    errorEmail = "error@email.com";
+                    users.create(nullName, lastName, errorEmail, password, phoneNumber, profilePicture, date, date,
+                        function(err, result){
+                            assert.notEqual(err, null);
+                            callback(null, errorEmail);
+                        }
+                    );
+                }, function(errorEmail, callback){
+                    users.findByEmail(errorEmail, function(err, result){
+                        assert(result.length, 0);
+                        callback(null)
+                    });
                 }
-            );
-        });
-      
-                // TODO change
-
-        it('should change phone number', function(){
-            var email = "eduardo.coronado@hotmail.com";
-            var fields = ["phoneNumber"];
-            var values = ["(514)911-4321"];
-            users.update(email, fields, values, function(err, result){
-                assert(result.affectedRows, 1);
-                assert(result.changedRows, 1);
+            ], function(err){
+                done()
             });
         });
 
-        it('should change user firstName and lastName', function(){
+        it('should not create user with empty string', function(done){
+            async.waterfall([
+                function(callback){
+                    emptyName = "";
+                    errorEmail = "error@email.com";
+                    users.create(emptyName, lastName, errorEmail, password, phoneNumber, profilePicture, date, date,
+                        function(err, result){
+                            assert.notEqual(err, null);
+                            callback(null, errorEmail);
+                        }
+                    );
+                }, function(errorEmail, callback){
+                    users.findByEmail(errorEmail, function(err, result){
+                        assert(result.length, 0);
+                        callback(null)
+                    });
+                }
+            ], function(err){
+                done()
+            });
+        })
+
+        it('should change phone number', function(done){
+            var email = "eduardo.coronado@hotmail.com";
+            var fields = ["phoneNumber"];
+            var values = ["(514)911-4321"];
+            async.waterfall([
+                function(callback){
+                    users.update(email, fields, values, function(err, result){
+                        assert.notEqual(err, null);
+                        assert(result.affectedRows, 1);
+                        assert(result.changedRows, 1);
+                        callback(null);
+                    });
+                }, function(callback){
+                    users.findByEmail(email, function(err, result){
+                        assert.notEqual(err, null);
+                        assert(result.length, 1);
+                        assert(result[0].phoneNumber, values[0]);
+                        callback(null)
+                    })
+                }
+            ], function(err){
+                done();
+            });
+
+        });
+
+        it('should change user firstName and lastName', function(done){
             var email = "eduardo.coronado@hotmail.com";
             var fields = ["firstName", "lastName"];
             var values = ["Michael", "Abdallah"];
-            users.update(email, fields, values, function(err, result){
-                assert(result.affectedRows, 1);
-                assert(result.changedRows, 1);
+            async.waterfall([
+                function(callback){
+                    users.update(email, fields, values, function(err, result){
+                        assert.notEqual(err, null);
+                        assert(result.affectedRows, 1);
+                        assert(result.changedRows, 1);
+                        callback(null);
+                    });
+                }, function(callback){
+                    users.findByEmail(email, function(err, result){
+                        assert.notEqual(err, undefined);
+                        assert(result.length, 1);
+                        assert(result[0].firstName, values[0]);
+                        assert(result[0].lastName, values[1]);
+                        callback(null)
+                    })
+                }
+            ], function(err){
+                done();
             });
         });
 
@@ -66,9 +156,24 @@ describe('User Tests', function(){
             var email = "eduardo.coronado@hotmail.com";
             var fields = ["password"];
             var values = ["vivamexico"];
-            users.update(email, fields, values, function(err, result){
-                assert(result.affectedRows, 1);
-                assert(result.changedRows, 1);
+            async.waterfall([
+                function(callback){
+                    users.update(email, fields, values, function(err, result){
+                        assert.notEqual(err, undefined);
+                        assert(result.affectedRows, 1);
+                        assert(result.changedRows, 1);
+                        callback(null);
+                    });
+                }, function(callback){
+                    users.findByEmail(email, function(err, result){
+                        assert.notEqual(err, undefined);
+                        assert(result.length, 1);
+                        assert(result[0].password, values[0]);
+                        callback(null)
+                    })
+                }
+            ], function(err){
+                done();
             });
         });
     });
