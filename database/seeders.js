@@ -1,6 +1,6 @@
 var schema = require('./schema');
 var db = require('./db');
-async = require('async');
+var async = require('async');
 var seed = {};
 
 seed.up = function (done) {
