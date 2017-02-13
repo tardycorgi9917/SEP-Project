@@ -35,10 +35,16 @@ users.findByEmail = function(email, done){
     db.get().query(query, function(err, result){
         if(err) done(err);
         else{
-            console.log(result);
             done(null, result);
         }
     })
 }
 
+users.findById = function(id, done){
+    var query = 'SELECT * FROM users WHERE id=' + id;
+    db.get().query(query, function(err, result){
+        if(err) done(err);
+        else done(null, result);
+    })
+}
 module.exports = users;
