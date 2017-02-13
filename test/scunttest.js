@@ -8,11 +8,11 @@ var scunt = require('../models/scavengerHunts');
 describe('Scunt test', function () {
   before(function (done) {
     db.connect(db, function (err) {
-      seed.down(function () {
+      //seed.down(function () {
         seed.up(function () {
           done();
         });
-      });
+      //});
     });
   });
 
@@ -39,11 +39,11 @@ describe('Scunt test', function () {
 
         assert.notStrictEqual(result[0].createdAt, null );
         assert.notStrictEqual(result[0].updatedAt, null );
-
+        done();
       } );
 
 
-      done();
+      
     });
 
   });
@@ -69,10 +69,10 @@ describe('Scunt test', function () {
           assert.notStrictEqual(result[0].endTime, null);
 
           assert.notStrictEqual(result[0].createdAt, result[0].updatedAt );
-
+          done()
       } );
 
-        done()
+        
       });
     });
   });
