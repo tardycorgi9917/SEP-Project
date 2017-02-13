@@ -26,12 +26,10 @@ router.post('/create-user', function(req, res, next) {
       date,
       function(err, result){
           if(err){
-              console.log(err);
               res.status(500).send(err);
           }
           else {
-              console.log("User Created Successfully")
-              res.send(result.insertId.toString());
+              res.send(result.toString());
           }
       });
 });
