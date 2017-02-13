@@ -11,8 +11,7 @@ users.create = function(firstName, lastName, email, password, phoneNumber, profi
         }
         else {
             console.log("User Created Successfully")
-            // console.log(result)
-            done(null, result);
+            done(null, result.insertId);
         }
     });
 }
