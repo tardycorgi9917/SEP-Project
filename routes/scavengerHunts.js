@@ -12,10 +12,7 @@ router.post('/create-ScavengerHunt', function(req, res, next) {
     var ScuntName = req.body.name;
     var ScuntDesc = req.body.description;
     var ScuntStart = new Date(Date.parse(req.body.startTime));
-    echo ScuntStart
-
     var ScuntEnd  = new Date(Date.parse(req.body.endTime));
-    echo ScuntEnd
 
 
   scunt.create(ScuntName, ScuntDesc, ScuntStart,ScuntEnd, function(err, id){
@@ -48,6 +45,21 @@ router.put('/modify-ScavengerHunt', function(req,res,next){
 
 
 });
+
+
+router.post('/delete-ScavengerHunt', function(req,res,next){
+    var name = req.body.name;
+    scunt.delete(name, function(err, result){
+    if(err)
+    {
+      res.status(500).send("An error occurred");
+    }else{
+      res.sendStatus(200);
+    }
+   });
+
+});
+
 
 
 module.exports = router;

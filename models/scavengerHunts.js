@@ -27,7 +27,7 @@ scunt.update = function(id , name, description, startTime, endTime, done){
     var UpdatedAt = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
     var values = [name, description, sTime,eTime, UpdatedAt, id];
-    var query = 'UPDATE scunt SET name = ?, description = ? , startTime = ?, endTime = ?, updatedAt = ? WHERE id = ?'
+    var query = 'UPDATE scunt SET name = ?, description = ? , startTime = ?, endTime = ?, updatedAt = ? WHERE id = ?';
     
     db.get().query(query, values, function(err, result) {
         if (err) {
@@ -40,12 +40,13 @@ scunt.update = function(id , name, description, startTime, endTime, done){
 }
 
 
-scunt.delete = function(id, done){
-    var scuntId = id;
-    var query = 'DELETE from scunt WHERE id = ?'
+scunt.delete = function(name, done){
+
+    var name = name;
+    var query = 'DELETE from scunt WHERE name = ?';
 
 
-    db.get().query(query, scuntId, function(err, result) {
+    db.get().query(query, name, function(err, result) {
         if (err) {
             done(err, undefined);
         }else{
