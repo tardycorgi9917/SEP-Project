@@ -8,7 +8,7 @@ users.create = function(firstName, lastName, email, password, phoneNumber, profi
     var values = [firstName, lastName, email, password, phoneNumber, profilePicture, date, date]
     db.get().query(query, values, function(err, result){
         if(err) done(err);
-        else done(null, result);
+        else done(null, result.insertId);
     });
 }
 
