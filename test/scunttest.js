@@ -19,15 +19,30 @@ describe('Scunt test', function () {
   it('Scunt creation Successful', function (done) {
     var name = 'frosh';
     var description = 'fresh meat';
-    var startTime = new Date("September 1, 2016 11:13:00");
-    var endTime = new Date("September 13, 2016 11:13:00");
+    var startTime = new Date();
+    var endTime = new Date();
 
     scunt.create(name, description, startTime, endTime, function (err, resultId) {
       assert.strictEqual(err, undefined);
       assert.notStrictEqual(resultId, undefined);
-      // assert.strictEqual(Result.description, description);
-      // assert.strictEqual(Result.startTime, startTime.toISOString().slice(0, 19).replace('T', ' '));
-      // assert.strictEqual(Result.endTime, endTime.toISOString().slice(0, 19).replace('T', ' '));
+      
+      var query = "SELECT * FROM scunt WHERE id = ?";
+      values = [resultId];
+
+      db.get().query(query, values, function(errQuery,result){
+        assert.strictEqual(errQuery,null);
+
+        assert.strictEqual(result[0].name, name);
+        assert.strictEqual(result[0].description, description);
+        assert.notStrictEqual(result[0].startTime, null);
+        assert.notStrictEqual(result[0].endTime, null);
+
+        assert.notStrictEqual(result[0].createdAt, null );
+        assert.notStrictEqual(result[0].updatedAt, null );
+
+      } );
+
+
       done();
     });
 
@@ -41,8 +56,22 @@ describe('Scunt test', function () {
       var startTime = new Date("September 1, 2017 11:13:00");
       var endTime = new Date("September 13, 2017 11:13:00");
 
-      scunt.update(id.toString(), newName, newDesc, startTime, endTime, function (err, modifyResult) {
-        assert.strictEqual(-1, 7);
+      scunt.update(id.toString(), newName, newDesc, startTime, endTime, function (err, dummy) {
+        var query = "SELECT * FROM scunt WHERE id = ?";
+        values = [id.toString()];        
+
+        db.get().query(query, values, function(errQuery,result){
+          assert.strictEqual(errQuery,null);
+
+          assert.strictEqual(result[0].name, newName);
+          assert.strictEqual(result[0].description, newDesc);
+          assert.notStrictEqual(result[0].startTime, null);
+          assert.notStrictEqual(result[0].endTime, null);
+
+          assert.notStrictEqual(result[0].createdAt, result[0].updatedAt );
+
+      } );
+
         done()
       });
     });
