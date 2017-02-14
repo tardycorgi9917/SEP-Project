@@ -67,7 +67,8 @@ router.post('/view-ScavengerHunt', function(req,res,next){
     {
       res.status(500).send("An error occurred");
     }else{
-      res.sendStatus(200);
+      //TODO unsure on best practices on how to format of data
+      res.send(result);
     }
    });    
 
