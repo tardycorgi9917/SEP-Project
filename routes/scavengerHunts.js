@@ -57,6 +57,19 @@ router.post('/delete-ScavengerHunt', function(req,res,next){
       res.sendStatus(200);
     }
    });
+});
+
+
+router.post('/view-ScavengerHunt', function(req,res,next){
+    var name = req.body.name;
+    scunt.view(name, function(err, result){
+    if(err)
+    {
+      res.status(500).send("An error occurred");
+    }else{
+      res.sendStatus(200);
+    }
+   });    
 
 });
 

@@ -39,7 +39,7 @@ scunt.update = function(id , name, description, startTime, endTime, done){
 
 }
 
-
+//Should we be using the scunt ID here instead of name?
 scunt.delete = function(name, done){
 
     var name = name;
@@ -55,4 +55,20 @@ scunt.delete = function(name, done){
     })
 }
 
+scunt.view = function(name, done){
+    var name = name;
+    var query = 'SELECT * from scunt WHERE name = ?';
+
+    db.get().query(query, name, function(err, result){
+        if (err) {
+            done(err, undefined);
+        }else {
+            done(undefined, result);
+        }
+
+    })
+}
+
 module.exports = scunt;
+
+
