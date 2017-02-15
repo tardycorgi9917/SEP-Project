@@ -12,6 +12,7 @@ router.post('/create-task', function(req, res, next) {
     var description = req.body.description;
     var points = req.body.points;
     var scuntId = req.body.scuntId;
+    if(points == null) points = 0;
 
     tasks.create(taskName, description, points, scuntId, function (err, id) {
         if (err) {
