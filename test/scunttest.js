@@ -6,15 +6,14 @@ var seed = require("../database/seeders");
 var scunt = require('../models/scavengerHunts');
 
 describe('Scunt test', function () {
-  before(function (done) {
-    db.connect(db, function (err) {
-      //seed.down(function () {
-        seed.up(function () {
-          done();
+  
+    before(function (done) {
+        db.connect(db, function (err) {
+            seed.up(function () {
+                done();
+            });
         });
-      //});
     });
-  });
 
   it('Scunt creation Successful', function (done) {
     var name = 'frosh';
