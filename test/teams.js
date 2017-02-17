@@ -247,7 +247,7 @@ describe('Teams Tests', function () {
             async.waterfall([
                 function (callback) {
                     // Create scavenger hunt
-                    var scuntName = 'scuntteamtest6';
+                    var scuntName = 'scuntteamtest5';
                     var scuntDesc = 'desc';
                     var scuntStart = new Date();
                     var scuntEnd = new Date();
@@ -305,7 +305,7 @@ describe('Teams Tests', function () {
             async.waterfall([
                 function (callback) {
                     // Create scavenger hunt
-                    var scuntName = 'scuntteamtest5';
+                    var scuntName = 'scuntteamtest6';
                     var scuntDesc = 'desc';
                     var scuntStart = new Date();
                     var scuntEnd = new Date();
@@ -371,7 +371,7 @@ describe('Teams Tests', function () {
             async.waterfall([
                 function (callback) {
                     // Create scavenger hunt
-                    var scuntName = 'scuntteamtest5';
+                    var scuntName = 'scuntteamtest7';
                     var scuntDesc = 'desc';
                     var scuntStart = new Date();
                     var scuntEnd = new Date();
