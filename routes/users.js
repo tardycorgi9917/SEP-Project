@@ -9,6 +9,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/create-user', function(req, res, next) {
+  var username = req.body.username;
   var firstName = req.body.firstName;
   var lastName = req.body.lastName;
   var email = req.body.email;
@@ -17,6 +18,7 @@ router.post('/create-user', function(req, res, next) {
   var profilePicture = "";
   var date = new Date().toISOString().slice(0, 19).replace('T', ' ');
   user.create(
+      username,
       firstName,
       lastName,
       email,
@@ -33,5 +35,27 @@ router.post('/create-user', function(req, res, next) {
           }
       });
 });
+
+router.post('/update-user', function(req, res, next){
+    var email = req.body.email;
+    var fields = req.body.fields;
+    var values = req.body.values;
+    user.update(email, fields, values, function(err, result){
+        if(err) {
+            res.status(500).send(err);
+        } else {
+            console.log("Updated User Successfully");
+            res.send(result);
+        }
+    });
+});
+
+router.get('/find-email/:email', function(req, res){
+    var email = req.params.email;
+    user.findByEmail(email, function(err, result){
+        if(err) res.status(500).send(err);
+        else res.send(result);
+    })
+})
 
 module.exports = router;

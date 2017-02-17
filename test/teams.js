@@ -29,14 +29,15 @@ describe('Teams Tests', function () {
                 },
                 function (scuntId, callback) {
                     // Create user
-                    var firstName = 'fname';
+                    var username = 'user11';
+                    var firstName = 'fname11';
                     var lastName = 'lname';
-                    var email = 'asdf@gmail.com';
+                    var email = 'asdf8@gmail.com';
                     var pwd = '123';
                     var phonenumber = '213 546-7889';
                     var profilepic = '';
                     var date = new Date();
-                    users.create(firstName, lastName, email, pwd, phonenumber, profilepic, date, function (err, id) {
+                    users.create(username, firstName, lastName, email, pwd, phonenumber, profilepic, date, function (err, id) {
                         callback(err, scuntId, id);
                     });
                 },
@@ -85,19 +86,21 @@ describe('Teams Tests', function () {
                 },
                 function (scuntId, callback) {
                     // Create user 1
-                    var firstName = 'fname';
+                    var username = 'user1';
+                    var firstName = 'fname1';
                     var lastName = 'lname';
-                    var email = 'asdf@gmail.com';
+                    var email = 'asdf9@gmail.com';
                     var pwd = '123';
                     var phonenumber = '213 546-7889';
                     var profilepic = '';
                     var date = new Date();
-                    users.create(firstName, lastName, email, pwd, phonenumber, profilepic, date, function (err, id) {
+                    users.create(username, firstName, lastName, email, pwd, phonenumber, profilepic, date, function (err, id) {
                         callback(err, scuntId, id);
                     });
                 },
                 function (scuntId, user1Id, callback) {
                     // Create user 2
+                    var username = 'user2';
                     var firstName = 'fname2';
                     var lastName = 'lname2';
                     var email = 'asdf2@fgmail.com';
@@ -105,7 +108,7 @@ describe('Teams Tests', function () {
                     var phonenumber = '213 546-78892';
                     var profilepic = '';
                     var date = new Date();
-                    users.create(firstName, lastName, email, pwd, phonenumber, profilepic, date, function (err, id) {
+                    users.create(username, firstName, lastName, email, pwd, phonenumber, profilepic, date, function (err, id) {
                         callback(err, scuntId, user1Id, id);
                     });
                 },
@@ -144,14 +147,15 @@ describe('Teams Tests', function () {
                 },
                 function (scuntId, callback) {
                     // Create user
-                    var firstName = 'fname';
+                    var username = 'user3';
+                    var firstName = 'fname3';
                     var lastName = 'lname';
-                    var email = 'asdf@gmail.com';
+                    var email = 'asdf10@gmail.com';
                     var pwd = '123';
                     var phonenumber = '213 546-7889';
                     var profilepic = '';
                     var date = new Date();
-                    users.create(firstName, lastName, email, pwd, phonenumber, profilepic, date, function (err, id) {
+                    users.create(username, firstName, lastName, email, pwd, phonenumber, profilepic, date, function (err, id) {
                         callback(err, scuntId, id);
                     });
                 },
@@ -191,14 +195,15 @@ describe('Teams Tests', function () {
                 },
                 function (scuntId, callback) {
                     // Create user
+                    var username = 'user4';
                     var firstName = 'fname4';
                     var lastName = 'lname4';
-                    var email = 'asdf@gmail.com';
+                    var email = 'asdf1@gmail.com';
                     var pwd = '123';
                     var phonenumber = '213 546-7889';
                     var profilepic = '';
                     var date = new Date();
-                    users.create(firstName, lastName, email, pwd, phonenumber, profilepic, date, function (err, id) {
+                    users.create(username, firstName, lastName, email, pwd, phonenumber, profilepic, date, function (err, id) {
                         callback(err, scuntId, id);
                     });
                 },
@@ -250,27 +255,29 @@ describe('Teams Tests', function () {
                 },
                 function (scuntId, callback) {
                     // Create user 1
-                    var firstName = 'fname';
+                    var username = 'user5';
+                    var firstName = 'fname5';
                     var lastName = 'lname';
-                    var email = 'asdf@gmail.com';
+                    var email = 'asdf2@gmail.com';
                     var pwd = '123';
                     var phonenumber = '213 546-7889';
                     var profilepic = '';
                     var date = new Date();
-                    users.create(firstName, lastName, email, pwd, phonenumber, profilepic, date, function (err, id) {
+                    users.create(username, firstName, lastName, email, pwd, phonenumber, profilepic, date, function (err, id) {
                         callback(err, scuntId, id);
                     });
                 },
                 function (scuntId, user1Id, callback) {
                     // Create user 2
-                    var firstName = 'fname';
+                    var username = 'user6';
+                    var firstName = 'fname6';
                     var lastName = 'lname';
-                    var email = 'asdf@gmail.com';
+                    var email = 'asdf3@gmail.com';
                     var pwd = '123';
                     var phonenumber = '213 546-7889';
                     var profilepic = '';
                     var date = new Date();
-                    users.create(firstName, lastName, email, pwd, phonenumber, profilepic, date, function (err, id) {
+                    users.create(username, firstName, lastName, email, pwd, phonenumber, profilepic, date, function (err, id) {
                         callback(err, scuntId, user1Id, id);
                     });
                 },
@@ -306,27 +313,29 @@ describe('Teams Tests', function () {
                 },
                 function (scuntId, callback) {
                     // Create user 1
-                    var firstName = 'fname';
+                    var username = 'user7';
+                    var firstName = 'fname7';
                     var lastName = 'lname';
-                    var email = 'asdf@gmail.com';
+                    var email = 'asdf4@gmail.com';
                     var pwd = '123';
                     var phonenumber = '213 546-7889';
                     var profilepic = '';
                     var date = new Date();
-                    users.create(firstName, lastName, email, pwd, phonenumber, profilepic, date, function (err, id) {
+                    users.create(username, firstName, lastName, email, pwd, phonenumber, profilepic, date, function (err, id) {
                         callback(err, scuntId, id);
                     });
                 },
                 function (scuntId, user1Id, callback) {
                     // Create user 2
-                    var firstName = 'fname';
+                    var username = 'user8';
+                    var firstName = 'fname8';
                     var lastName = 'lname';
-                    var email = 'asdf@gmail.com';
+                    var email = 'asdf5@gmail.com';
                     var pwd = '123';
                     var phonenumber = '213 546-7889';
                     var profilepic = '';
                     var date = new Date();
-                    users.create(firstName, lastName, email, pwd, phonenumber, profilepic, date, function (err, id) {
+                    users.create(username, firstName, lastName, email, pwd, phonenumber, profilepic, date, function (err, id) {
                         callback(err, scuntId, user1Id, id);
                     });
                 },
@@ -370,27 +379,29 @@ describe('Teams Tests', function () {
                 },
                 function (scuntId, callback) {
                     // Create user 1
-                    var firstName = 'fname';
+                    var username = 'user9';
+                    var firstName = 'fname9';
                     var lastName = 'lname';
-                    var email = 'asdf@gmail.com';
+                    var email = 'asdf6@gmail.com';
                     var pwd = '123';
                     var phonenumber = '213 546-7889';
                     var profilepic = '';
                     var date = new Date();
-                    users.create(firstName, lastName, email, pwd, phonenumber, profilepic, date, function (err, id) {
+                    users.create(username, firstName, lastName, email, pwd, phonenumber, profilepic, date, function (err, id) {
                         callback(err, scuntId, id);
                     });
                 },
                 function (scuntId, user1Id, callback) {
                     // Create user 2
-                    var firstName = 'fname';
+                    var username = 'user10';
+                    var firstName = 'fname10';
                     var lastName = 'lname';
-                    var email = 'asdf@gmail.com';
+                    var email = 'asdf7@gmail.com';
                     var pwd = '123';
                     var phonenumber = '213 546-7889';
                     var profilepic = '';
                     var date = new Date();
-                    users.create(firstName, lastName, email, pwd, phonenumber, profilepic, date, function (err, id) {
+                    users.create(username, firstName, lastName, email, pwd, phonenumber, profilepic, date, function (err, id) {
                         callback(err, scuntId, user1Id, id);
                     });
                 },
