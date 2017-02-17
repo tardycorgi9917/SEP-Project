@@ -7,7 +7,7 @@ var scunt = require('../models/scavengerHunts');
 
 describe('Scunt test', function () {
 
-    beforeEach(function (done) {
+    before(function (done) {
         db.connect(db, function (err) {
             seed.up(function () {
                 done();
@@ -43,7 +43,7 @@ describe('Scunt test', function () {
     });
 
   });
-/*
+
   it('scunt already exist', function (done){
     async.waterfall([
       function(callback){
@@ -78,11 +78,12 @@ describe('Scunt test', function () {
       function(err,id){
 
         assert.strictEqual(err, 'Scunt with same name already exist');
+        done();
       }
     );
   }
   );
-*/
+
 
 
   it('Scunt update Succressful', function (done) {
@@ -113,14 +114,6 @@ describe('Scunt test', function () {
       });
     });
   });
-
-  afterEach(function (done) {
-      db.connect(db, function (err) {
-          seed.down(function () {
-              done();
-          });
-      });
-  });  
 
 }
 
