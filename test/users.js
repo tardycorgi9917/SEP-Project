@@ -26,15 +26,14 @@ describe('User Tests', function(){
         it('should create user successfully', function(done){
             async.waterfall([
                 function(callback){
-                    users.create(firstName, lastName, email, password, phoneNumber, profilePicture, date, date,
+                    users.create(firstName, lastName, email, password, phoneNumber, profilePicture, date,
                         function(err, result){
-                            assert(err, undefined);
-                            assertNotEqual(result.insertId, undefined);
+                            assert.strictEqual(err, null);
+                            assert.notStrictEqual(result, null);
                             callback(null, result);
                         }
                     );
-                }, function(result, callback){
-                    var id = result.insertId;
+                }, function(id, callback){
                     users.findById(id, function(err, result){
                         if(err) callback(err);
                         else callback(null, result);
@@ -50,7 +49,7 @@ describe('User Tests', function(){
                     callback(null);
                 }],
                 function(err){
-                    assert(err, null);
+                    assert.equal(err, null);
                     done();
             });
         });
@@ -62,7 +61,7 @@ describe('User Tests', function(){
                 function(callback){
                     nullName = null;
                     errorEmail = "error@email.com";
-                    users.create(nullName, lastName, errorEmail, password, phoneNumber, profilePicture, date, date,
+                    users.create(nullName, lastName, errorEmail, password, phoneNumber, profilePicture, date,
                         function(err, result){
                             assert.notStrictEqual(err, null);
                             callback(null, errorEmail);
@@ -84,7 +83,7 @@ describe('User Tests', function(){
                 function(callback){
                     emptyName = "";
                     errorEmail = "error@email.com";
-                    users.create(emptyName, lastName, errorEmail, password, phoneNumber, profilePicture, date, date,
+                    users.create(emptyName, lastName, errorEmail, password, phoneNumber, profilePicture, date,
                         function(err, result){
                             assert.notEqual(err, null);
                             callback(null, errorEmail);
@@ -102,7 +101,7 @@ describe('User Tests', function(){
         })
 
         it('should change phone number', function(done){
-            var email = "eduardo.coronado@hotmail.com";
+            var email = "eduardo.coronado@gmail.com";
             var fields = ["phoneNumber"];
             var values = ["(514)911-4321"];
             async.waterfall([
@@ -126,7 +125,7 @@ describe('User Tests', function(){
         });
 
         it('should change user firstName and lastName', function(done){
-            var email = "eduardo.coronado@hotmail.com";
+            var email = "eduardo.coronado@gmail.com";
             var fields = ["firstName", "lastName"];
             var values = ["Michael", "Abdallah"];
             async.waterfall([
@@ -150,7 +149,7 @@ describe('User Tests', function(){
         });
 
         it('should change password', function(done){
-            var email = "eduardo.coronado@hotmail.com";
+            var email = "eduardo.coronado@gmail.com";
             var fields = ["password"];
             var values = ["vivamexico"];
             async.waterfall([
@@ -162,7 +161,7 @@ describe('User Tests', function(){
                     });
                 }, function(callback){
                     users.findByEmail(email, function(err, result){
-                        assert.notEqual(err, undefined);
+                        assert.strictEqual(err, null);
                         assert(result.length, 1);
                         assert(result[0].password, values[0]);
                         callback(null)
