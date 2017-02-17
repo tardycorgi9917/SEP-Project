@@ -1,5 +1,5 @@
 var db = require("../database/db.js");
-
+var async = require('async');
 var scunt = {}
 
 scunt.createScunt = function(name, description, startTime, endTime, done) {
@@ -7,7 +7,7 @@ scunt.createScunt = function(name, description, startTime, endTime, done) {
 
     var date = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
-    var values = [name, description,sTime ,eTime, date, date];
+    var values = [name, description,startTime ,endTime, date, date];
     var query = 'INSERT INTO scunt (name, description, startTime, endTime, createdAt, updatedAt) VALUES(?, ?, ?, ?, ?, ?)';
 
     db.get().query(query, values, function(err, result) {
@@ -21,8 +21,6 @@ scunt.createScunt = function(name, description, startTime, endTime, done) {
 
 scunt.create = function(name,description, startTime, endTime, done){
 
-    var sTime = startTime.toISOString().slice(0, 19).replace('T', ' ');
-    var eTime = endTime.toISOString().slice(0, 19).replace('T', ' ');
 
     async.waterfall([
         //checks if scunt already exist
@@ -43,6 +41,9 @@ scunt.create = function(name,description, startTime, endTime, done){
 
         },
         function(callback){
+
+            var sTime = startTime.toISOString().slice(0, 19).replace('T', ' ');
+            var eTime = endTime.toISOString().slice(0, 19).replace('T', ' ');
             scunt.createScunt(name,description, sTime, eTime , done);
         }
 
