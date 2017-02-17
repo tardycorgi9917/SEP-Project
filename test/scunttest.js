@@ -1,13 +1,13 @@
 var assert = require('assert');
-
+var async = require('async')
 var db = require('../database/db');
 var seed = require("../database/seeders");
 
 var scunt = require('../models/scavengerHunts');
 
 describe('Scunt test', function () {
-  
-    before(function (done) {
+
+    beforeEach(function (done) {
         db.connect(db, function (err) {
             seed.up(function () {
                 done();
@@ -39,15 +39,53 @@ describe('Scunt test', function () {
         assert.notStrictEqual(result[0].createdAt, null );
         assert.notStrictEqual(result[0].updatedAt, null );
         done();
-      } );
-
-
-      
+      } );    
     });
 
   });
+/*
+  it('scunt already exist', function (done){
+    async.waterfall([
+      function(callback){
+        var name = "Supa Frosh";
+        var description = "nothing";
+        var date = new Date();
+        scunt.create(name,description, date, date, function(err,resultId){
+          if(err != undefined)
+          {
+            callback(err,undefined);
+          }else{
+            callback(undefined, resultId);
+          }
+        }        
+        );   
+      },
+      function(ID, callback){
+        var name = "Supa Frosh";
+        var description = "nothing";
+        var date = new Date();
+        scunt.create(name,description, date,date, function(err,resultId)
+        {
+          if(err != undefined){
+            callback(err, undefined);
+          }else{
+            callback(undefined, resultId);
+          }
+        }        
+        );       
+      }
+    ],
+      function(err,id){
 
-  it('Scunt update Succresstul', function (done) {
+        assert.strictEqual(err, 'Scunt with same name already exist');
+      }
+    );
+  }
+  );
+*/
+
+
+  it('Scunt update Succressful', function (done) {
     scunt.create('fish frosh', 'jesus loves you', new Date("September 1, 2016 11:13:00"), new Date("September 13, 2016 11:13:00"), function (err, id) {
       assert.strictEqual(err, undefined);
       var newName = 'NK Frosh';
@@ -75,4 +113,15 @@ describe('Scunt test', function () {
       });
     });
   });
-});
+
+  afterEach(function (done) {
+      db.connect(db, function (err) {
+          seed.down(function () {
+              done();
+          });
+      });
+  });  
+
+}
+
+);
