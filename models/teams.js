@@ -156,4 +156,27 @@ teams.join = function (userId, teamId, allowswitch, done) {
     });
 }
 
+teams.viewByScunt = function(scuntId, done) {
+    var query = 'SELECT * FROM teams WHERE scuntId = ?';
+    var values = [scuntId];
+
+    db.get().query(query, values, function(err, result) {
+        done(err, result);
+    });
+}
+
+teams.teamUsers = function(teamId, done) {
+    var query = 'SELECT teamUserRel.userType, users.id, users.username, users.firstName, users.lastName,'
+                + ' users.email, users.phoneNumber, users.profilePicture'
+                + ' FROM teamUserRel'
+                + ' JOIN users ON teamUserRel.userId = users.id'
+                + ' WHERE teamId = ?'
+                
+    var values = [teamId];
+
+    db.get().query(query, values, function(err, result) {
+        done(err, result);
+    });
+}
+
 module.exports = teams;

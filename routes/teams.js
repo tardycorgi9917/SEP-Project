@@ -7,6 +7,26 @@ router.get('/', function(req, res, next) {
   res.send('this is the teams app');
 });
 
+var listResponse = function(listquery, arg, res) {
+    listquery(arg, function(err, result) {
+       if (err) {
+           res.status(500).send(err);
+       } else {
+           res.send(result);
+       }
+    })
+}
+
+router.get('/list-teams', function(req, res, next) {
+   var scuntId = req.query.scuntId; 
+   listResponse(teams.viewByScunt, scuntId, res);
+});
+
+router.get('/team-users', function(req, res, next) {
+    var teamId = req.query.teamId;
+    listResponse(teams.teamUsers, teamId, res);
+});
+
 router.post('/create-team', function(req, res, next) {
     var name = req.body.name;
     var scuntId = req.body.scuntId;
