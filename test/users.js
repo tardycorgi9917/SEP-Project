@@ -15,6 +15,7 @@ describe('User Tests', function(){
     });
 
     describe('User Creation', function(){
+        var username = "Eduardo";
         var firstName = "Eduardo";
         var lastName = "Coronado";
         var email = "eduardo.coronado@gmail.com";
@@ -26,7 +27,7 @@ describe('User Tests', function(){
         it('should create user successfully', function(done){
             async.waterfall([
                 function(callback){
-                    users.create(firstName, lastName, email, password, phoneNumber, profilePicture, date,
+                    users.create(username, firstName, lastName, email, password, phoneNumber, profilePicture, date,
                         function(err, result){
                             assert.strictEqual(err, null);
                             assert.notStrictEqual(result, null);
@@ -54,14 +55,12 @@ describe('User Tests', function(){
             });
         });
 
-        // TODO check for duplicate errors
-
         it('should not create user with null name', function(done){
             async.waterfall([
                 function(callback){
                     nullName = null;
                     errorEmail = "error@email.com";
-                    users.create(nullName, lastName, errorEmail, password, phoneNumber, profilePicture, date,
+                    users.create(nullName, firstName, lastName, errorEmail, password, phoneNumber, profilePicture, date,
                         function(err, result){
                             assert.notStrictEqual(err, null);
                             callback(null, errorEmail);
@@ -69,7 +68,7 @@ describe('User Tests', function(){
                     );
                 }, function(errorEmail, callback){
                     users.findByEmail(errorEmail, function(err, result){
-                        assert(result.length, 0);
+                        assert.equal(result.length, 0);
                         callback(null)
                     });
                 }
@@ -83,7 +82,7 @@ describe('User Tests', function(){
                 function(callback){
                     emptyName = "";
                     errorEmail = "error@email.com";
-                    users.create(emptyName, lastName, errorEmail, password, phoneNumber, profilePicture, date,
+                    users.create(emptyName, firstName, lastName, errorEmail, password, phoneNumber, profilePicture, date,
                         function(err, result){
                             assert.notEqual(err, null);
                             callback(null, errorEmail);
@@ -91,7 +90,7 @@ describe('User Tests', function(){
                     );
                 }, function(errorEmail, callback){
                     users.findByEmail(errorEmail, function(err, result){
-                        assert(result.length, 0);
+                        assert.equal(result.length, 0);
                         callback(null)
                     });
                 }
