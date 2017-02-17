@@ -9,6 +9,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/create-user', function(req, res, next) {
+  var username = req.body.username;
   var firstName = req.body.firstName;
   var lastName = req.body.lastName;
   var email = req.body.email;
@@ -17,6 +18,7 @@ router.post('/create-user', function(req, res, next) {
   var profilePicture = "";
   var date = new Date().toISOString().slice(0, 19).replace('T', ' ');
   user.create(
+      username,
       firstName,
       lastName,
       email,

@@ -4,6 +4,7 @@ schema.users = {
     "name": "users",
     "fields" : {
         "id" : "int(11) NOT NULL AUTO_INCREMENT",
+        "username": "varchar(200) NOT NULL",
         "firstName": "varchar(200) NOT NULL",
         "lastName" : "varchar(200) NOT NULL",
         "email" : "varchar(200) NOT NULL",
@@ -14,7 +15,9 @@ schema.users = {
         "updatedAt" : "datetime NOT NULL"
     },
     "constraints": [
-        "PRIMARY KEY (id)"
+        "PRIMARY KEY (id)",
+        "CONSTRAINT username UNIQUE (username)",
+        "CONSTRAINT email UNIQUE (email)",
     ],
 };
 
