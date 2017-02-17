@@ -32,7 +32,7 @@ scunt.create = function(name,description, startTime, endTime, done){
                     callback(err);
                 }else if(result[0].duplicateScunt > 0 )
                 {
-                    callback('Scunt with same name already exist ')
+                    callback('Scunt with same name already exist')
                 }else{
                     callback(null);
                 }
