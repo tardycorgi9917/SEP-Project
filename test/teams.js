@@ -443,4 +443,88 @@ describe('Teams Tests', function () {
 
         });
     });
+    
+    describe('Team viewing tests', function () {
+        it('Switch team using join', function (done) {
+            async.waterfall([
+                function (callback) {
+                    // Create scavenger hunt
+                    var scuntName = 'scuntteamtest6';
+                    var scuntDesc = 'desc';
+                    var scuntStart = new Date();
+                    var scuntEnd = new Date();
+                    scunts.create(scuntName, scuntDesc, scuntStart, scuntEnd, callback);
+                },
+                function (scuntId, callback) {
+                    // Create user 1
+                    var username = 'user12';
+                    var firstName = 'fname12';
+                    var lastName = 'lname';
+                    var email = 'asdf12@gmail.com';
+                    var pwd = '123';
+                    var phonenumber = '213 546-7889';
+                    var profilepic = '';
+                    var date = new Date();
+                    users.create(username, firstName, lastName, email, pwd, phonenumber, profilepic, date, function (err, id) {
+                        callback(err, scuntId, id);
+                    });
+                },
+                function (scuntId, user1Id, callback) {
+                    // Create user 2
+                    var username = 'user13';
+                    var firstName = 'fname13';
+                    var lastName = 'lname';
+                    var email = 'asdf13@gmail.com';
+                    var pwd = '123';
+                    var phonenumber = '213 546-7889';
+                    var profilepic = '';
+                    var date = new Date();
+                    users.create(username, firstName, lastName, email, pwd, phonenumber, profilepic, date, function (err, id) {
+                        callback(err, scuntId, user1Id, id);
+                    });
+                },
+                function (scuntId, user1Id, user2Id, callback) {
+                    // create team 1
+                    var name = 'teamtest9';
+                    teams.create(name, scuntId, user1Id, function (err, id) {
+                        assert.strictEqual(err, null, 'teams create has some invalid sql ' + err);
+                        callback(err, scuntId, user1Id, user2Id, id);
+                    });
+                },
+                function (scuntId, user1Id, user2Id, team1Id, callback) {
+                    // create team 2
+                    var name = 'teamtest10';
+                    teams.create(name, scuntId, user2Id, function (err, id) {
+                        assert.strictEqual(err, null, 'teams create has some invalid sql ' + err);
+                        callback(err, scuntId, user1Id, user2Id, team1Id, id);
+                    });
+                },
+                function (scuntId, user1Id, user2Id, team1Id, team2Id, callback) {
+                    // View teams
+                    teams.viewByScunt(scuntId, function(err, result) {
+                        assert.strictEqual(err, null, 'Error in view by scunt');
+                        assert.strictEqual(result.length, 2);
+                        assert.strictEqual(result[0].id, team1Id);
+                        assert.strictEqual(result[0].scuntId, scuntId);
+                        assert.strictEqual(result[1].id, team2Id);
+                        assert.strictEqual(result[1].scuntId, scuntId);
+                        callback(err, user1Id, user2Id, team1Id, team2Id);
+                    });
+                },
+                function (user1Id, user2Id, team1Id, team2Id, callback) {
+                    // view users in team
+                    teams.teamUsers(team1Id, function(err, result) {
+                        assert.strictEqual(err, null, 'Error in view by team');
+                        assert.strictEqual(result.length, 1);
+                        assert.strictEqual(result[0].id, user1Id);
+                        callback(err);
+                    })
+                },
+            ], function (err) {
+                assert.strictEqual(err, null, 'unknown error occured');
+                done();
+            })
+
+        });
+    });
 });
