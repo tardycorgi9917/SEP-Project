@@ -445,11 +445,11 @@ describe('Teams Tests', function () {
     });
     
     describe('Team viewing tests', function () {
-        it('Switch team using join', function (done) {
+        it('View teams in scavenger hunt and users in team', function (done) {
             async.waterfall([
                 function (callback) {
                     // Create scavenger hunt
-                    var scuntName = 'scuntteamtest6';
+                    var scuntName = 'scuntteamtest8';
                     var scuntDesc = 'desc';
                     var scuntStart = new Date();
                     var scuntEnd = new Date();
@@ -521,7 +521,7 @@ describe('Teams Tests', function () {
                     })
                 },
             ], function (err) {
-                assert.strictEqual(err, null, 'unknown error occured');
+                assert.strictEqual(err, null, 'unknown error occured' + JSON.stringify(err));
                 done();
             })
 
