@@ -32,7 +32,6 @@ router.put('/modify-ScavengerHunt', function(req,res,next){
     var newScuntStart = new Date(Date.parse(req.body.startTime));
     var newScuntEnd = new Date(Date.parse(req.body.endTime));
 
-
     scunt.update(id,newScuntName, newScuntDesc, newScuntStart,newScuntEnd, function(err, result){
     if(err)
     {
@@ -41,9 +40,6 @@ router.put('/modify-ScavengerHunt', function(req,res,next){
       res.sendStatus(200);
     }
    });
-
-
 });
-
 
 module.exports = router;
