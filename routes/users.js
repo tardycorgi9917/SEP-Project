@@ -11,7 +11,7 @@ router.get('/', function(req, res, next) {
 router.post('/login', function(req, res, next) {
   var username = req.body.username;
   var password = req.body.password;
-  
+
   user.login(username, password, function(err, id) {
       if (err) {
           res.sendStatus(403);
@@ -29,6 +29,7 @@ router.post('/create-user', function(req, res, next) {
   var password = req.body.password;
   var phoneNumber = req.body.phoneNumber || "";
   var profilePicture = "";
+  console.log(req.body);
   var date = new Date().toISOString().slice(0, 19).replace('T', ' ');
   user.create(
       username,
@@ -41,6 +42,7 @@ router.post('/create-user', function(req, res, next) {
       date,
       function(err, result){
           if(err){
+              console.log(err);
               res.status(500).send(err);
           }
           else {

@@ -15,6 +15,7 @@ router.post('/create-team', function(req, res, next) {
     teams.create(name, scuntId, leaderId, function (err, id) {
         if (err) {
             res.status(500).send(err);
+            console.log(err);
         } else {
             res.send(id.toString());
         }
