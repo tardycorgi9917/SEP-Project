@@ -8,6 +8,19 @@ router.get('/', function(req, res, next) {
   res.send('this is the users app');
 });
 
+router.post('/login', function(req, res, next) {
+  var username = req.body.username;
+  var password = req.body.password;
+  
+  user.login(username, password, function(err, id) {
+      if (err) {
+          res.sendStatus(403);
+      } else {
+          res.send(id.toString());
+      }
+  });
+});
+
 router.post('/create-user', function(req, res, next) {
   var username = req.body.username;
   var firstName = req.body.firstName;

@@ -3,6 +3,19 @@ var async = require('async');
 
 var users = {}
 
+users.login = function(username, password, done) {
+    var query = 'SELECT id from users WHERE username = ? AND password = ?';
+    var values = [username, password];
+
+    db.get().query(query, values, function(err, result) {
+        if (err || result.length == 0) {
+            done("Authorization failed: " + err);
+        } else {
+            done(null, result[0].id);
+        }
+    });
+}
+
 users.create = function(username, firstName, lastName, email, password, phoneNumber, profilePicture, date, done) {
     if (!username) {
         return done('Need to provide a first name');
