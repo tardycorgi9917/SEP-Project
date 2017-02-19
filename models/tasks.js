@@ -3,8 +3,12 @@ var async = require('async');
 
 var tasks = {}
 
-// Initial values
-tasks.points = 0;
+tasks.list = function(scuntId, done) {
+	var query = 'SELECT * FROM tasks WHERE scuntId = ?';
+	var values = [scuntId];
+
+	db.get().query(query, values, done);
+}
 
 tasks.create = function(taskName, description, points, scuntId, done) {
 	console.log('create');
