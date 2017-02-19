@@ -56,8 +56,8 @@ router.post('/edit-task', function(req, res, next) {
 	})
 });
 
-router.delete('/delete-task', function(req, res, next) {
-	var taskId = req.body.taskId;
+router.delete('/delete-task/', function(req, res, next) {
+	var taskId = req.query.taskId;
 
 	tasks.delete(taskId, function(err) {
 		if (err) {

@@ -30,7 +30,7 @@ router.post('/create-ScavengerHunt', function(req, res, next) {
     scunt.create(ScuntName, ScuntDesc, ScuntStart,ScuntEnd, function(err, id){
         if(err)
         {
-          res.status(500).send("An error occurred");
+          res.status(500).send(err);
         }else{
           res.send(id.toString());
         }
@@ -60,7 +60,7 @@ router.delete('/delete-ScavengerHunt/:scuntId', function(req, res, next) {
 
     scunt.delete(scuntId, function (err, result) {
       if (err) {
-        res.status(500).send("An error occurred");
+        res.status(500).send(err);
       } else {
         res.sendStatus(200);
       }
