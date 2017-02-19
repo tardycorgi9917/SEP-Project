@@ -4,7 +4,8 @@ var async = require('async');
 var tasks = {}
 
 tasks.list = function(scuntId, done) {
-	var query = 'SELECT * FROM tasks WHERE scuntId = ?';
+	var query = 'SELECT id, name, description, points, scuntId, createdAt AS created, updatedAt AS updated'
+				+ ' FROM tasks WHERE scuntId = ?';
 	var values = [scuntId];
 
 	db.get().query(query, values, done);
