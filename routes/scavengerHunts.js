@@ -13,7 +13,7 @@ router.get('/list-scunts', function(req, res) {
     if (err) {
       res.sendStatus(500);
     } else {
-      res.send({JSON.stringify(result)});
+      res.send(JSON.stringify(result));
     }
   })
 }); 
@@ -53,6 +53,18 @@ router.put('/modify-ScavengerHunt', function(req,res,next){
       res.sendStatus(200);
     }
    });
+});
+
+router.delete('/delete-ScavengerHunt/:scuntId', function(req, res, next) {
+    var scuntId = req.params.scuntId;
+
+    scunt.delete(scuntId, function (err, result) {
+      if (err) {
+        res.status(500).send("An error occurred");
+      } else {
+        res.sendStatus(200);
+      }
+    });
 });
 
 module.exports = router;

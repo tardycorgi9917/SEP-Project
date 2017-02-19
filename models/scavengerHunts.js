@@ -59,8 +59,7 @@ scunt.update = function(id , name, description, startTime, endTime, done){
         }else{
             done(undefined, result);
         }
-    })
-
+    });
 }
 
 scunt.list = function(done) {
@@ -72,5 +71,13 @@ scunt.list = function(done) {
     })
 }
 
+scunt.delete = function(id, done) {
+    var query = 'DELETE FROM scunt WHERE id = ?';
+    var values = [id];
+
+    db.get().query(query, values, function(err, result) {
+        done(err, result);
+    });
+}
 
 module.exports = scunt;
