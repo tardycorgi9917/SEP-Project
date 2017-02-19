@@ -22,8 +22,8 @@ router.post('/create-team', function(req, res, next) {
     })
 });
 
-router.delete('/delete-team', function(req, res, next) {
-    var teamId = req.body.teamId;
+router.delete('/delete-team/:teamId', function(req, res, next) {
+    var teamId = req.params.teamId;
 
     teams.delete(teamId, function(err) {
         if (err) {
