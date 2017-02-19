@@ -447,7 +447,7 @@ describe('Teams Tests', function () {
 
     describe('team list', function(){
 
-        it('list teams accurately', function(){
+        it('list teams accurately', function(done){
             async.waterfall([
                 function (callback) {
                     // Create scavenger hunt
@@ -528,7 +528,7 @@ describe('Teams Tests', function () {
                                 i++;
                             }
                             
-                            callback(null);                 
+                            callback(err);                 
                         }
                     );
                 }                
