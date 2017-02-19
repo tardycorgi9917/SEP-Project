@@ -18,6 +18,15 @@ teams.createTeamUserRel = function(teamId, userId, type, done) {
     })
 }
 
+teams.removeTeamUserRel = function(teamId, userId, done) {
+    var query = 'DELETE FROM teamUserRel WHERE teamId = ? AND userId = ?';
+    var values = [teamId, userId];
+
+    db.get().query(query, values, function(err, result) {
+        done(err);
+    });
+}
+
 teams.create = function(name, points, maxmembers, scuntId, leaderId, done) {
     var now = new Date().toISOString().slice(0, 19).replace('T', ' ');
 

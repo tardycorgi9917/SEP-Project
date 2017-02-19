@@ -48,7 +48,7 @@ router.delete('/delete-team/:teamId', function(req, res, next) {
     });
 });
 
-router.post('/add-to-team', function(req, res, next) {
+router.post('/add-to-team/', function(req, res, next) {
     var userId = req.body.userId;
     var teamId = req.body.teamId;
 
@@ -72,6 +72,19 @@ router.post('/join-team', function(req, res, next) {
             res.sendStatus(200);
         }
     });
+});
+
+router.delete('/remove-from-team/:teamId/:userId', function(req, res, next) {
+    var userId = req.params.userId;
+    var teamId = req.params.teamId;
+
+    teams.removeTeamUserRel(teamId, userId, function(err) {
+        if (err) {
+            res.status(500).send(err);
+        } else {
+            res.sendStatus(200);
+        }
+    })
 });
 
 module.exports = router;
