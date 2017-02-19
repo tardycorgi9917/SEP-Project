@@ -4,7 +4,7 @@ var async = require('async');
 var users = {}
 
 users.login = function(username, password, done) {
-    var query = 'SELECT id, username, firstname, email, phoneNumber FROM users WHERE username = ? AND password = ?';
+    var query = 'SELECT id, username, firstName, lastName, email, phoneNumber, isPhoneNumberVisible FROM users WHERE username = ? AND password = ?';
     var values = [username.toString(), password.toString()];
 
     db.get().query(query, values, function(err, result) {

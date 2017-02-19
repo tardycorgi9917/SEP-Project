@@ -10,6 +10,7 @@ schema.users = {
         "email" : "varchar(200) NOT NULL",
         "password" : "varchar(255) NOT NULL",
         "phoneNumber" : "varchar(50)",
+        "isPhoneNumberVisible": "varchar(5) NOT NULL DEFAULT 'true'",
         "profilePicture" : "BLOB",
         "createdAt" : "datetime NOT NULL",
         "updatedAt" : "datetime NOT NULL"
