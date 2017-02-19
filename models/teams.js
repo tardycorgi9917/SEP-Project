@@ -9,13 +9,7 @@ teams.createTeamUserRel = function(teamId, userId, type, done) {
     var now = new Date().toISOString().slice(0, 19).replace('T', ' ');
     var values = [teamId, userId, type, now, now];
 
-    db.get().query(query, values, function(err, result) {
-        if (err) {
-            done(err);
-        } else {
-            done(undefined, result.insertId);
-        }
-    })
+    db.get().query(query, values, done);
 }
 
 teams.removeTeamUserRel = function(teamId, userId, done) {
@@ -195,11 +189,7 @@ teams.update = function(teamId, name, points, maxmembers, scuntId, done) {
     var query = "UPDATE `teams` SET `name`=?,`points`=?,`maxMembers`=?,`scuntId`=?,`updatedAt`=? WHERE `id`=?";
     var values = [name, points, maxmembers, scuntId, now, teamId];
     db.get().query(query, values, function(err, res){
-        if(err){
-            done(err);
-        } else {
-            done(null);
-        }
+        done(err);
     });
 }
 
