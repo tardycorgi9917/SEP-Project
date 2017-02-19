@@ -11,12 +11,12 @@ router.get('/', function(req, res, next) {
 router.post('/login', function(req, res, next) {
   var username = req.body.username;
   var password = req.body.password;
-
-  user.login(username, password, function(err, id) {
+  
+  user.login(username, password, function(err, user) {
       if (err) {
           res.sendStatus(403);
       } else {
-          res.send(id.toString());
+          res.send(JSON.stringify(user));
       }
   });
 });
