@@ -18,7 +18,7 @@ users.login = function(username, password, done) {
 
 users.create = function(username, firstName, lastName, email, password, phoneNumber, profilePicture, date, done) {
     if (!username) {
-        return done('Need to provide a first name');
+        return done('Need to provide a username');
     }
 
     // Create user

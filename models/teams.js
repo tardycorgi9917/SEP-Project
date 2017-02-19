@@ -190,4 +190,17 @@ teams.list = function(done) {
     })
 }
 
+teams.update = function(teamId, name, points, maxmembers, scuntId, done) {
+    var now = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    var query = "UPDATE `teams` SET `name`=?,`points`=?,`maxMembers`=?,`scuntId`=?,`updatedAt`=? WHERE `id`=?";
+    var values = [name, points, maxmembers, scuntId, now, teamId];
+    db.get().query(query, values, function(err, res){
+        if(err){
+            done(err);
+        } else {
+            done(null);
+        }
+    });
+}
+
 module.exports = teams;
