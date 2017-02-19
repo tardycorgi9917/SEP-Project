@@ -20,13 +20,14 @@ router.get('/list-teams', function(req, res, next) {
 
 router.post('/create-team', function(req, res, next) {
     var name = req.body.name;
-    var name = req.body.points;
-    var name = req.body.maxmembers;
+    var points = req.body.points;
+    var maxmembers = req.body.maxmembers;
     var scuntId = req.body.scuntId;
     var leaderId = req.body.leaderId;
 
-    teams.create(name, scuntId, leaderId, function (err, id) {
+    teams.create(name, points, maxmembers, scuntId, leaderId, function (err, id) {
         if (err) {
+            console.log(err);
             res.status(500).send(err);
             console.log(err);
         } else {
