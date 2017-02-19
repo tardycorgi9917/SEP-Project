@@ -3,8 +3,6 @@ var async = require('async');
 var scunt = {}
 
 scunt.createScunt = function(name, description, startTime, endTime, done) {
-
-
     var date = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
     var values = [name, description,startTime ,endTime, date, date];
@@ -20,8 +18,6 @@ scunt.createScunt = function(name, description, startTime, endTime, done) {
 }
 
 scunt.create = function(name,description, startTime, endTime, done){
-
-
     async.waterfall([
         //checks if scunt already exist
         function(callback){
@@ -36,30 +32,20 @@ scunt.create = function(name,description, startTime, endTime, done){
                 }else{
                     callback(null);
                 }
-
             });
-
         },
         function(callback){
-
             var sTime = startTime.toISOString().slice(0, 19).replace('T', ' ');
             var eTime = endTime.toISOString().slice(0, 19).replace('T', ' ');
             scunt.createScunt(name,description, sTime, eTime , done);
         }
-
     ],function(err, scuntId){
-
         done(err,scuntId);
-
     });
-
-
 
 }
 
-
 scunt.update = function(id , name, description, startTime, endTime, done){
-
     var sTime = startTime.toISOString().slice(0, 19).replace('T', ' ');
     var eTime = endTime.toISOString().slice(0, 19).replace('T', ' ');
     var UpdatedAt = new Date().toISOString().slice(0, 19).replace('T', ' ');
@@ -76,5 +62,15 @@ scunt.update = function(id , name, description, startTime, endTime, done){
     })
 
 }
+
+scunt.list = function(done) {
+    var query = 'SELECT id, name, description, startTime AS start, endTime AS end, createdAt AS created, updatedAt AS updated '
+                + 'FROM scunt';
+    
+    db.get().query(query, null, function(err, result) {
+        done(err, result);
+    })
+}
+
 
 module.exports = scunt;

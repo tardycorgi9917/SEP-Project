@@ -8,6 +8,16 @@ router.get('/', function(req, res, next) {
   res.send('this is the scunt app');
 });
 
+router.get('/list-scunts', function(req, res) {
+  scunt.list(function(err, result) {
+    if (err) {
+      res.sendStatus(500);
+    } else {
+      res.send({JSON.stringify(result)});
+    }
+  })
+}); 
+
 router.post('/create-ScavengerHunt', function(req, res, next) {
     var ScuntName = req.body.name;
     var ScuntDesc = req.body.description;
