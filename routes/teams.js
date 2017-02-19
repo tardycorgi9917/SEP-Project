@@ -87,4 +87,20 @@ router.delete('/remove-from-team/:teamId/:userId', function(req, res, next) {
     })
 });
 
+router.post('/update-team', function(req, res, next){
+    var teamId = req.body.teamId;
+    var name = req.body.name;
+    var points = req.body.points;
+    var maxmembers = req.body.maxmembers;
+    var scuntId = req.body.scuntId;
+
+    teams.update(teamId, name, points, maxmembers, scuntId, function(err){
+        if(err){
+            res.status(500).send(err);
+        } else {
+            res.sendStatus(200);
+        }
+    });
+});
+
 module.exports = router;
