@@ -3,10 +3,6 @@ var async = require('async');
 
 var teams = {}
 
-// Initial values
-teams.maxmembers = 2;
-teams.points = 0;
-
 teams.createTeamUserRel = function(teamId, userId, type, done) {
     var query = 'INSERT INTO teamUserRel (teamId, userId, userType, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?)';
     
@@ -22,7 +18,7 @@ teams.createTeamUserRel = function(teamId, userId, type, done) {
     })
 }
 
-teams.create = function(name, scuntId, leaderId, done) {
+teams.create = function(name, points, maxmembers, scuntId, leaderId, done) {
     var now = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
     async.waterfall([
@@ -64,7 +60,7 @@ teams.create = function(name, scuntId, leaderId, done) {
             // Create teams entry
             var query = 'INSERT INTO teams (name, points, maxmembers, scuntId, createdAt, updatedAt) '
                         + 'VALUES(?, ?, ?, ?, ?, ?)';
-            var values = [name, teams.points, teams.maxmembers, scuntId, now, now];
+            var values = [name, points, maxmembers, scuntId, now, now];
                         
             db.get().query(query, values, function (err, result) {
                 if (err) {
@@ -154,6 +150,35 @@ teams.join = function (userId, teamId, allowswitch, done) {
     ], function(err, result) {
         done(err, result);
     });
+}
+
+teams.list = function(done) {
+    async.waterfall([
+        function(callback) {
+            // Get all teams
+            var query = 'SELECT * FROM teams';
+            db.get().query(query, [], function(err, res) {
+                callback(err, res);
+            });
+        },
+        function(teams, callback) {
+            // Get all teamUserRelations
+            var query = 'SELECT * FROM teamUserRel';
+            db.get().query(query, [], function(err, res) {
+                for (var i in teams) {
+                    teams[i].teamUsers = [];
+                    for (var j in res) {
+                        if (res[j].teamId == teams[i].id) {
+                            teams[i].teamUsers.push(res[j]);
+                        }
+                    }
+                }
+                callback(err, teams);
+            });
+        }
+    ], function(err, result) {
+        done(err, result);
+    })
 }
 
 module.exports = teams;

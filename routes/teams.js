@@ -7,8 +7,21 @@ router.get('/', function(req, res, next) {
   res.send('this is the teams app');
 });
 
+router.get('/list-teams', function(req, res, next) {
+    teams.list(function(err, teams) {
+        if (err) {
+            res.status(500).send(err);
+            console.log(err);
+        } else {
+            res.send(teams);
+        }
+    });
+});
+
 router.post('/create-team', function(req, res, next) {
     var name = req.body.name;
+    var name = req.body.points;
+    var name = req.body.maxmembers;
     var scuntId = req.body.scuntId;
     var leaderId = req.body.leaderId;
 
