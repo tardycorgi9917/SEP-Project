@@ -10,7 +10,7 @@ schema.users = {
         "email" : "varchar(200) NOT NULL",
         "password" : "varchar(255) NOT NULL",
         "phoneNumber" : "varchar(50)",
-        "isPhoneNumberVisible": "varchar(5) NOT NULL DEFAULT 'true'",
+        //"isPhoneNumberVisible": "varchar(5) NOT NULL DEFAULT 'true'",
         "profilePicture" : "BLOB",
         "createdAt" : "datetime NOT NULL",
         "updatedAt" : "datetime NOT NULL"
@@ -103,15 +103,5 @@ schema.scuntUserRel = {
     ],
 };
 
-// Defines the order in which these tables can be dropped without violating foreign key constraints
-
-schema.droplist = [
-    schema.teamUserRel.name,
-    schema.scuntUserRel.name,
-    schema.teams.name,
-    schema.users.name,
-    schema.tasks.name,
-    schema.scunt.name
-]
 
 module.exports = schema;
