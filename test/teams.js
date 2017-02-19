@@ -57,6 +57,7 @@ describe('Teams Tests', function () {
                 var values = [id];
 
                 db.get().query(query, values, function (err, result) {
+                    console.log(result);
                     assert.equal('testteam', result[0].name);
                     done();
                 });
