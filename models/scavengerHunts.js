@@ -66,18 +66,14 @@ scunt.list = function(done) {
     var query = 'SELECT id, name, description, startTime AS start, endTime AS end, createdAt AS created, updatedAt AS updated '
                 + 'FROM scunt';
     
-    db.get().query(query, null, function(err, result) {
-        done(err, result);
-    })
+    db.get().query(query, null, done);
 }
 
 scunt.delete = function(id, done) {
     var query = 'DELETE FROM scunt WHERE id = ?';
     var values = [id];
 
-    db.get().query(query, values, function(err, result) {
-        done(err, result);
-    });
+    db.get().query(query, values, done);
 }
 
 module.exports = scunt;

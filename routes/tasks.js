@@ -7,6 +7,18 @@ router.get('/', function(req, res, next) {
   res.send('this is the tasks app');
 });
 
+router.get('/list-tasks', function(req, res, next) {
+	var scuntId = req.query.scuntId;
+	
+	tasks.list(scuntId, function(err, tasks) {
+		if (err) {
+			res.status(500).send(err);
+		} else {
+			res.send(tasks);
+		}
+	});
+})
+
 router.post('/create-task', function(req, res, next) {
 	var taskName = req.body.taskName;
 	var description = req.body.description;
