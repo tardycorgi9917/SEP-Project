@@ -11,17 +11,20 @@ router.get('/', function(req, res, next) {
 router.post('/create-ScavengerHunt', function(req, res, next) {
     var ScuntName = req.body.name;
     var ScuntDesc = req.body.description;
-    var ScuntStart = new Date(Date.parse(req.body.startTime));
-    var ScuntEnd  = new Date(Date.parse(req.body.endTime));
-
-  scunt.create(ScuntName, ScuntDesc, ScuntStart,ScuntEnd, function(err, id){
-    if(err)
-    {
-      res.status(500).send("An error occurred");
-    }else{
-      res.send(id.toString());
-    }
-   });
+    var StartDate = req.body.startTime.replace(", ", " ");
+    var EndDate = req.body.endTime.replace(", ", " ");
+    var ScuntStart = new Date(Date.parse(StartDate));
+    var ScuntEnd  = new Date(Date.parse(EndDate));
+    console.log(ScuntStart);
+    console.log(ScuntEnd);
+    scunt.create(ScuntName, ScuntDesc, ScuntStart,ScuntEnd, function(err, id){
+        if(err)
+        {
+          res.status(500).send("An error occurred");
+        }else{
+          res.send(id.toString());
+        }
+    });
 });
 
 
