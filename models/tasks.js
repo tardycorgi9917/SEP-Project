@@ -12,7 +12,6 @@ tasks.list = function(scuntId, done) {
 }
 
 tasks.create = function(taskName, description, points, scuntId, done) {
-	console.log('create');
 	var now = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
 	async.waterfall([
@@ -43,21 +42,18 @@ tasks.create = function(taskName, description, points, scuntId, done) {
 					callback(err);
 				} else {
 					var taskId = result.insertId;
-					callback(undefined, taskId)
+					callback(undefined, taskId);
 				}
 			});
 		}
 	], function(err, taskId) {
-		console.log("Tasks "+taskId+" Created Successfully")
 		done(err, taskId);
 	});
 }
 
 tasks.edit = function(taskID,editDict, done) {
-	console.log('edit');
 	async.waterfall([
 		function (callback) {
-
 			if (!editDict["name"]) {
 				return callback(null); // cannot be duplicate modif if name not changed
 			}
@@ -93,11 +89,11 @@ tasks.edit = function(taskID,editDict, done) {
 			query += " updatedAt ='" + now
 				+ "' WHERE id = '" + taskID + "';"
 
-			db.get().query(query, function (err, result) {
+			db.get().query(query, function (err) {
 				if (err) {
 					callback(err);
 				} else {
-					callback(undefined, result)
+					callback(undefined, taskID);
 				}
 			});
 		}
@@ -107,13 +103,12 @@ tasks.edit = function(taskID,editDict, done) {
 }
 
 tasks.delete = function (taskId, done) {
-	console.log('delete');
 	var query = 'DELETE FROM tasks WHERE id = ?';
 	values = [taskId];
 
 	db.get().query(query, values, function (err, result) {
 		done(err);
-	})
+	});
 }
 
 module.exports = tasks;
