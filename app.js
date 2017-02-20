@@ -22,7 +22,9 @@ db.connect(db, function(err) {
       console.log("***********************************************************")
       console.log("WARNING: YOU ARE IN PRODUCTION MODE! ALL CHANGES WILL AFFECT PRODUCTION DATABASE")
       seeders.down(function () {
-        seeders.up(function(){});
+        seeders.up(function(){
+          console.log("Seeders completed");
+        });
       });
       console.log("***********************************************************")
     }
