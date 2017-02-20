@@ -97,6 +97,26 @@ teams.delete = function (teamId, done) {
 teams.join = function (userId, teamId, allowswitch, done) {
     async.waterfall([
         function(callback) {
+            if (allowswitch) {
+                // join
+                callback(null, userId);
+            } else {
+                // add to team, userId is a username
+                var query = 'SELECT id FROM users WHERE username = ?';
+                var values = [userId];
+
+                console.log(userId);
+
+                db.get().query(query, values, function(err, res) {
+                    if (err || res.length == 0) {
+                        callback('User not found');
+                    } else {
+                        callback(null, res[0].id);
+                    }
+                });
+            }
+        },
+        function(id, callback) {
             // Validate that the user is not in a team already, unless switching allowed
             var query = 'SELECT COUNT(*) AS userteams '
                         + 'FROM teams AS t1 '
@@ -104,7 +124,7 @@ teams.join = function (userId, teamId, allowswitch, done) {
                         + 'JOIN teamUserRel ON teamUserRel.teamId = t2.id '
                         + 'WHERE teamUserRel.userId = ? AND t1.id = ?';
                         
-            values = [userId, teamId];
+            values = [id, teamId];
             db.get().query(query, values, function (err, result) {
                 var userteams = result[0].userteams;
                 if (err) {
@@ -112,11 +132,11 @@ teams.join = function (userId, teamId, allowswitch, done) {
                 } else if (allowswitch == false && userteams > 0) {
                     callback('User already has a team');
                 } else {
-                    callback(null);
+                    callback(null, id);
                 }
             })
         },
-        function(callback) {
+        function(id, callback) {
             // Validate that the team still has space left
             var query = 'SELECT maxmembers - teamcount.teamcount AS spaceleft FROM teams '
                         + 'JOIN (SELECT COUNT(*) AS teamcount FROM teamUserRel WHERE teamUserRel.teamId = ?) AS teamcount '
@@ -129,29 +149,29 @@ teams.join = function (userId, teamId, allowswitch, done) {
                 } else if (result[0].spaceleft <= 0) {
                     callback('Team is at max capacity');
                 } else {
-                    callback(null);
+                    callback(null, id);
                 }
             })
-        }, function(callback) {
+        }, function(id, callback) {
             // If user is switching teams, delete the old teamUserRelation
             var query = 'DELETE teamUserRel '
                         + 'FROM teams AS t1 '
                         + 'JOIN teams AS t2 ON t2.scuntId = t1.scuntId ' 
                         + 'JOIN teamUserRel ON teamUserRel.teamId = t2.id '
                         + 'WHERE teamUserRel.userId = ? AND t1.id = ?';
-            var values = [userId, teamId];
+            var values = [id, teamId];
                         
             db.get().query(query, values, function(err, result) {
-                callback(err);
+                callback(err, id);
             });
-        }, function(callback) {
+        }, function(id, callback) {
             // Create the new relation
-            teams.createTeamUserRel(teamId, userId, 'participant', function(err, result) {
-                callback(err, result);
+            teams.createTeamUserRel(teamId, id, 'participant', function(err, result) {
+                callback(err, id);
             });
         }
-    ], function(err, result) {
-        done(err, result);
+    ], function(err, id) {
+        done(err, id);
     });
 }
 

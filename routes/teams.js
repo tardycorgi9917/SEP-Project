@@ -49,14 +49,14 @@ router.delete('/delete-team/:teamId', function(req, res, next) {
 });
 
 router.post('/add-to-team/', function(req, res, next) {
-    var userId = req.body.userId;
+    var username = req.body.username;
     var teamId = req.body.teamId;
 
-    teams.join(userId, teamId, false, function(err) {
+    teams.join(username, teamId, false, function(err, userId) {
         if (err) {
             res.status(500).send(err);
         } else {
-            res.sendStatus(200);
+            res.send(userId.toString());
         }
     });
 });
