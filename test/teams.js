@@ -177,7 +177,7 @@ describe('Teams Tests', function () {
                     });
                 },
             ], function (err) {
-                assert.strictEqual(err, null, 'unknown error occured');
+                assert.strictEqual(err, null, 'unknown error occured ' + err);
                 done();
             });
         });
@@ -291,8 +291,8 @@ describe('Teams Tests', function () {
                     });
                 },
                 function(teamId, user2Id, callback) {
-                    teams.join(user2Id, teamId, false, function(err) {
-                        assert.strictEqual(err, null, 'happy path adding to team failed');
+                    teams.join('user6', teamId, false, function(err) {
+                        assert.strictEqual(err, null, 'happy path adding to team failed -- ' + err);
                         callback(err);
                     });
                 }
@@ -357,7 +357,7 @@ describe('Teams Tests', function () {
                     });
                 },
                 function(user1Id, user2Id, team1Id, team2Id, callback) {
-                    teams.join(user1Id, team2Id, false, function(err) {
+                    teams.join("user7", team2Id, false, function(err) {
                         assert.strictEqual(err, 'User already has a team', 'happy path adding to team failed');
                         callback(null);
                     });
@@ -498,7 +498,7 @@ describe('Teams Tests', function () {
                     });
                 },
                 function(userId,teamId , callback) {
-                    teams.join(userId[1], teamId, false, function(err) {
+                    teams.join("Freshmeat2", teamId, false, function(err) {
                         assert.strictEqual(err, null);
                         callback(err, userId, teamId);
                     });
