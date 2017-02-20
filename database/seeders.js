@@ -37,7 +37,7 @@ seed.up = function (done) {
 			qstr += ");";
 		}
 	});
-	console.log("****** query to create tables: " + qstr);
+	//console.log("****** query to create tables: " + qstr);
 
 	db.get().query(qstr, [], function (err, result) { //query for table structure
 		var i = 0;

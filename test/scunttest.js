@@ -115,6 +115,49 @@ describe('Scunt test', function () {
     });
   });
 
+  it('scunt list', function(done)
+  {
+    async.waterfall([
+      function(callback)
+      {
+        var Name = 'SK Frosh';
+        var Desc = 'South Korea best Korea';
+        var startTime = new Date("September 1, 2017 11:13:00");
+        var endTime = new Date("September 13, 2017 11:13:00");
+
+        scunt.create(Name, Desc, startTime, endTime, function(err, id){
+          callback(err,id);
+        });
+
+      },
+      function(scuntId,callback)
+      {
+        scunt.list(
+          function(err, result)
+          {
+            var foundScunt = false;
+            for(var count = 0 ; count< result.length; count++)
+            {
+              if(result[count].id == scuntId )
+              {
+                foundScunt = true;
+              }
+            }
+            assert.equal(foundScunt, true);
+            callback(err);
+          }
+        );
+      }
+    ], 
+    function(err){
+      assert.equal(err, null);
+      done();
+    });
+
+
+  });
+
+
 }
 
 );

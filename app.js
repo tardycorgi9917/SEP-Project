@@ -4,13 +4,8 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var seeders = require('./database/seeders');
 var args = process.argv.slice(2);
-
-if(process.env.NODE_ENV === "production"){
-  console.log("***********************************************************")
-  console.log("WARNING: YOU ARE IN PRODUCTION MODE! ALL CHANGES WILL AFFECT PRODUCTION DATABASE")
-  console.log("***********************************************************")
-}
 
 // add database setup module
 var db = require('./database/db.js')
@@ -23,20 +18,30 @@ db.connect(db, function(err) {
     process.exit(1)
   } else {
     console.log("DB CONNECTED");
+    if (process.env.NODE_ENV === "production") {
+      console.log("***********************************************************")
+      console.log("WARNING: YOU ARE IN PRODUCTION MODE! ALL CHANGES WILL AFFECT PRODUCTION DATABASE")
+      seeders.down(function () {
+        seeders.up(function(){
+          console.log("Seeders completed");
+        });
+      });
+      console.log("***********************************************************")
+    }
   }
 })
 
-if(args.length && args[0] == "DB=up"){
-// if(true){
+if (args.length && args[0] == "DB=up") {
+  // if(true){
   console.log("****************************BEGINNING MIGRATION********************************");
-  seed.up(function() {
+  seed.up(function () {
     console.log("****************************FINISHED MIGRATION********************************");
     process.exit(0);
   });
-} 
-else if(args.length && args[0] == "DB=down"){
+}
+else if (args.length && args[0] == "DB=down") {
   console.log("****************************DROPPING ALL TABLES********************************");
-  seed.down(function() {
+  seed.down(function () {
     console.log("****************************FINISHED DROPPING TABLES********************************");
     process.exit(0);
   });
@@ -67,14 +72,14 @@ app.use('/tasks', tasks);
 app.use('/scavengerHunts', scavengerHunts)
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
