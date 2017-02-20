@@ -163,12 +163,83 @@ describe('User Tests', function(){
                         assert.strictEqual(err, null);
                         assert(result.length, 1);
                         assert(result[0].password, values[0]);
-                        callback(null)
+                        callback(err)
                     })
                 }
             ], function(err){
+                assert.equal(err,null);
                 done();
             });
         });
     });
+
+    describe('login',function(){
+        
+        
+        var firstName = "Reginald";
+        var lastName = "McGee";
+        var email = "reginald.mcgee@gmail.com";
+        var password = "myhandareyuge";
+        var phoneNumber = "(514)911-1234";
+        var profilePicture = "";
+        var date = new Date().toISOString().slice(0, 19).replace('T', ' ');
+
+
+        it('login successful',function(){
+
+            async.waterfall([
+                function(callback){
+                    var username = "Coolio";
+                    users.create(username, firstName, lastName, email, password, phoneNumber, profilePicture, date,
+                        function(err, result){
+                            assert.strictEqual(err, null);
+                            assert.notStrictEqual(result, null);
+                            callback(null, result);
+                        }
+                    );
+                },function(id, callback){
+                    users.login(username, password,function(err, result){
+                        assert.strictEqual(id, result);
+                        callback(err);
+                    });
+                    
+                }],
+                function(err){
+                    assert.equal(err, null);
+                    done();
+            });
+
+        });
+
+        it('login unsuccesful', function(){
+            async.waterfall([
+                function(callback){
+                    var username = "xxXNoScopeXxx";
+                    users.create(username, firstName, lastName, email, password, phoneNumber, profilePicture, date,
+                        function(err, result){
+                            assert.strictEqual(err, null);
+                            assert.notStrictEqual(result, null);
+                            callback(null, result);
+                        }
+                    );                    
+                },
+                function(id,callback)
+                {
+                    users.login(username, "smallHand", function(err,result){
+                        assert.notStrictEqual(err, null);
+                        callback(err);
+                    });
+                }],
+                function(err){
+                    assert.equal(err,null);
+                    done();
+            });
+            
+        });
+              
+    });
+
+
+
+
 });

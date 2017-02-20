@@ -44,7 +44,7 @@ describe('Teams Tests', function () {
                 function (scuntId, userId, callback) {
                     // Create team
                     var name = 'testteam';
-                    teams.create(name, scuntId, userId, function (err, id) {
+                    teams.create(name, 0, 2, scuntId, userId, function (err, id) {
                         assert.notStrictEqual(id, null, 'Could not create team, id was null');
                         assert.strictEqual(err, null, 'teams create has some invalid sql ' + err);
 
@@ -69,7 +69,7 @@ describe('Teams Tests', function () {
             var scuntId = '-1';
             var leaderId = '1';
 
-            teams.create(name, scuntId, leaderId, function (err, id) {
+            teams.create(name, 0, 2, scuntId, leaderId, function (err, id) {
                 assert.strictEqual(id, undefined);
                 done();
             });
@@ -116,7 +116,7 @@ describe('Teams Tests', function () {
                 function (scuntid, user1id, user2id, callback) {
                     // create team 1
                     var name = 'testteam';
-                    teams.create(name, scuntid, user1id, function (err, id) {
+                    teams.create(name, 0, 2, scuntid, user1id, function (err, id) {
                         assert.strictEqual(err, null, 'teams create has some invalid sql ' + err);
                         callback(err, scuntid, user2id);
                     });
@@ -124,7 +124,7 @@ describe('Teams Tests', function () {
                 function (scuntId, user2Id, callback) {
                     // Create team 2 with the same name
                     var name = 'testteam';
-                    teams.create(name, scuntId, user2Id, function (err, id) {
+                    teams.create(name, 0, 2, scuntId, user2Id, function (err, id) {
                         assert.strictEqual(err, 'A team with this name already exists in this scavenger hunt');
                         assert.strictEqual(id, undefined, 'Team should not have been created');
                         callback(null);
@@ -163,7 +163,7 @@ describe('Teams Tests', function () {
                 function (scuntId, userId, callback) {
                     // create team 3
                     var name = 'teamtest3';
-                    teams.create(name, scuntId, userId, function (err, id) {
+                    teams.create(name, 0, 2, scuntId, userId, function (err, id) {
                         assert.strictEqual(err, null, 'teams create has some invalid sql ' + err);
                         callback(err, scuntId, userId);
                     });
@@ -171,13 +171,13 @@ describe('Teams Tests', function () {
                 function (scuntId, userId, callback) {
                     // create team 4
                     var name = 'teamtest4';
-                    teams.create(name, scuntId, userId, function (err, id) {
+                    teams.create(name, 0, 2, scuntId, userId, function (err, id) {
                         assert.strictEqual(err, "User already has a team");
                         callback(null);
                     });
                 },
             ], function (err) {
-                assert.strictEqual(err, null, 'unknown error occured');
+                assert.strictEqual(err, null, 'unknown error occured ' + err);
                 done();
             });
         });
@@ -211,7 +211,7 @@ describe('Teams Tests', function () {
                 function (scuntId, userId, callback) {
                     // create team 4
                     var name = 'teamtest4';
-                    teams.create(name, scuntId, userId, function (err, id) {
+                    teams.create(name, 0, 2, scuntId, userId, function (err, id) {
                         assert.strictEqual(err, null, 'teams create has some invalid sql ' + err);
                         callback(err, id);
                     });
@@ -285,14 +285,14 @@ describe('Teams Tests', function () {
                 function (scuntId, user1Id, user2Id, callback) {
                     // create team 3
                     var name = 'teamtest6';
-                    teams.create(name, scuntId, user1Id, function (err, id) {
+                    teams.create(name, 0, 2, scuntId, user1Id, function (err, id) {
                         assert.strictEqual(err, null, 'teams create has some invalid sql ' + err);
                         callback(err, id, user2Id);
                     });
                 },
                 function(teamId, user2Id, callback) {
-                    teams.join(user2Id, teamId, false, function(err) {
-                        assert.strictEqual(err, null, 'happy path adding to team failed');
+                    teams.join('user6', teamId, false, function(err) {
+                        assert.strictEqual(err, null, 'happy path adding to team failed -- ' + err);
                         callback(err);
                     });
                 }
@@ -343,7 +343,7 @@ describe('Teams Tests', function () {
                 function (scuntId, user1Id, user2Id, callback) {
                     // create team 1
                     var name = 'teamtest7';
-                    teams.create(name, scuntId, user1Id, function (err, id) {
+                    teams.create(name, 0, 2, scuntId, user1Id, function (err, id) {
                         assert.strictEqual(err, null, 'teams create has some invalid sql ' + err);
                         callback(err, scuntId, user1Id, user2Id, id);
                     });
@@ -351,13 +351,13 @@ describe('Teams Tests', function () {
                 function (scuntId, user1Id, user2Id, team1Id, callback) {
                     // create team 2
                     var name = 'teamtest8';
-                    teams.create(name, scuntId, user2Id, function (err, id) {
+                    teams.create(name, 0, 2, scuntId, user2Id, function (err, id) {
                         assert.strictEqual(err, null, 'teams create has some invalid sql ' + err);
                         callback(err, user1Id, user2Id, team1Id, id);
                     });
                 },
                 function(user1Id, user2Id, team1Id, team2Id, callback) {
-                    teams.join(user1Id, team2Id, false, function(err) {
+                    teams.join("user7", team2Id, false, function(err) {
                         assert.strictEqual(err, 'User already has a team', 'happy path adding to team failed');
                         callback(null);
                     });
@@ -409,7 +409,7 @@ describe('Teams Tests', function () {
                 function (scuntId, user1Id, user2Id, callback) {
                     // create team 1
                     var name = 'teamtest7';
-                    teams.create(name, scuntId, user1Id, function (err, id) {
+                    teams.create(name, 0, 2, scuntId, user1Id, function (err, id) {
                         assert.strictEqual(err, null, 'teams create has some invalid sql ' + err);
                         callback(err, scuntId, user1Id, user2Id, id);
                     });
@@ -417,7 +417,7 @@ describe('Teams Tests', function () {
                 function (scuntId, user1Id, user2Id, team1Id, callback) {
                     // create team 2
                     var name = 'teamtest8';
-                    teams.create(name, scuntId, user2Id, function (err, id) {
+                    teams.create(name, 0, 2, scuntId, user2Id, function (err, id) {
                         assert.strictEqual(err, null, 'teams create has some invalid sql ' + err);
                         callback(err, user1Id, user2Id, team1Id, id);
                     });
@@ -444,4 +444,103 @@ describe('Teams Tests', function () {
 
         });
     });
+
+    describe('team list', function(){
+
+        it('list teams accurately', function(done){
+            async.waterfall([
+                function (callback) {
+                    // Create scavenger hunt
+                    var scuntName = 'Sadness';
+                    var scuntDesc = 'desc';
+                    var scuntStart = new Date();
+                    var scuntEnd = new Date();
+                    scunts.create(scuntName, scuntDesc, scuntStart, scuntEnd, callback);
+                },
+                function(scuntId, callback)
+                {
+                    var username = 'Freshmeat1';
+                    var firstName = 'fname9';
+                    var lastName = 'lname';
+                    var email = 'polo1@gmail.com';
+                    var pwd = '123';
+                    var phonenumber = '213 546-7889';
+                    var profilepic = '';
+                    var date = new Date();
+                    users.create(username, firstName, lastName, email, pwd, phonenumber, profilepic, date, function (err, id) {
+                        userId = [];
+                        userId.push(id);
+                        callback(err, scuntId, userId);
+                    });                   
+
+                },
+                function(scuntId, userId, callback ){
+
+                    var username = 'Freshmeat2';
+                    var firstName = 'fname9';
+                    var lastName = 'lname';
+                    var email = 'polo2@gmail.com';
+                    var pwd = '123';
+                    var phonenumber = '213 546-7889';
+                    var profilepic = '';
+                    var date = new Date();
+                    users.create(username, firstName, lastName, email, pwd, phonenumber, profilepic, date, function (err, id2) {
+                        userId.push(id2);
+                        callback(err, scuntId, userId);
+                    });                    
+                },
+                function (scuntId, userId, callback) {
+                    // create team 1
+                    var name = 'wanker1';
+                    teams.create(name, 0, 2, scuntId, userId[0], function (err, id) {
+                        assert.strictEqual(err, null, 'teams create has some invalid sql ' + err);
+                        callback(err,userId, id);
+                    });
+                },
+                function(userId,teamId , callback) {
+                    teams.join("Freshmeat2", teamId, false, function(err) {
+                        assert.strictEqual(err, null);
+                        callback(err, userId, teamId);
+                    });
+                },
+                function(userId, teamId, callback) {
+                    teams.list(
+                        function(err,result)
+                        {
+
+                            assert.notEqual(result.length, 0);
+                            var i = 0;
+
+                            while(i< result.length)
+                            {
+                                id = result[i].id
+                                if(id == teamId )
+                                {
+                                    teamMember = result[i].teamUsers;
+
+                                    assert.equal(teamMember.length,2);
+
+                                    memberId1 = teamMember[0].userId;
+                                    memberId2 = teamMember[1].userId;
+                                    assert.notEqual(userId.indexOf(memberId1),-1);
+                                    assert.notEqual(userId.indexOf(memberId2),-1);
+                                }
+                                i++;
+                            }
+                            
+                            callback(err);                 
+                        }
+                    );
+                }                
+            ], 
+                function(err){
+                    assert.strictEqual(err,null);
+                    done();
+
+            });
+        });
+
+    });
+
+
 });

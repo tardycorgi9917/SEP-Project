@@ -3,6 +3,16 @@ var db = require('./db');
 var async = require('async');
 var seed = {};
 
+// Defines the order in which these tables can be dropped without violating foreign key constraints
+droplist = [
+    schema.teamUserRel.name,
+    schema.scuntUserRel.name,
+    schema.teams.name,
+    schema.users.name,
+    schema.tasks.name,
+    schema.scunt.name
+]
+
 seed.up = function (done) {
 	var tables = Object.keys(schema);
 	var qstr = "";
@@ -32,9 +42,9 @@ seed.up = function (done) {
 	db.get().query(qstr, [], function (err, result) { //query for table structure
 		var i = 0;
 		if (err) {
-			//console.log("****** it fucked up " + err);
+			console.log("****** it fucked up " + err);
 		} else {
-			//console.log("---- Table created Succesfully ----");
+			console.log("---- Table created Succesfully ----");
 		}
 
 		done();
@@ -45,8 +55,8 @@ seed.down = function (done) {
 	var tables = Object.keys(schema);
 	tables.reverse();
 	var query = "";
-	for(var i in schema.droplist) {
-		query += "DROP TABLE IF EXISTS `" + schema.droplist[i] + "`; ";
+	for(var i in droplist) {
+		query += "DROP TABLE IF EXISTS `" + droplist[i] + "` CASCADE; ";
 	} 
 
 	//console.log("****** query to drop tables: " + query);
