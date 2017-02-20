@@ -4,7 +4,7 @@ var async = require('async');
 var users = {}
 
 users.login = function(username, password, done) {
-    var query = 'SELECT id, username, firstname, email, phoneNumber FROM users WHERE username = ? AND password = ?';
+    var query = 'SELECT id, username, firstName, lastName, email, phoneNumber, isPhoneNumberVisible FROM users WHERE username = ? AND password = ?';
     var values = [username.toString(), password.toString()];
 
     db.get().query(query, values, function(err, result) {
@@ -18,13 +18,13 @@ users.login = function(username, password, done) {
 
 users.create = function(username, firstName, lastName, email, password, phoneNumber, profilePicture, date, done) {
     if (!username) {
-        return done('Need to provide a first name');
+        return done('Need to provide a username');
     }
 
     // Create user
     var query = 'INSERT INTO users (username, firstName, lastName, email, password, phoneNumber, profilePicture, createdAt, updatedAt) ' +
         'VALUES(?,?,?,?,?,?,?,?,?)';
-        
+
     var values = [username, firstName, lastName, email, password, phoneNumber, profilePicture, date, date]
     db.get().query(query, values, function (err, result) {
         if (err) done(err, null);
@@ -73,4 +73,14 @@ users.findById = function (id, done) {
         else done(null, result);
     })
 }
+
+users.findByUsername = function (username, done){
+    var query = 'SELECT * FROM users WHERE username = ?';
+    var values = [username];
+    db.get().query(query, values, function(err, result){
+        if(err) done(err);
+        else done(null, result);
+    })
+}
+
 module.exports = users;

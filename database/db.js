@@ -1,4 +1,5 @@
 var env = process.env.NODE_ENV || 'development';
+//var env = "production";
 var mysql = require('mysql')
   , async = require('async')
   , config = require('./config')[env]

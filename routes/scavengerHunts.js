@@ -8,6 +8,16 @@ router.get('/', function(req, res, next) {
   res.send('this is the scunt app');
 });
 
+router.get('/list-scunts', function(req, res) {
+  scunt.list(function(err, result) {
+    if (err) {
+      res.sendStatus(500);
+    } else {
+      res.send(JSON.stringify(result));
+    }
+  })
+}); 
+
 router.post('/create-ScavengerHunt', function(req, res, next) {
     var ScuntName = req.body.name;
     var ScuntDesc = req.body.description;
@@ -20,7 +30,7 @@ router.post('/create-ScavengerHunt', function(req, res, next) {
     scunt.create(ScuntName, ScuntDesc, ScuntStart,ScuntEnd, function(err, id){
         if(err)
         {
-          res.status(500).send("An error occurred");
+          res.status(500).send(err);
         }else{
           res.send(id.toString());
         }
@@ -43,6 +53,18 @@ router.put('/modify-ScavengerHunt', function(req,res,next){
       res.sendStatus(200);
     }
    });
+});
+
+router.delete('/delete-ScavengerHunt/:scuntId', function(req, res, next) {
+    var scuntId = req.params.scuntId;
+
+    scunt.delete(scuntId, function (err, result) {
+      if (err) {
+        res.status(500).send(err);
+      } else {
+        res.sendStatus(200);
+      }
+    });
 });
 
 module.exports = router;

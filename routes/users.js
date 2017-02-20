@@ -11,7 +11,7 @@ router.get('/', function(req, res, next) {
 router.post('/login', function(req, res, next) {
   var username = req.body.username;
   var password = req.body.password;
-  
+
   user.login(username, password, function(err, user) {
       if (err) {
           res.sendStatus(403);
@@ -71,6 +71,21 @@ router.get('/find-email/:email', function(req, res){
         if(err) res.status(500).send(err);
         else res.send(result);
     })
+});
+
+router.get('/find-id/:id', function(req, res){
+    var id = req.params.id;
+    user.findById(id, function(err, result){
+        if(err) res.status(500).send(err);
+        else res.send(result[0]);
+    })
 })
 
+router.get('/find-username/:username', function(req, res){
+    var username = req.params.username;
+    user.findByUsername(username, function(err, result){
+        if(err) res.status(500).send(err);
+        else res.send(result);
+    })
+})
 module.exports = router;
