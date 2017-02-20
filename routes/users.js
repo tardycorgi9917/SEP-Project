@@ -77,7 +77,7 @@ router.get('/find-id/:id', function(req, res){
     var id = req.params.id;
     user.findById(id, function(err, result){
         if(err) res.status(500).send(err);
-        else res.send(result);
+        else res.send(result[0]);
     })
 })
 
