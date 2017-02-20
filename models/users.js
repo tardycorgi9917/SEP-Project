@@ -24,7 +24,7 @@ users.create = function(username, firstName, lastName, email, password, phoneNum
     // Create user
     var query = 'INSERT INTO users (username, firstName, lastName, email, password, phoneNumber, profilePicture, createdAt, updatedAt) ' +
         'VALUES(?,?,?,?,?,?,?,?,?)';
-        
+
     var values = [username, firstName, lastName, email, password, phoneNumber, profilePicture, date, date]
     db.get().query(query, values, function (err, result) {
         if (err) done(err, null);
@@ -73,4 +73,14 @@ users.findById = function (id, done) {
         else done(null, result);
     })
 }
+
+users.findByUsername = function (username, done){
+    var query = 'SELECT * FROM users WHERE username = ?';
+    var values = [username];
+    db.get().query(query, values, function(err, result){
+        if(err) done(err);
+        else done(null, result);
+    })
+}
+
 module.exports = users;
