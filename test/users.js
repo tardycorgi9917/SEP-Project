@@ -163,10 +163,11 @@ describe('User Tests', function(){
                         assert.strictEqual(err, null);
                         assert(result.length, 1);
                         assert(result[0].password, values[0]);
-                        callback(null)
+                        callback(err)
                     })
                 }
             ], function(err){
+                assert.equal(err,null);
                 done();
             });
         });
@@ -199,8 +200,9 @@ describe('User Tests', function(){
                 },function(id, callback){
                     users.login(username, password,function(err, result){
                         assert.strictEqual(id, result);
+                        callback(err);
                     });
-                    callback(null);
+                    
                 }],
                 function(err){
                     assert.equal(err, null);
@@ -225,8 +227,8 @@ describe('User Tests', function(){
                 {
                     users.login(username, "smallHand", function(err,result){
                         assert.notStrictEqual(err, null);
+                        callback(err);
                     });
-                    callback(null);
                 }],
                 function(err){
                     assert.equal(err,null);

@@ -444,4 +444,103 @@ describe('Teams Tests', function () {
 
         });
     });
+
+    describe('team list', function(){
+
+        it('list teams accurately', function(done){
+            async.waterfall([
+                function (callback) {
+                    // Create scavenger hunt
+                    var scuntName = 'Sadness';
+                    var scuntDesc = 'desc';
+                    var scuntStart = new Date();
+                    var scuntEnd = new Date();
+                    scunts.create(scuntName, scuntDesc, scuntStart, scuntEnd, callback);
+                },
+                function(scuntId, callback)
+                {
+                    var username = 'Freshmeat1';
+                    var firstName = 'fname9';
+                    var lastName = 'lname';
+                    var email = 'polo1@gmail.com';
+                    var pwd = '123';
+                    var phonenumber = '213 546-7889';
+                    var profilepic = '';
+                    var date = new Date();
+                    users.create(username, firstName, lastName, email, pwd, phonenumber, profilepic, date, function (err, id) {
+                        userId = [];
+                        userId.push(id);
+                        callback(err, scuntId, userId);
+                    });                   
+
+                },
+                function(scuntId, userId, callback ){
+
+                    var username = 'Freshmeat2';
+                    var firstName = 'fname9';
+                    var lastName = 'lname';
+                    var email = 'polo2@gmail.com';
+                    var pwd = '123';
+                    var phonenumber = '213 546-7889';
+                    var profilepic = '';
+                    var date = new Date();
+                    users.create(username, firstName, lastName, email, pwd, phonenumber, profilepic, date, function (err, id2) {
+                        userId.push(id2);
+                        callback(err, scuntId, userId);
+                    });                    
+                },
+                function (scuntId, userId, callback) {
+                    // create team 1
+                    var name = 'wanker1';
+                    teams.create(name, 0, 2, scuntId, userId[0], function (err, id) {
+                        assert.strictEqual(err, null, 'teams create has some invalid sql ' + err);
+                        callback(err,userId, id);
+                    });
+                },
+                function(userId,teamId , callback) {
+                    teams.join(userId[1], teamId, false, function(err) {
+                        assert.strictEqual(err, null);
+                        callback(err, userId, teamId);
+                    });
+                },
+                function(userId, teamId, callback) {
+                    teams.list(
+                        function(err,result)
+                        {
+
+                            assert.notEqual(result.length, 0);
+                            var i = 0;
+
+                            while(i< result.length)
+                            {
+                                id = result[i].id
+                                if(id == teamId )
+                                {
+                                    teamMember = result[i].teamUsers;
+
+                                    assert.equal(teamMember.length,2);
+
+                                    memberId1 = teamMember[0].userId;
+                                    memberId2 = teamMember[1].userId;
+                                    assert.notEqual(userId.indexOf(memberId1),-1);
+                                    assert.notEqual(userId.indexOf(memberId2),-1);
+                                }
+                                i++;
+                            }
+                            
+                            callback(err);                 
+                        }
+                    );
+                }                
+            ], 
+                function(err){
+                    assert.strictEqual(err,null);
+                    done();
+
+            });
+        });
+
+    });
+
+
 });
