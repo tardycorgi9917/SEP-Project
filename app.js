@@ -4,11 +4,15 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var seeders = require('./database/seeders');
 var args = process.argv.slice(2);
 
 if(process.env.NODE_ENV === "production"){
   console.log("***********************************************************")
   console.log("WARNING: YOU ARE IN PRODUCTION MODE! ALL CHANGES WILL AFFECT PRODUCTION DATABASE")
+  seeders.down(function(){
+    seeders.up();
+  });
   console.log("***********************************************************")
 }
 
