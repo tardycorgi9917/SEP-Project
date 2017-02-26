@@ -5,8 +5,8 @@ var scunt = {}
 scunt.createScunt = function(name, description, startTime, endTime, done) {
     var date = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
-    var values = [name, description,startTime ,endTime, date, date];
-    var query = 'INSERT INTO scunt (name, description, startTime, endTime, createdAt, updatedAt) VALUES(?, ?, ?, ?, ?, ?)';
+    var values = [name, description, 'PENDING', startTime ,endTime, date, date];
+    var query = 'INSERT INTO scunt (name, description, status, startTime, endTime, createdAt, updatedAt) VALUES(?, ?, ?, ?, ?, ?, ?)';
 
     db.get().query(query, values, function(err, result) {
         if (err) {
@@ -45,6 +45,22 @@ scunt.create = function(name,description, startTime, endTime, done){
 
 }
 
+scunt.setStatus = function(id, status, done) {
+    var updatedAt = new Date().toISOString().slice(0, 19).replace('T', ' ');
+
+    var validStatuses = ['PENDING', 'PUBLISHED', 'STARTED', 'FINISHED'];
+    if (validStatuses.indexOf(status) == -1) {
+        return done('An invalid status was used');
+    }
+
+    var query = 'UPDATE scunt SET status = ?, updatedAt = ? WHERE id = ?';
+    var values = [status, updatedAt, id];
+
+    db.get().query(query, values, function(err, result) {
+        done(err, result);
+    });
+}
+
 scunt.update = function(id , name, description, startTime, endTime, done){
     var sTime = startTime.toISOString().slice(0, 19).replace('T', ' ');
     var eTime = endTime.toISOString().slice(0, 19).replace('T', ' ');
@@ -63,7 +79,7 @@ scunt.update = function(id , name, description, startTime, endTime, done){
 }
 
 scunt.list = function(done) {
-    var query = 'SELECT id, name, description, startTime AS start, endTime AS end, createdAt AS created, updatedAt AS updated '
+    var query = 'SELECT id, name, description, status, startTime AS start, endTime AS end, createdAt AS created, updatedAt AS updated '
                 + 'FROM scunt';
     
     db.get().query(query, null, done);

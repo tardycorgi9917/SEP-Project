@@ -35,9 +35,10 @@ describe('Teams Tests', function () {
                     var email = 'asdf8@gmail.com';
                     var pwd = '123';
                     var phonenumber = '213 546-7889';
+                    var isAdmin = true;
                     var profilepic = '';
                     var date = new Date();
-                    users.create(username, firstName, lastName, email, pwd, phonenumber, profilepic, date, function (err, id) {
+                    users.create(username, firstName, lastName, email, pwd, phonenumber, isAdmin, profilepic, date, function (err, id) {
                         callback(err, scuntId, id);
                     });
                 },
@@ -94,8 +95,9 @@ describe('Teams Tests', function () {
                     var pwd = '123';
                     var phonenumber = '213 546-7889';
                     var profilepic = '';
+                    var isAdmin = true;
                     var date = new Date();
-                    users.create(username, firstName, lastName, email, pwd, phonenumber, profilepic, date, function (err, id) {
+                    users.create(username, firstName, lastName, email, pwd, phonenumber, isAdmin, profilepic, date, function (err, id) {
                         callback(err, scuntId, id);
                     });
                 },
@@ -107,9 +109,10 @@ describe('Teams Tests', function () {
                     var email = 'asdf2@fgmail.com';
                     var pwd = '1232';
                     var phonenumber = '213 546-78892';
+                    var isAdmin = true;
                     var profilepic = '';
                     var date = new Date();
-                    users.create(username, firstName, lastName, email, pwd, phonenumber, profilepic, date, function (err, id) {
+                    users.create(username, firstName, lastName, email, pwd, phonenumber, isAdmin, profilepic, date, function (err, id) {
                         callback(err, scuntId, user1Id, id);
                     });
                 },
@@ -154,9 +157,10 @@ describe('Teams Tests', function () {
                     var email = 'asdf10@gmail.com';
                     var pwd = '123';
                     var phonenumber = '213 546-7889';
+                    var isAdmin = true;
                     var profilepic = '';
                     var date = new Date();
-                    users.create(username, firstName, lastName, email, pwd, phonenumber, profilepic, date, function (err, id) {
+                    users.create(username, firstName, lastName, email, pwd, phonenumber, isAdmin, profilepic, date, function (err, id) {
                         callback(err, scuntId, id);
                     });
                 },
@@ -202,9 +206,10 @@ describe('Teams Tests', function () {
                     var email = 'asdf1@gmail.com';
                     var pwd = '123';
                     var phonenumber = '213 546-7889';
+                    var isAdmin = true;
                     var profilepic = '';
                     var date = new Date();
-                    users.create(username, firstName, lastName, email, pwd, phonenumber, profilepic, date, function (err, id) {
+                    users.create(username, firstName, lastName, email, pwd, phonenumber, isAdmin, profilepic, date, function (err, id) {
                         callback(err, scuntId, id);
                     });
                 },
@@ -262,9 +267,10 @@ describe('Teams Tests', function () {
                     var email = 'asdf2@gmail.com';
                     var pwd = '123';
                     var phonenumber = '213 546-7889';
+                    var isAdmin = true
                     var profilepic = '';
                     var date = new Date();
-                    users.create(username, firstName, lastName, email, pwd, phonenumber, profilepic, date, function (err, id) {
+                    users.create(username, firstName, lastName, email, pwd, phonenumber, isAdmin, profilepic, date, function (err, id) {
                         callback(err, scuntId, id);
                     });
                 },
@@ -276,9 +282,10 @@ describe('Teams Tests', function () {
                     var email = 'asdf3@gmail.com';
                     var pwd = '123';
                     var phonenumber = '213 546-7889';
+					var isAdmin = true;
                     var profilepic = '';
                     var date = new Date();
-                    users.create(username, firstName, lastName, email, pwd, phonenumber, profilepic, date, function (err, id) {
+                    users.create(username, firstName, lastName, email, pwd, phonenumber, isAdmin, profilepic, date, function (err, id) {
                         callback(err, scuntId, user1Id, id);
                     });
                 },
@@ -320,9 +327,10 @@ describe('Teams Tests', function () {
                     var email = 'asdf4@gmail.com';
                     var pwd = '123';
                     var phonenumber = '213 546-7889';
+                    var isAdmin = true;
                     var profilepic = '';
                     var date = new Date();
-                    users.create(username, firstName, lastName, email, pwd, phonenumber, profilepic, date, function (err, id) {
+                    users.create(username, firstName, lastName, email, pwd, phonenumber, isAdmin, profilepic, date, function (err, id) {
                         callback(err, scuntId, id);
                     });
                 },
@@ -334,9 +342,10 @@ describe('Teams Tests', function () {
                     var email = 'asdf5@gmail.com';
                     var pwd = '123';
                     var phonenumber = '213 546-7889';
+                    var isAdmin = true;
                     var profilepic = '';
                     var date = new Date();
-                    users.create(username, firstName, lastName, email, pwd, phonenumber, profilepic, date, function (err, id) {
+                    users.create(username, firstName, lastName, email, pwd, phonenumber, isAdmin, profilepic, date, function (err, id) {
                         callback(err, scuntId, user1Id, id);
                     });
                 },
@@ -386,9 +395,10 @@ describe('Teams Tests', function () {
                     var email = 'asdf6@gmail.com';
                     var pwd = '123';
                     var phonenumber = '213 546-7889';
+                    var isAdmin = true;
                     var profilepic = '';
                     var date = new Date();
-                    users.create(username, firstName, lastName, email, pwd, phonenumber, profilepic, date, function (err, id) {
+                    users.create(username, firstName, lastName, email, pwd, phonenumber, isAdmin, profilepic, date, function (err, id) {
                         callback(err, scuntId, id);
                     });
                 },
@@ -400,9 +410,10 @@ describe('Teams Tests', function () {
                     var email = 'asdf7@gmail.com';
                     var pwd = '123';
                     var phonenumber = '213 546-7889';
+                    var isAdmin = true;
                     var profilepic = '';
                     var date = new Date();
-                    users.create(username, firstName, lastName, email, pwd, phonenumber, profilepic, date, function (err, id) {
+                    users.create(username, firstName, lastName, email, pwd, phonenumber, isAdmin, profilepic, date, function (err, id) {
                         callback(err, scuntId, user1Id, id);
                     });
                 },
@@ -465,9 +476,10 @@ describe('Teams Tests', function () {
                     var email = 'polo1@gmail.com';
                     var pwd = '123';
                     var phonenumber = '213 546-7889';
+                    var isAdmin = true;
                     var profilepic = '';
                     var date = new Date();
-                    users.create(username, firstName, lastName, email, pwd, phonenumber, profilepic, date, function (err, id) {
+                    users.create(username, firstName, lastName, email, pwd, phonenumber, isAdmin, profilepic, date, function (err, id) {
                         userId = [];
                         userId.push(id);
                         callback(err, scuntId, userId);
@@ -482,9 +494,10 @@ describe('Teams Tests', function () {
                     var email = 'polo2@gmail.com';
                     var pwd = '123';
                     var phonenumber = '213 546-7889';
+                    var isAdmin = true;
                     var profilepic = '';
                     var date = new Date();
-                    users.create(username, firstName, lastName, email, pwd, phonenumber, profilepic, date, function (err, id2) {
+                    users.create(username, firstName, lastName, email, pwd, phonenumber, isAdmin, profilepic, date, function (err, id2) {
                         userId.push(id2);
                         callback(err, scuntId, userId);
                     });                    
@@ -536,11 +549,7 @@ describe('Teams Tests', function () {
                 function(err){
                     assert.strictEqual(err,null);
                     done();
-
             });
         });
-
     });
-
-
 });
