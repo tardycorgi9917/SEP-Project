@@ -86,12 +86,59 @@ teams.create = function(name, points, maxmembers, scuntId, leaderId, done) {
 }
 
 teams.delete = function (teamId, done) {
-    var query = 'DELETE FROM teamUserRel WHERE teamId = ?; DELETE FROM teams WHERE id = ?';
-    values = [teamId, teamId];
 
-    db.get().query(query, values, function (err, result) {
+    async.waterfall([
+        function(callback){
+            var query = 'SELECT scuntId FROM Teams where id = ?';
+            values = [teamId];
+
+            db.get().query(query, values, function(err, result)
+            {
+                if(err)
+                {
+                    callback(err);
+                }else
+                {
+                    callback(undefined, res[0].id);
+                }
+
+            });
+        },
+        function(callback, ScuntId)
+        {
+            var query = 'SELECT startTime, endTime FROM scunt where id = ?';
+            values = [ScuntId];
+            currentDate = new date();
+
+            db.get().query(query, values ,function(err, result){
+                if(err)
+                {
+                    callback(err);
+                }else if(new date(result[0].startTime) < currentDate && new date(result[0].endTime) > currentDate )
+                {
+                    callback('Cannot Delete Teams during scunt');
+                }else
+                {
+                    callback(undefined,result);
+                }
+
+            });
+        },
+        function(callback)
+        {            
+            var query = 'DELETE FROM teamUserRel WHERE teamId = ?; DELETE FROM teams WHERE id = ?';
+            values = [teamId, teamId];
+
+            db.get().query(query, values, function (err, result) {
+                done(err);
+            })
+        }
+
+    ], function(err)
+    {
         done(err);
-    })
+    });
+
 }
 
 teams.join = function (userId, teamId, allowswitch, done) {
