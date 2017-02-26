@@ -5,6 +5,7 @@ var seed = {};
 
 // Defines the order in which these tables can be dropped without violating foreign key constraints
 droplist = [
+	schema.teamTaskRel.name,
     schema.teamUserRel.name,
     schema.scuntUserRel.name,
     schema.teams.name,
@@ -62,7 +63,7 @@ seed.down = function (done) {
 	//console.log("****** query to drop tables: " + query);
 	db.get().query(query, [], function (err, result) {
 		if (err) {
-			// console.log("it fucked up " + err);
+			console.log("it fucked up " + err);
 		} else {
 			// console.log("---- Tables Removed Succesfully ----");
 		}
