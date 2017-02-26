@@ -35,6 +35,18 @@ router.post('/create-ScavengerHunt', function (req, res, next) {
   });
 });
 
+router.put('/publish-scunt', function (req, res, next) {
+  var id = req.body.id;
+
+  scunt.publish(id, function (err, result) {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.sendStatus(200);
+    }
+  });
+});
+
 router.put('/status-scunt', function (req, res, next) {
   var id = req.body.id;
   var status = req.body.status;
@@ -45,7 +57,7 @@ router.put('/status-scunt', function (req, res, next) {
     } else {
       res.sendStatus(200);
     }
-  })
+  });
 });
 
 router.put('/modify-ScavengerHunt', function (req, res, next) {
