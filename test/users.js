@@ -21,13 +21,14 @@ describe('User Tests', function(){
         var email = "eduardo.coronado@gmail.com";
         var password = "ilikethehabs";
         var phoneNumber = "(514)911-1234";
+        var isAdmin = true;
         var profilePicture = "";
         var date = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
         it('should create user successfully', function(done){
             async.waterfall([
                 function(callback){
-                    users.create(username, firstName, lastName, email, password, phoneNumber, profilePicture, date,
+                    users.create(username, firstName, lastName, email, password, phoneNumber, isAdmin, profilePicture, date,
                         function(err, result){
                             assert.strictEqual(err, null);
                             assert.notStrictEqual(result, null);
@@ -60,7 +61,7 @@ describe('User Tests', function(){
                 function(callback){
                     nullName = null;
                     errorEmail = "error@email.com";
-                    users.create(nullName, firstName, lastName, errorEmail, password, phoneNumber, profilePicture, date,
+                    users.create(nullName, firstName, lastName, errorEmail, password, phoneNumber, isAdmin, profilePicture, date,
                         function(err, result){
                             assert.notStrictEqual(err, null);
                             callback(null, errorEmail);
@@ -82,7 +83,7 @@ describe('User Tests', function(){
                 function(callback){
                     emptyName = "";
                     errorEmail = "error@email.com";
-                    users.create(emptyName, firstName, lastName, errorEmail, password, phoneNumber, profilePicture, date,
+                    users.create(emptyName, firstName, lastName, errorEmail, password, phoneNumber, isAdmin, profilePicture, date,
                         function(err, result){
                             assert.notEqual(err, null);
                             callback(null, errorEmail);
@@ -181,6 +182,7 @@ describe('User Tests', function(){
         var email = "reginald.mcgee@gmail.com";
         var password = "myhandareyuge";
         var phoneNumber = "(514)911-1234";
+        var isAdmin = true;
         var profilePicture = "";
         var date = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
@@ -190,7 +192,7 @@ describe('User Tests', function(){
             async.waterfall([
                 function(callback){
                     var username = "Coolio";
-                    users.create(username, firstName, lastName, email, password, phoneNumber, profilePicture, date,
+                    users.create(username, firstName, lastName, email, password, phoneNumber, isAdmin, profilePicture, date,
                         function(err, result){
                             assert.strictEqual(err, null);
                             assert.notStrictEqual(result, null);
@@ -215,7 +217,7 @@ describe('User Tests', function(){
             async.waterfall([
                 function(callback){
                     var username = "xxXNoScopeXxx";
-                    users.create(username, firstName, lastName, email, password, phoneNumber, profilePicture, date,
+                    users.create(username, firstName, lastName, email, password, phoneNumber, isAdmin, profilePicture, date,
                         function(err, result){
                             assert.strictEqual(err, null);
                             assert.notStrictEqual(result, null);
@@ -238,8 +240,4 @@ describe('User Tests', function(){
         });
               
     });
-
-
-
-
 });

@@ -11,6 +11,7 @@ schema.users = {
         "password" : "varchar(255) NOT NULL",
         "phoneNumber" : "varchar(50)",
         "isPhoneNumberVisible": "varchar(5) NOT NULL DEFAULT 'true'",
+        "isAdmin": "varchar(5) NOT NULL",
         "profilePicture" : "BLOB",
         "createdAt" : "datetime NOT NULL",
         "updatedAt" : "datetime NOT NULL"
@@ -28,6 +29,7 @@ schema.scunt = {
         "id": "int(11) NOT NULL AUTO_INCREMENT",
         "name" : "varchar(50) NOT NULL",
         "description" : "varchar(500) NOT NULL",
+        "status": "varchar(50) NOT NULL",
         "startTime": "datetime",
         "endTime": "datetime",
         "createdAt" : "datetime NOT NULL",
@@ -103,5 +105,20 @@ schema.scuntUserRel = {
     ],
 };
 
+schema.teamTaskRel = {
+    "name": "teamTaskRel",
+    "fields": {
+        "teamId": "int(11) NOT NULL",
+        "taskId": "int(11) NOT NULL",
+        "status": "varchar(50) NOT NULL",
+        "createdAt" : "datetime NOT NULL",
+        "updatedAt" : "datetime NOT NULL",
+    },
+    "constraints": [
+        "FOREIGN KEY (teamId) REFERENCES teams(id) ON DELETE CASCADE",
+        "FOREIGN KEY (taskId) REFERENCES tasks(id) ON DELETE CASCADE",
+        "CONSTRAINT teamTaskId UNIQUE (teamId, taskId)"
+    ]
+}
 
 module.exports = schema;

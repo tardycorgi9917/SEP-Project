@@ -4,28 +4,29 @@ var async = require('async');
 var users = {}
 
 users.login = function(username, password, done) {
-    var query = 'SELECT id, username, firstName, lastName, email, phoneNumber, isPhoneNumberVisible FROM users WHERE username = ? AND password = ?';
+    var query = 'SELECT id, username, firstName, lastName, email, phoneNumber, isPhoneNumberVisible, isAdmin FROM users WHERE username = ? AND password = ?';
     var values = [username.toString(), password.toString()];
 
     db.get().query(query, values, function(err, result) {
         if (err || result.length == 0) {
             done("Authorization failed: " + err);
         } else {
+            result[0].isAdmin = result[0].isAdmin == '1';
             done(null, result[0]);
         }
     });
 }
 
-users.create = function(username, firstName, lastName, email, password, phoneNumber, profilePicture, date, done) {
+users.create = function(username, firstName, lastName, email, password, phoneNumber, isAdmin, profilePicture, date, done) {
     if (!username) {
         return done('Need to provide a username');
     }
 
     // Create user
-    var query = 'INSERT INTO users (username, firstName, lastName, email, password, phoneNumber, profilePicture, createdAt, updatedAt) ' +
-        'VALUES(?,?,?,?,?,?,?,?,?)';
+    var query = 'INSERT INTO users (username, firstName, lastName, email, password, phoneNumber, isAdmin, profilePicture, createdAt, updatedAt) ' +
+        'VALUES(?,?,?,?,?,?,?,?,?,?)';
 
-    var values = [username, firstName, lastName, email, password, phoneNumber, profilePicture, date, date]
+    var values = [username, firstName, lastName, email, password, phoneNumber, isAdmin, profilePicture, date, date]
     db.get().query(query, values, function (err, result) {
         if (err) done(err, null);
         else done(null, result.insertId);
