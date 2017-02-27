@@ -12,7 +12,6 @@ tasks.list = function(scuntId, done) {
 }
 
 tasks.create = function(taskName, description, points, scuntId, done) {
-	var now = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
 	async.waterfall([
 		function(callback) {
@@ -35,8 +34,8 @@ tasks.create = function(taskName, description, points, scuntId, done) {
 		function(callback) {
 			// Create task entry
 			var query = 'INSERT INTO tasks (name, description, points, scuntId, createdAt, updatedAt) '
-						+ 'VALUES(?, ?, ?, ?, ?, ?)';
-			var values = [taskName, description, points, scuntId, now, now];
+						+ 'VALUES(?, ?, ?, ?, NOW(), NOW())';
+			var values = [taskName, description, points, scuntId];
 			db.get().query(query, values, function (err, result) {
 				if (err) {
 					callback(err);
@@ -85,15 +84,13 @@ tasks.edit = function(taskId,editDict, done) {
 				}
 			}
 
-			var now = new Date().toISOString().slice(0, 19).replace('T', ' ');
-			query += " updatedAt ='" + now
-				+ "' WHERE id = '" + taskID + "';"
-
-			db.get().query(query, function (err) {
+			query += " updatedAt = NOW() WHERE id = ?;"
+			var values = [taskId];
+			db.get().query(query,values, function (err) {
 				if (err) {
 					callback(err);
 				} else {
-					callback(undefined, taskID);
+					callback(undefined, taskId);
 				}
 			});
 		}
@@ -109,7 +106,7 @@ tasks.approveTask = function(taskId, teamId, done) {
 				+ ' FROM tasks t1'
 				+ ' JOIN tasks t2 ON t1.scuntId = t2.scuntId AND t1.id <> t2.id AND t1.id = ? AND t2.name = ?'
 
-			var values = [taskID, editDict["name"]];
+			var values = [taskId, editDict["name"]];
 
 			db.get().query(query, values, function (err, result) {
 				if (err) {
@@ -125,15 +122,13 @@ tasks.approveTask = function(taskId, teamId, done) {
 			// Create task entry
 			var query = "UPDATE teamTaskRel SET status='APPROVED'";
 
-			var now = new Date().toISOString().slice(0, 19).replace('T', ' ');
-			query += " updatedAt ='" + now
-				+ "' WHERE teamId = '" + teamId + "' AND taskId = '" + taskId + "';"
-
-			db.get().query(query, function (err) {
+			query += " updatedAt =NOW() WHERE teamId = ? AND taskId = ?;"
+			var values = [teamId,taskId];
+			db.get().query(query,values, function (err) {
 				if (err) {
 					callback(err);
 				} else {
-					callback(undefined, taskID,teamId);
+					callback(undefined, taskId,teamId);
 				}
 			});
 		}
