@@ -28,7 +28,9 @@ router.post('/create-user', function(req, res, next) {
   var email = req.body.email;
   var password = req.body.password;
   var phoneNumber = req.body.phoneNumber || "";
+  var isAdmin = req.body.isAdmin == "true";
   var profilePicture = "";
+  
   console.log(req.body);
   var date = new Date().toISOString().slice(0, 19).replace('T', ' ');
   user.create(
@@ -38,6 +40,7 @@ router.post('/create-user', function(req, res, next) {
       email,
       password,
       phoneNumber,
+      isAdmin,
       profilePicture,
       date,
       function(err, result){
