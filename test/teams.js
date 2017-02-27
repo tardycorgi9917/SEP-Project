@@ -194,8 +194,14 @@ describe('Teams Tests', function () {
                     // Create scavenger hunt
                     var scuntName = 'scuntteamtest4';
                     var scuntDesc = 'desc';
+
+                    var dateOffset = 30;
                     var scuntStart = new Date();
                     var scuntEnd = new Date();
+
+                    scuntStart.setDate(scuntStart.getDate()+dateOffset);
+                    scuntEnd.setDate(scuntEnd.getDate()+dateOffset+10);
+
                     scunts.create(scuntName, scuntDesc, scuntStart, scuntEnd, callback);
                 },
                 function (scuntId, callback) {
@@ -258,8 +264,8 @@ describe('Teams Tests', function () {
                    var scuntStartDate = new Date();
                    var scuntEndDate = new Date();
 
-                   scuntStartDate.setDate(scruntStartDate.getDate()-dateOffset);
-                   scuntEndDate.setDate(scruntEndDate.getDate()+dateOffset);
+                   scuntStartDate.setDate(scuntStartDate.getDate()-dateOffset);
+                   scuntEndDate.setDate(scuntEndDate.getDate()+dateOffset);
 
                    scunts.create(name, desc, scuntStartDate, scuntEndDate,callback);
                 },
@@ -272,10 +278,11 @@ describe('Teams Tests', function () {
                     var email = 'asdf1@gmail.com';
                     var pwd = '123';
                     var phonenumber = '213 546-7889';
+                    var isAdmin = false;
                     var profilepic = '';
                     var date = new Date();
-                    users.create(username, firstName, lastName, email, pwd, phonenumber, profilepic, date, function (err, id) {
-                        callback(err, scuntId, id);
+                    users.create(username, firstName, lastName, email, pwd, phonenumber,isAdmin, profilepic, date, function (err, id) {
+                        callback(err, ScuntId, id);
                     });                   
                 } 
                 ,
