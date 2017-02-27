@@ -51,7 +51,7 @@ tasks.create = function(taskName, description, points, scuntId, done) {
 	});
 }
 
-tasks.edit = function(taskID,editDict, done) {
+tasks.edit = function(taskId,editDict, done) {
 	async.waterfall([
 		function (callback) {
 			if (!editDict["name"]) {
@@ -62,7 +62,7 @@ tasks.edit = function(taskID,editDict, done) {
 				+ ' FROM tasks t1'
 				+ ' JOIN tasks t2 ON t1.scuntId = t2.scuntId AND t1.id <> t2.id AND t1.id = ? AND t2.name = ?'
 
-			var values = [taskID, editDict["name"]];
+			var values = [taskId, editDict["name"]];
 
 			db.get().query(query, values, function (err, result) {
 				if (err) {
@@ -99,6 +99,46 @@ tasks.edit = function(taskID,editDict, done) {
 		}
 	], function (err, taskId) {
 		done(err, taskId);
+	});
+}
+
+tasks.approveTask = function(taskId, teamId, done) {
+	async.waterfall([
+		function (callback) {
+			var query = 'SELECT COUNT(*) AS duplicateTasks'
+				+ ' FROM tasks t1'
+				+ ' JOIN tasks t2 ON t1.scuntId = t2.scuntId AND t1.id <> t2.id AND t1.id = ? AND t2.name = ?'
+
+			var values = [taskID, editDict["name"]];
+
+			db.get().query(query, values, function (err, result) {
+				if (err) {
+					callback(err);
+				} else if (result[0].duplicateTasks > 0) {
+					callback('A duplicate task exists');
+				} else {
+					callback(null);
+				}
+			});
+		},
+		function (callback) {
+			// Create task entry
+			var query = "UPDATE teamTaskRel SET status='APPROVED'";
+
+			var now = new Date().toISOString().slice(0, 19).replace('T', ' ');
+			query += " updatedAt ='" + now
+				+ "' WHERE teamId = '" + teamId + "' AND taskId = '" + taskId + "';"
+
+			db.get().query(query, function (err) {
+				if (err) {
+					callback(err);
+				} else {
+					callback(undefined, taskID,teamId);
+				}
+			});
+		}
+	], function (err, taskId,teamId) {
+		done(err, taskId,teamId);
 	});
 }
 
