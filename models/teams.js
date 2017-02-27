@@ -86,12 +86,63 @@ teams.create = function(name, points, maxmembers, scuntId, leaderId, done) {
 }
 
 teams.delete = function (teamId, done) {
-    var query = 'DELETE FROM teamUserRel WHERE teamId = ?; DELETE FROM teams WHERE id = ?';
-    values = [teamId, teamId];
 
-    db.get().query(query, values, function (err, result) {
+    async.waterfall([
+        function(callback){
+            var query = 'SELECT scuntId FROM teams where id = ?';
+            values = [teamId];
+
+            db.get().query(query, values, function(err, result)
+            {
+                if(err)
+                {
+                    callback(err);
+                }else if(result.length == 0)
+                {
+                    callback('team does not exist');
+                }else
+                {
+                    callback(undefined, result[0].scuntId);
+                }
+
+            });
+        },
+        function(ScuntId,callback)
+        {
+            
+            var query = 'SELECT startTime, endTime FROM scunt where id = ?';
+            values = [ScuntId];
+            currentDate = new Date();
+
+            db.get().query(query, values ,function(err, result){
+                if(err)
+                {
+                    callback(err);
+                }else if(new Date(result[0].startTime) < currentDate && new Date(result[0].endTime) > currentDate )
+                {
+                    callback('Cannot Delete Teams during scunt');
+                }else
+                {
+                    callback(undefined);
+                }
+
+            });
+        },
+        function(callback)
+        {            
+            var query = 'DELETE FROM teamUserRel WHERE teamId = ?; DELETE FROM teams WHERE id = ?';
+            values = [teamId, teamId];
+
+            db.get().query(query, values, function (err, result) {
+                callback(err);
+            })
+        }
+
+    ], function(err)
+    {
         done(err);
-    })
+    });
+
 }
 
 teams.join = function (userId, teamId, allowswitch, done) {
@@ -104,8 +155,6 @@ teams.join = function (userId, teamId, allowswitch, done) {
                 // add to team, userId is a username
                 var query = 'SELECT id FROM users WHERE username = ?';
                 var values = [userId];
-
-                console.log(userId);
 
                 db.get().query(query, values, function(err, res) {
                     if (err || res.length == 0) {
