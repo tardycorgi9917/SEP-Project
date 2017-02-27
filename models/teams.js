@@ -89,7 +89,7 @@ teams.delete = function (teamId, done) {
 
     async.waterfall([
         function(callback){
-            var query = 'SELECT scuntId FROM Teams where id = ?';
+            var query = 'SELECT scuntId FROM teams where id = ?';
             values = [teamId];
 
             db.get().query(query, values, function(err, result)
@@ -99,27 +99,28 @@ teams.delete = function (teamId, done) {
                     callback(err);
                 }else
                 {
-                    callback(undefined, res[0].id);
+                    callback(undefined, result[0].scuntId);
                 }
 
             });
         },
         function(ScuntId,callback)
         {
+            
             var query = 'SELECT startTime, endTime FROM scunt where id = ?';
             values = [ScuntId];
-            currentDate = new date();
+            currentDate = new Date();
 
             db.get().query(query, values ,function(err, result){
                 if(err)
                 {
                     callback(err);
-                }else if(new date(result[0].startTime) < currentDate && new date(result[0].endTime) > currentDate )
+                }else if(new Date(result[0].startTime) < currentDate && new Date(result[0].endTime) > currentDate )
                 {
                     callback('Cannot Delete Teams during scunt');
                 }else
                 {
-                    callback(undefined,result);
+                    callback(undefined);
                 }
 
             });
@@ -130,7 +131,7 @@ teams.delete = function (teamId, done) {
             values = [teamId, teamId];
 
             db.get().query(query, values, function (err, result) {
-                done(err);
+                callback(err);
             })
         }
 
@@ -151,8 +152,6 @@ teams.join = function (userId, teamId, allowswitch, done) {
                 // add to team, userId is a username
                 var query = 'SELECT id FROM users WHERE username = ?';
                 var values = [userId];
-
-                console.log(userId);
 
                 db.get().query(query, values, function(err, res) {
                     if (err || res.length == 0) {
