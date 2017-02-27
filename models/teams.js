@@ -104,7 +104,7 @@ teams.delete = function (teamId, done) {
 
             });
         },
-        function(callback, ScuntId)
+        function(ScuntId,callback)
         {
             var query = 'SELECT startTime, endTime FROM scunt where id = ?';
             values = [ScuntId];

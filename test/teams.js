@@ -241,7 +241,56 @@ describe('Teams Tests', function () {
                 done();
             });
         });
+
+        it('should not be able to delete if during scunt', function(done)
+        {
+            async.waterfall([
+                function(callback)
+                {
+                   var name = 'ScuntNumbaWan';
+                   var desc = 'BestNumba';
+                   var scuntStartDate = new Date();
+                   var scuntEndDate = new Date();
+
+                   scunts.create(name, desc, scuntStartDate, scuntEndDate,
+                   function(err, id)
+                   {
+                        callback(err,id);
+                   });
+                },
+                function(ScuntId,callback)
+                {
+                     // Create user
+                    var username = 'NumbaWan';
+                    var firstName = 'fname4';
+                    var lastName = 'lname4';
+                    var email = 'asdf1@gmail.com';
+                    var pwd = '123';
+                    var phonenumber = '213 546-7889';
+                    var profilepic = '';
+                    var date = new Date();
+                    users.create(username, firstName, lastName, email, pwd, phonenumber, profilepic, date, function (err, id) {
+                        callback(err, scuntId, id);
+                    });                   
+                } 
+                ,
+                function(callback)
+                {
+                    var name = 'teamNumbaWan';
+                    teams.create();
+                }
+
+
+            ], function()
+            {
+
+            });
+
+
+        });
+
     });
+
 
     describe('Adding user to team and joining', function () {
         it('Happy path adding to team', function (done) {
