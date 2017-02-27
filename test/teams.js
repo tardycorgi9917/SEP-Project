@@ -249,21 +249,21 @@ describe('Teams Tests', function () {
                 {
                    var name = 'ScuntNumbaWan';
                    var desc = 'BestNumba';
+                   var dateOffset = 6;
                    var scuntStartDate = new Date();
                    var scuntEndDate = new Date();
 
-                   scunts.create(name, desc, scuntStartDate, scuntEndDate,
-                   function(err, id)
-                   {
-                        callback(err,id);
-                   });
+                   scuntStartDate.setDate(scruntStartDate.getDate()-dateOffset);
+                   scuntEndDate.setDate(scruntEndDate.getDate()+dateOffset);
+
+                   scunts.create(name, desc, scuntStartDate, scuntEndDate,callback);
                 },
                 function(ScuntId,callback)
                 {
                      // Create user
                     var username = 'NumbaWan';
-                    var firstName = 'fname4';
-                    var lastName = 'lname4';
+                    var firstName = 'NumbaWanF';
+                    var lastName = 'NumbaWanL';
                     var email = 'asdf1@gmail.com';
                     var pwd = '123';
                     var phonenumber = '213 546-7889';
@@ -274,18 +274,27 @@ describe('Teams Tests', function () {
                     });                   
                 } 
                 ,
-                function(callback)
+                function(scuntId, userId, callback)
                 {
                     var name = 'teamNumbaWan';
-                    teams.create();
+                    teams.create(name, 0, 2, scuntId, userId, function (err, id) {
+                        assert.strictEqual(err, null, 'teams create has some invalid sql ' + err);
+                        callback(err, id);
+                    });
                 }
+                ,
+                function(teamId,callback)
+                {
+                    teams.delete(teamId, function (err) {
+                        assert.StrictEqual(err,'Cannot Delete Teams during scunt');
+                        callback(err);
+                    });
 
-
-            ], function()
+                }
+            ], function(err)
             {
-
+                done();
             });
-
 
         });
 
