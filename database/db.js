@@ -33,4 +33,9 @@ db.get = function() {
 }
 
 
+db.populate = function(done) {
+  done();
+}
+
+
 module.exports = db;
