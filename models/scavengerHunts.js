@@ -88,6 +88,32 @@ scunt.publish = function(id, done) {
     });
 }
 
+scunt.close = function(scuntId, done) {
+    async.waterfall([
+        function(callback){
+            var query = 'SELECT COUNT(*) AS duplicateScunt FROM scunt where id =?';
+            var values = [scuntId];
+            db.get().query(query , values, function(err,result){
+                if(err){
+                    callback(err);
+                }else if(result[0].duplicateScunt != 0 )
+                {
+                    callback('Scunt with this id doesn\'t exist')
+                }else{
+                    callback(null);
+                }
+            });
+        },
+        function(callback) {
+            scunt.setStatus(scuntId, 'FINISHED', function (err, res) {
+                callback(err,scuntId);
+            });
+        }
+    ], function (err,scuntId) {
+        done(err,scuntId);
+    });
+}
+
 scunt.update = function (id, name, description, startTime, endTime, done) {
     var sTime = startTime.toISOString().slice(0, 19).replace('T', ' ');
     var eTime = endTime.toISOString().slice(0, 19).replace('T', ' ');
@@ -104,6 +130,8 @@ scunt.update = function (id, name, description, startTime, endTime, done) {
         }
     });
 }
+
+
 
 scunt.list = function (done) {
     var query = 'SELECT id, name, description, status, startTime AS start, endTime AS end, createdAt AS created, updatedAt AS updated '
