@@ -97,6 +97,9 @@ teams.delete = function (teamId, done) {
                 if(err)
                 {
                     callback(err);
+                }else if(result.length == 0)
+                {
+                    callback('team does not exist');
                 }else
                 {
                     callback(undefined, result[0].scuntId);
