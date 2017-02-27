@@ -56,6 +56,30 @@ router.post('/edit-task', function(req, res, next) {
 	})
 });
 
+router.post('/approve-task', function(req, res, next) {
+	var taskId = req.body.taskId;
+	var teamId = req.body.teamId;
+	if(taskId != null){
+		taskDict["taskId"] = taskId;
+	}else{
+		res.status(500).send(err);
+	}
+	if(teamId != null){
+		taskDict["teamId"] = teamId;
+	}else{
+		res.status(500).send(err);
+	}
+
+
+	tasks.approveTask(taskId, teamId, function (err, taskId,teamId) {
+		if (err) {
+			res.status(500).send(err);
+		} else {
+			res.send(taskId.toString());
+		}
+	})
+});
+
 router.delete('/delete-task/', function(req, res, next) {
 	var taskId = req.query.taskId;
 
