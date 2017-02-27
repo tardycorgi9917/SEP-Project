@@ -59,14 +59,10 @@ router.post('/edit-task', function(req, res, next) {
 router.post('/approve-task', function(req, res, next) {
 	var taskId = req.body.taskId;
 	var teamId = req.body.teamId;
-	if(taskId != null){
-		taskDict["taskId"] = taskId;
-	}else{
+	if(taskId == null){
 		res.status(500).send(err);
 	}
-	if(teamId != null){
-		taskDict["teamId"] = teamId;
-	}else{
+	if(teamId == null){
 		res.status(500).send(err);
 	}
 
