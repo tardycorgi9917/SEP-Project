@@ -89,7 +89,6 @@ router.post('/update-task-status/', function(req, res, next){
     tasks.updateTaskStatus(teamId, taskId, status, function(err){
         if(err){
             res.sendStatus(500);
-            console.log(err);
         } else {
             res.sendStatus(200);
         }

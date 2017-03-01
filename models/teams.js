@@ -24,7 +24,6 @@ teams.removeTeamUserRel = function(teamId, userId, done) {
 teams.createTeamTaskRel = function(teamId, task, done){
     var query = 'INSERT INTO teamTaskRel (teamId, taskId, status, createdAt, updatedAt) VALUES(?,?,?,?,?)'
     var now = new Date().toISOString().slice(0, 19).replace('T', ' ');
-    console.log(task);
     var values = [teamId, task.id, "Incomplete", now, now];
     db.get().query(query, values, done);
 }
@@ -100,7 +99,6 @@ teams.create = function(name, points, maxmembers, scuntId, leaderId, done) {
                 teams.createTeamTaskRel(teamId, tasks[i], function(err, result){
                     if(err) callback(err)
                     else{
-                        console.log(result);
                         callback(null, teamId);
                     }
                 })

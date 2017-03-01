@@ -5,6 +5,9 @@ var db = require('../database/db');
 var seed = require('../database/seeders');
 var tasks = require('../models/tasks');
 var scunts = require('../models/scavengerHunts');
+var users = require('../models/users');
+var teams = require('../models/teams');
+
 
 describe('Tasks Tests', function () {
     before(function (done) {
@@ -214,4 +217,62 @@ describe('Tasks Tests', function () {
         });
     });
 
+    describe('Task Status Updates', function(){
+        var now = new Date();
+        it('Should Successfully Update Task Status', function(done){
+            async.waterfall([
+                function(callback){
+                    users.create("shane", "Shane", "McIntosh", "shane@test.com", "mcintosh","5149136710", true, null, now, function(err, userId){
+                        if(err) callback(err);
+                        else callback(null, userId);
+                    });
+                }, function(userId, callback){
+                    scunts.create("Loool", "Let's get litt up", now, now, function(err, scuntId){
+                        if(err) callback(err);
+                        else callback(null, scuntId);
+                    });
+                }, function(scuntId, callback){
+                    tasks.create("Catch A Squirrel", "Use a Pokeball", 40, scuntId, function(err, taskId){
+                        if(err) callback(err);
+                        else callback(null, taskId, scuntId);
+                    });
+                }, function(taskId, scuntId, callback){
+                    users.create("keheliya", "Keheliya", "Gallaba", "keheliya@test.com", "gallaba","5149136711", false, null, now, function(err, userId){
+                        if(err) callback(err);
+                        else callback(null, userId, scuntId, taskId);
+                    });
+                }, function(userId, scuntId, taskId, callback){
+                    teams.create("AllStarz", 300, 20, scuntId, userId, function(err, teamId){
+                        if(err) callback(err);
+                        else callback(null, teamId, taskId);
+                    });
+                }, function(teamId, taskId, callback){
+                    tasks.getTaskStatus(teamId, taskId, function(err,result){
+                        if(err) callback(err);
+                        else{
+                            var status = result[0].status;
+                            assert(status, "Incomplete");
+                            callback(null, teamId, taskId);
+                        }
+                    })
+                }, function(teamId, taskId, callback){
+                    tasks.updateTaskStatus(teamId, taskId, "In Progress", function(err, result){
+                        if(err) callback(err);
+                        else callback(null, teamId, taskId);
+                    });
+                }, function(teamId, taskId, callback){
+                    tasks.getTaskStatus(teamId, taskId, function(err,result){
+                        if(err) callback(err);
+                        else {
+                            var status = result[0].status;
+                            assert(status, "In Progress");
+                            callback(null, teamId, taskId);
+                        }
+                    })
+                }
+            ], function(err){
+                done();
+            });
+        });
+    });
 });
