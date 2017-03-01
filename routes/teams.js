@@ -27,7 +27,6 @@ router.post('/create-team', function(req, res, next) {
 
     teams.create(name, points, maxmembers, scuntId, leaderId, function (err, id) {
         if (err) {
-            console.log(err);
             res.status(500).send(err);
             console.log(err);
         } else {
