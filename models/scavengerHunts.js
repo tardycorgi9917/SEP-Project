@@ -61,10 +61,10 @@ scunt.setStatus = function(id, status, done) {
     });
 }
 
-scunt.publish = function(id, done) {
+scunt.start = function(id, done) {
     async.waterfall([
 		function(callback) {
-            scunt.setStatus(id, 'PUBLISHED', function (err, res) {
+            scunt.setStatus(id, 'STARTED', function (err, res) {
                 callback(err);
             });
         }, 
