@@ -91,12 +91,12 @@ scunt.start = function(id, done) {
 scunt.close = function(scuntId, done) {
     async.waterfall([
         function(callback){
-            var query = 'SELECT COUNT(*) AS duplicateScunt FROM scunt where id =?';
+            var query = 'SELECT COUNT(*) AS uniqueScunt FROM scunt where id =?';
             var values = [scuntId];
             db.get().query(query , values, function(err,result){
                 if(err){
                     callback(err);
-                }else if(result[0].duplicateScunt != 0 )
+                }else if(result[0].uniqueScunt == 0 )
                 {
                     callback('Scunt with this id doesn\'t exist')
                 }else{
@@ -144,7 +144,13 @@ scunt.delete = function (id, done) {
     var query = 'DELETE FROM scunt WHERE id = ?';
     var values = [id];
 
-    db.get().query(query, values, done);
+    db.get().query(query, values,  function (err) {
+        if (err) {
+            done(err, undefined);
+        } else {
+            done(undefined, id);
+        }
+    });
 }
 
 module.exports = scunt;
