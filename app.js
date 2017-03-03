@@ -46,6 +46,13 @@ else if (args.length && args[0] == "DB=down") {
     process.exit(0);
   });
 }
+else if(args.length && args[0] == "seed"){
+  console.log("****************************POPULATING ALL TABLES********************************");
+  seed.populate(function () {
+    console.log("****************************FINISHED POPULATING DROPPING TABLES********************************");
+    process.exit(0);
+  });
+}
 
 var index = require('./routes/index');
 var users = require('./routes/users');

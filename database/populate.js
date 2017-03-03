@@ -1,8 +1,7 @@
-var users = require('../models/users')
-var db = require("../database/db")
+
 var pop = {}
 
-var user_pop = [
+pop.users = [
     {
         username : 'stephcurry30',
         firstName : "Stephen",
@@ -75,11 +74,6 @@ var user_pop = [
     }
 ]
 
-pop.users = function(done) {
-    async.forEach(user_pop, function(){
-        users.create()
-    }, function(){
-        done()
-    })
-}
-
+pop.teams = [
+    
+]
