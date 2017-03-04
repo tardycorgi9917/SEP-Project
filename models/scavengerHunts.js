@@ -119,8 +119,13 @@ scunt.delete = function (id, done) {
     db.get().query(query, values, done);
 }
 
-scunt.timeRemaining = function(id, done) {
-    
+scunt.getTimeRemaining = function(id, done) {
+    var query = 'SELECT startTime AS start, endTime AS end FROM scunt WHERE id = ?';
+    var values = [id];
+
+    db.get().query(query, values, function(err, result) {
+        done(err, result);
+    });
 }
 
 
