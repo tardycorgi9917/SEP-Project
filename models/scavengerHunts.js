@@ -119,4 +119,9 @@ scunt.delete = function (id, done) {
     db.get().query(query, values, done);
 }
 
+scunt.timeRemaining = function(id, done) {
+    
+}
+
+
 module.exports = scunt;
