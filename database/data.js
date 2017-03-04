@@ -1,7 +1,7 @@
 
-var pop = {}
+var data = {}
 
-pop.users = [
+data.users = [
     {
         username : 'stephcurry30',
         firstName : "Stephen",
@@ -74,6 +74,8 @@ pop.users = [
     }
 ]
 
-pop.teams = [
-    
+data.teams = [
+
 ]
+
+module.exports = data;

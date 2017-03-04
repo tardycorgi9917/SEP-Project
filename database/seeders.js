@@ -1,6 +1,8 @@
 var schema = require('./schema');
 var db = require('./db');
 var async = require('async');
+var data = require('./data');
+var users = require('../models/users');
 var seed = {};
 
 // Defines the order in which these tables can be dropped without violating foreign key constraints
@@ -69,6 +71,12 @@ seed.down = function (done) {
 		}
 		done();
 	});
+}
+
+seed.populate = function(done){
+	async.forEach(data.users, function(user){ 
+		users.create(user.username, user.firstname, user.lastName, user.email, user.password, '', '')
+	})	
 }
 
 module.exports = seed;
