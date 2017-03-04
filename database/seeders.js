@@ -74,11 +74,14 @@ seed.down = function (done) {
 }
 
 seed.populate = function(done){
+	var now = new Date().toISOString().slice(0, 19).replace('T', ' ');
 	async.forEach(data.users, function(user){ 
-		users.create(user.username, user.firstname, user.lastName, user.email, user.password, '', '', function(err, usr){
-			
+		users.create(user.username, user.firstName, user.lastName, user.email, user.password, '5147373734', false,'ghjefnkenfef', now ,function(err, usr){
+			console.log(usr)
 		})
-	})	
+	}, function(err, res){
+		done();
+	});
 }
 
 module.exports = seed;
