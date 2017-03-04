@@ -61,10 +61,10 @@ scunt.setStatus = function(id, status, done) {
     });
 }
 
-scunt.start = function(id, done) {
+scunt.publish = function(id, done) {
     async.waterfall([
 		function(callback) {
-            scunt.setStatus(id, 'STARTED', function (err, res) {
+            scunt.setStatus(id, 'PUBLISHED', function (err, res) {
                 callback(err);
             });
         }, 
@@ -87,6 +87,17 @@ scunt.start = function(id, done) {
         done(err);
     });
 }
+
+
+scunt.findById = function (id, done) {
+    var query = 'SELECT * FROM scunt WHERE id = ?';
+    var values = [id];
+    db.get().query(query, values, function (err, result) {
+        if (err) done(err);
+        else done(null, result);
+    })
+}
+
 
 scunt.update = function (id, name, description, startTime, endTime, done) {
     var sTime = startTime.toISOString().slice(0, 19).replace('T', ' ');

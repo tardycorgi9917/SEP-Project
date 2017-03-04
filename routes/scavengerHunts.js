@@ -8,6 +8,15 @@ router.get('/', function (req, res, next) {
   res.send('this is the scunt app');
 });
 
+router.get('/find-id/:id', function(req, res){
+    var id = req.params.id;
+    scunt.findById(id, function(err, result){
+        if(err) res.status(500).send(err);
+        else res.send(result[0]);
+    })
+});
+
+
 router.get('/list-scunts', function (req, res) {
   scunt.list(function (err, result) {
     if (err) {
@@ -35,10 +44,10 @@ router.post('/create-ScavengerHunt', function (req, res, next) {
   });
 });
 
-router.put('/start-scunt', function(req, res, next) {
+router.put('/publish-scunt', function (req, res, next) {
   var id = req.body.id;
 
-  scunt.start(id, function (err, result) {
+  scunt.publish(id, function (err, result) {
     if (err) {
       res.status(500).send(err);
     } else {
