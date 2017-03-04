@@ -75,7 +75,9 @@ seed.down = function (done) {
 
 seed.populate = function(done){
 	async.forEach(data.users, function(user){ 
-		users.create(user.username, user.firstname, user.lastName, user.email, user.password, '', '')
+		users.create(user.username, user.firstname, user.lastName, user.email, user.password, '', '', function(err, usr){
+			
+		})
 	})	
 }
 
