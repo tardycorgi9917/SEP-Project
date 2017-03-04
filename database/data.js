@@ -1,6 +1,25 @@
 
 var data = {}
 
+data.scunts = [
+    {
+
+        name: 'NBA Finals',
+        description: 'best of 7 games wins the NBA Titile',
+        startTime: '2017-03-04 21:48:46',
+        endTime: '2018-03-04 21:48:46'
+    }
+]
+
+data.tasks = [
+    {
+        taskName: 'blow a 3-1 lead',
+        description: 'Gain a 3-1 advantage and then loose the next 3 games',
+        points: '500',
+        scuntId: '1'
+    }
+]
+
 data.users = [
     {
         username : 'stephcurry30',
@@ -75,7 +94,20 @@ data.users = [
 ]
 
 data.teams = [
-
+    {
+        name: 'Clevland Cavaliers',
+        points: 0,
+        maxmembers: 15,
+        scuntId: 1,
+        leaderId: 6 
+    },
+    {
+        name: 'Golden State Warriors',
+        points: 0,
+        maxmembers: 15,
+        scuntId: 1,
+        leaderId: 1 
+    },
 ]
 
 module.exports = data;

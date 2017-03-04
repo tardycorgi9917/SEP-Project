@@ -3,6 +3,8 @@ var db = require('./db');
 var async = require('async');
 var data = require('./data');
 var users = require('../models/users');
+var scunts = require('../models/scavengerHunts');
+var teams = require('../models/teams')
 var seed = {};
 
 // Defines the order in which these tables can be dropped without violating foreign key constraints
@@ -75,13 +77,55 @@ seed.down = function (done) {
 
 seed.populate = function(done){
 	var now = new Date().toISOString().slice(0, 19).replace('T', ' ');
-	async.forEach(data.users, function(user){ 
-		users.create(user.username, user.firstName, user.lastName, user.email, user.password, '5147373734', false,'ghjefnkenfef', now ,function(err, usr){
-			console.log(usr)
-		})
-	}, function(err, res){
-		done();
-	});
+	async.forEach(data.users, 
+		function(user, callback){ 
+			users.create(user.username, user.firstName, user.lastName, user.email, user.password, '5147373734', false,'ghjefnkenfef', now ,function(err, usr){
+				if(err){
+					console.log(err)
+					done();
+				} else {
+					callback()
+				}
+			});
+		},
+		function(err) {
+			async.forEach(data.scunts, 
+				function(scunt, callback){
+					scunts.createScunt(scunt.name, scunt.description, scunt.startTime, scunt.endTime, function(err, scnt){
+						if(err){
+							console.log(err);
+							done();
+						} else {
+							callback();
+						}
+					})
+				},
+				function(err){
+					if(err){
+						console.log(err)
+					} 
+					async.forEach(data.teams, 
+						function(team, callback){
+							teams.create(team.name, team.points, team.maxmembers, team.scuntId, team.leaderId, function(err, t){
+								if(err){
+									console.log(err)
+									done();
+								} else {
+									callback();
+								}
+							})
+						},
+						function(err){
+							if(err){
+								console.log(err)
+							}
+							done()
+						}
+					)
+				}
+			)
+		}
+	);
 }
 
 module.exports = seed;
