@@ -90,11 +90,11 @@ scunt.publish = function(id, done) {
 
 
 scunt.findById = function (id, done) {
-    var query = 'SELECT * FROM scunt WHERE id = ?';
+    var query = 'SELECT id, name, description, status, startTime AS start, endTime AS end, createdAt AS created, updatedAt AS updated FROM scunt WHERE id = ?';
     var values = [id];
     db.get().query(query, values, function (err, result) {
         if (err) done(err);
-        else done(null, result);
+        else done(null, result[0]);
     })
 }
 
