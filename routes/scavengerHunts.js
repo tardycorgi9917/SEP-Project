@@ -18,6 +18,19 @@ router.get('/list-scunts', function (req, res) {
   })
 });
 
+router.get('/is-leader-ScavengerHunt/:userId/:scuntId', function(req, res, next) {
+  var scuntId = req.params.scuntId;
+  var userId = req.params.userId;
+
+  scunt.isLeaderScavengerHunt(userId, scuntId, function(err, result) {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.send(JSON.stringify(result));
+    }
+  });
+});
+
 router.post('/create-ScavengerHunt', function (req, res, next) {
   var ScuntName = req.body.name;
   var ScuntDesc = req.body.description;

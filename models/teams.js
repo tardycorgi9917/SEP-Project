@@ -21,6 +21,26 @@ teams.removeTeamUserRel = function(teamId, userId, done) {
     });
 }
 
+//check please
+teams.createTeamTaskRel = function(teamId, taskId, type, done) {
+    var query = 'INSERT INTO teamTaskRel (teamId, taskId, userType, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?)';
+    
+    var now = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    var values = [teamId, taskId, type, now, now];
+
+    db.get().query(query, values, done);
+}
+
+//check please
+teams.removeTeamTaskRel = function(teamId, taskId, done) {
+    var query = 'DELETE FROM teamTaskRel WHERE teamId = ? AND taskId = ?';
+    var values = [teamId, taskId];
+
+    db.get().query(query, values, function(err, result) {
+        done(err);
+    });
+}
+
 teams.create = function(name, points, maxmembers, scuntId, leaderId, done) {
     var now = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
@@ -79,6 +99,23 @@ teams.create = function(name, points, maxmembers, scuntId, leaderId, done) {
             teams.createTeamUserRel(teamId, leaderId, 'leader', function (err, result) {
                 callback(err, teamId);
             });
+      /*  },
+      // to do 
+
+        function(teamId, scuntId, callback) {
+            // Add tasks for team
+            var query = 'select id from tasks where scuntId = ?';
+            var values = [scuntId];
+            db.get().query(query, values, function (err, result) {
+                if (err) done(err);
+                else {
+              //      for(var taskId in result) {
+               //         teams.createTeamTaskRel(teamId, taskId, 'STARTED', function(err, result){
+                        callback(err, teamId);
+                 //   });
+                  //  }
+                }
+            })*/
         }
     ], function(err, teamId) {
         done(err, teamId);

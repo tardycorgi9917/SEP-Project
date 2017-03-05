@@ -97,6 +97,16 @@ scunt.findById = function (id, done) {
     })
 }
 
+scunt.isLeaderScavengerHunt = function(userId, scuntId, done){
+    var query = 'SELECT COUNT(*) FROM teamUserRel tr JOIN teams t ON tr.teamId = t.id WHERE tr.userId = ?  AND t.scuntId = ?   AND tr.userType = "leader"';
+    var values = [userId, scuntId];
+    db.get().query(query, values, function(err, result) {
+        if (err) done(err);
+  //      else done(null, 1);
+        else done(null, result[0]["COUNT(*)"]);
+    })
+}
+
 scunt.update = function (id, name, description, startTime, endTime, done) {
     var sTime = startTime.toISOString().slice(0, 19).replace('T', ' ');
     var eTime = endTime.toISOString().slice(0, 19).replace('T', ' ');
