@@ -2,7 +2,12 @@ var db = require("../database/db.js");
 var async = require('async');
 
 var teamTasks = {}
+//to do 
+//set status
 
+
+
+//To check
 teamTasks.create = function(teamId, taskId, status, scuntId, done) {
 	var now = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
