@@ -126,6 +126,8 @@ scunt.getTimeRemaining = function(id, done) {
     db.get().query(query, values, function(err, result) {
         done(err, result);
     });
+
+
 }
 
 
