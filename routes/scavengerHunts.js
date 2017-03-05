@@ -67,8 +67,7 @@ router.put('/time-scunt', function (req, res, next) {
     if (err) {
       res.status(500).send(err);
     } else {
-      // res.sendStatus(200);
-      res.send(result); 
+      res.sendStatus(200);
     }
   });
 });
