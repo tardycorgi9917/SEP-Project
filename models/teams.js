@@ -1,11 +1,11 @@
 var db = require("../database/db.js");
 var async = require('async');
-
+var tasks = require('./tasks')
 var teams = {}
 
 teams.createTeamUserRel = function(teamId, userId, type, done) {
     var query = 'INSERT INTO teamUserRel (teamId, userId, userType, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?)';
-    
+
     var now = new Date().toISOString().slice(0, 19).replace('T', ' ');
     var values = [teamId, userId, type, now, now];
 
@@ -19,6 +19,13 @@ teams.removeTeamUserRel = function(teamId, userId, done) {
     db.get().query(query, values, function(err, result) {
         done(err);
     });
+}
+
+teams.createTeamTaskRel = function(teamId, task, done){
+    var query = 'INSERT INTO teamTaskRel (teamId, taskId, status, createdAt, updatedAt) VALUES(?,?,?,?,?)'
+    var now = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    var values = [teamId, task.id, "Incomplete", now, now];
+    db.get().query(query, values, done);
 }
 
 teams.create = function(name, points, maxmembers, scuntId, leaderId, done) {
@@ -64,21 +71,38 @@ teams.create = function(name, points, maxmembers, scuntId, leaderId, done) {
             var query = 'INSERT INTO teams (name, points, maxmembers, scuntId, createdAt, updatedAt) '
                         + 'VALUES(?, ?, ?, ?, ?, ?)';
             var values = [name, points, maxmembers, scuntId, now, now];
-                        
+
             db.get().query(query, values, function (err, result) {
                 if (err) {
                     callback(err);
                 } else {
                     var teamId = result.insertId;
-                    callback(undefined, teamId)
+                    callback(null, teamId, scuntId)
                 }
             });
         },
-        function(teamId, callback) {
+        function(teamId, scuntId, callback) {
             // Add the user to his team
             teams.createTeamUserRel(teamId, leaderId, 'leader', function (err, result) {
-                callback(err, teamId);
+                callback(err, teamId, scuntId);
             });
+        },
+        function(teamId, scuntId, callback){
+            // Get the tasks list
+            tasks.list(scuntId, function(err, tasks){
+                if(err) callback(err)
+                else callback(null, teamId, tasks);
+            })
+        }, function(teamId, tasks, callback){
+            // Get the team's task and create TeamTaskRel
+            for (i in tasks){
+                teams.createTeamTaskRel(teamId, tasks[i], function(err, result){
+                    if(err) callback(err)
+                    else{
+                        callback(null, teamId);
+                    }
+                })
+            }
         }
     ], function(err, teamId) {
         done(err, teamId);
@@ -109,7 +133,7 @@ teams.delete = function (teamId, done) {
         },
         function(ScuntId,callback)
         {
-            
+
             var query = 'SELECT startTime, endTime FROM scunt where id = ?';
             values = [ScuntId];
             currentDate = new Date();
@@ -129,7 +153,7 @@ teams.delete = function (teamId, done) {
             });
         },
         function(callback)
-        {            
+        {
             var query = 'DELETE FROM teamUserRel WHERE teamId = ?; DELETE FROM teams WHERE id = ?';
             values = [teamId, teamId];
 
@@ -169,10 +193,10 @@ teams.join = function (userId, teamId, allowswitch, done) {
             // Validate that the user is not in a team already, unless switching allowed
             var query = 'SELECT COUNT(*) AS userteams '
                         + 'FROM teams AS t1 '
-                        + 'JOIN teams AS t2 ON t2.scuntId = t1.scuntId ' 
+                        + 'JOIN teams AS t2 ON t2.scuntId = t1.scuntId '
                         + 'JOIN teamUserRel ON teamUserRel.teamId = t2.id '
                         + 'WHERE teamUserRel.userId = ? AND t1.id = ?';
-                        
+
             values = [id, teamId];
             db.get().query(query, values, function (err, result) {
                 var userteams = result[0].userteams;
@@ -191,7 +215,7 @@ teams.join = function (userId, teamId, allowswitch, done) {
                         + 'JOIN (SELECT COUNT(*) AS teamcount FROM teamUserRel WHERE teamUserRel.teamId = ?) AS teamcount '
                         + 'WHERE teams.id = ?'
             var values = [teamId, teamId];
-            
+
             db.get().query(query, values, function (err, result) {
                 if (err) {
                    callback(err);
@@ -205,11 +229,11 @@ teams.join = function (userId, teamId, allowswitch, done) {
             // If user is switching teams, delete the old teamUserRelation
             var query = 'DELETE teamUserRel '
                         + 'FROM teams AS t1 '
-                        + 'JOIN teams AS t2 ON t2.scuntId = t1.scuntId ' 
+                        + 'JOIN teams AS t2 ON t2.scuntId = t1.scuntId '
                         + 'JOIN teamUserRel ON teamUserRel.teamId = t2.id '
                         + 'WHERE teamUserRel.userId = ? AND t1.id = ?';
             var values = [id, teamId];
-                        
+
             db.get().query(query, values, function(err, result) {
                 callback(err, id);
             });

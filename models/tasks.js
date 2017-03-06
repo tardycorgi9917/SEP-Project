@@ -111,4 +111,21 @@ tasks.delete = function (taskId, done) {
 	});
 }
 
+tasks.getTaskStatus = function(teamId, taskId, done){
+	var query = 'SELECT status FROM teamTaskRel WHERE teamId = ? AND taskId = ?';
+	values = [teamId, taskId];
+	db.get().query(query, values, function(err, status){
+		if(err) done(err);
+		else done(null, status);
+	})
+}
+
+tasks.updateTaskStatus = function(teamId, taskId, status, done){
+	var query = 'UPDATE teamTaskRel SET status = ? WHERE teamId = ? AND taskId = ?';
+	values = [status,teamId, taskId];
+	db.get().query(query, values, function(err, result){
+		done(err);
+	})
+}
+
 module.exports = tasks;
