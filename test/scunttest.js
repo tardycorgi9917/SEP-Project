@@ -273,4 +273,42 @@ describe('Scunt test', function () {
         done();
     });
   });
+
+  it("Scunt get status", function(done){
+    async.waterfall([
+      function(callback) {
+        var Name = 'StatusScunt';
+        var Desc = 'Status scunt';
+        var startTime = new Date("September 1, 2017 11:13:00");
+        var endTime = new Date("September 13, 2017 11:13:00");
+
+        scunt.create(Name, Desc, startTime, endTime, function (err, id) {
+          callback(err, id);
+        });
+      },
+      function(id, callback)
+      {
+        scunt.setStatus(id, 'PUBLISHED', function(err, res) {
+          callback(err, id);
+        });      
+      },
+      function(id, callback)
+      {
+        scunt.getStatus(id, function(err,result)
+        {
+          assert.strictEqual(err,null);
+          assert.strictEqual(result[0].status, "PUBLISHED");
+          callback(err);
+        });
+      }        
+    ],
+    function(err)
+    {
+      assert.equal(err,null);
+      done();
+    });
+
+  });
+
+
 });

@@ -121,6 +121,14 @@ scunt.list = function (done) {
     db.get().query(query, null, done);
 }
 
+scunt.getStatus = function(ScuntId, done)
+{
+    var value = [ScuntId];
+    var query = 'SELECT status FROM scunt WHERE id = ?';
+
+    db.get().query(query, value, done);
+}
+
 scunt.delete = function (id, done) {
     var query = 'DELETE FROM scunt WHERE id = ?';
     var values = [id];
