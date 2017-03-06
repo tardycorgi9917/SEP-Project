@@ -16,7 +16,7 @@ droplist = [
 
 seed.up = function (done) {
 	var tables = Object.keys(schema);
-	var qstr = "";
+	var qstr = "SET default_storage_engine=INNODB;";
 	async.each(tables, function (table) {
 		if (schema.hasOwnProperty(table)) {
 			qstr += "CREATE TABLE IF NOT EXISTS `" + schema[table].name + "` (";
@@ -58,7 +58,7 @@ seed.down = function (done) {
 	var query = "";
 	for(var i in droplist) {
 		query += "DROP TABLE IF EXISTS `" + droplist[i] + "` CASCADE; ";
-	} 
+	}
 
 	//console.log("****** query to drop tables: " + query);
 	db.get().query(query, [], function (err, result) {
