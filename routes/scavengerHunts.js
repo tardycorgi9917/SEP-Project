@@ -18,6 +18,19 @@ router.get('/list-scunts', function (req, res) {
   })
 });
 
+router.get('/view-scuntStatus/:ScuntId', function(req,res){
+  var ScuntId = req.params.ScuntId;
+  scunt.getStatus(ScuntId,function(err,result){
+    if(err)
+    {
+      res.sendStatus(500);
+    }else
+    {
+      res.send(JSON.stringify(result));
+    }
+  })
+});
+
 router.post('/create-ScavengerHunt', function (req, res, next) {
   var ScuntName = req.body.name;
   var ScuntDesc = req.body.description;
@@ -72,6 +85,14 @@ router.put('/status-scunt', function (req, res, next) {
       res.sendStatus(200);
     }
   });
+});
+
+router.get('/find-id/:id', function(req, res){
+    var id = req.params.id;
+    scunt.findById(id, function(err, result){
+        if(err) res.status(500).send(err);
+        else res.send(result[0]);
+    })
 });
 
 router.put('/modify-ScavengerHunt', function (req, res, next) {
