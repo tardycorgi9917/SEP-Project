@@ -229,7 +229,7 @@ describe('Scunt test', function () {
           ("starteduser2", "startfname2", "startlname2", "startfname2@gmail.com", "1234", "1231231234", "1", "", "2017-01-01", "2017-01-01"),
           ("starteduser3", "startfname3", "startlname3", "startfname3@gmail.com", "1234", "1231231234", "1", "", "2017-01-01", "2017-01-01"),
           ("starteduser4", "startfname4", "startlname4", "startfname4@gmail.com", "1234", "1231231234", "1", "", "2017-01-01", "2017-01-01");
-		  
+      
           INSERT INTO teams (name, points, maxmembers, scuntId, createdAt, updatedAt) VALUES 
           ("startteam1", "0", "3", ?, "2017-01-01", "2017-01-01"),
           ("startteam2", "0", "3", ?, "2017-01-01", "2017-01-01");
@@ -393,5 +393,38 @@ describe('Scunt test', function () {
         done();
     });
   });
+
+  it("Scunt get status", function(done){
+    async.waterfall([
+      function(callback) {
+        var Name = 'StatusScunt';
+        var Desc = 'Status scunt';
+        var startTime = new Date("September 1, 2017 11:13:00");
+        var endTime = new Date("September 13, 2017 11:13:00");
+
+        scunt.create(Name, Desc, startTime, endTime, function (err, id) {
+          callback(err, id);
+        });
+      },
+      function(id, callback){
+        scunt.setStatus(id, 'PUBLISHED', function(err, res) {
+          callback(err, id);
+        });      
+      },
+      function(id, callback){
+        scunt.getStatus(id, function(err,result)
+        {
+          assert.strictEqual(err,null);
+          assert.strictEqual(result[0].status, "PUBLISHED");
+          callback(err);
+        });
+      }
+    ],
+    function(err){
+      assert.equal(err,null);
+      done();
+    });
+  });
+
 
 });
