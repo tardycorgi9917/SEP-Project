@@ -3,9 +3,14 @@ var data = {}
 
 data.scunts = [
     {
-
         name: 'NBA Finals',
         description: 'best of 7 games wins the NBA Titile',
+        startTime: '2017-03-04 21:48:46',
+        endTime: '2018-03-04 21:48:46'
+    },
+    {
+        name: 'Nba Combine',
+        description: 'A complete test of athleticism',
         startTime: '2017-03-04 21:48:46',
         endTime: '2018-03-04 21:48:46'
     }
@@ -17,6 +22,24 @@ data.tasks = [
         description: 'Gain a 3-1 advantage and then loose the next 3 games',
         points: '500',
         scuntId: '1'
+    },
+    {
+        taskName: 'Have a player suspended',
+        description: 'Have one player on your team get a one game suspension',
+        points: '50',
+        scuntId: '1',
+    },
+    {    
+        taskName: 'Throw a mouthgaurd at a fan',
+        description: 'Throw a mouthgaurd at a fan',
+        points: '50',
+        scuntId: '1',
+    },
+    {    
+        taskName: 'Leap Master',
+        description: 'Have a player achieve a 40inch vertical or higher',
+        points: '50',
+        scuntId: '1',
     }
 ]
 
