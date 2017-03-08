@@ -119,7 +119,24 @@ seed.populate = function(done){
 							if(err){
 								console.log(err)
 							}
-							done()
+							async.forEach(data.userToTeam,
+								function(userMap, callabck) {
+									teams.join(userMap.userId, userMap.teamId, userMap.allowswitch, function(err, res){
+										if(err){
+											console.log(err);
+											done();
+										} else {
+											callabck();
+										}
+									})
+								},
+								function (err) {
+									if(err){
+										console.log(err)
+									}
+									done(); 
+								}
+							)
 						}
 					)
 				}

@@ -133,4 +133,57 @@ data.teams = [
     },
 ]
 
+data.userToTeam = [
+    {
+        userId: '1',
+        teamId: '1',
+        allowswitch: true    
+    },
+    {
+        userId: '2',
+        teamId: '1',
+        allowswitch: true    
+    },
+    {
+        userId: '3',
+        teamId: '1',
+        allowswitch: true    
+    },
+    {
+        userId: '4',
+        teamId: '1',
+        allowswitch: true    
+    },
+    {
+        userId: '5',
+        teamId: '1',
+        allowswitch: true    
+    },
+    {
+        userId: '6',
+        teamId: '2',
+        allowswitch: true    
+    },
+    {
+        userId: '7',
+        teamId: '2',
+        allowswitch: true    
+    },
+    {
+        userId: '8',
+        teamId: '2',
+        allowswitch: true    
+    },
+    {
+        userId: '9',
+        teamId: '2',
+        allowswitch: true    
+    },
+    {
+        userId: '10',
+        teamId: '2',
+        allowswitch: true    
+    },
+]
+
 module.exports = data;
