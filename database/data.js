@@ -6,13 +6,15 @@ data.scunts = [
         name: 'NBA Finals',
         description: 'best of 7 games wins the NBA Titile',
         startTime: '2017-03-04 21:48:46',
-        endTime: '2018-03-04 21:48:46'
+        endTime: '2018-03-04 21:48:46',
+        id: 1
     },
     {
         name: 'Nba Combine',
         description: 'A complete test of athleticism',
         startTime: '2017-03-04 21:48:46',
-        endTime: '2018-03-04 21:48:46'
+        endTime: '2018-03-04 21:48:46',
+        id: 2
     }
 ]
 

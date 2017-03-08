@@ -150,7 +150,24 @@ seed.populate = function(done){
 											if(err){
 												console.log(err)
 											}
-											done();
+											async.forEach(data.scunts,
+												function(scunt, callback) {
+													scunts.start(scunt.id, function(err){
+														if(err){
+															console.log(err)
+															done(); 
+														} else {
+															callback();
+														}
+													});
+												},
+												function(err) {
+													if(err){
+														console.log(err)
+													}
+													done(); 
+												}
+											)
 										}
 									);
 								}
