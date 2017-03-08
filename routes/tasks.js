@@ -32,7 +32,7 @@ router.post('/create-task', function(req, res, next) {
 		} else {
 			res.send(id.toString());
 		}
-	})
+	});
 });
 
 router.post('/edit-task', function(req, res, next) {
@@ -53,7 +53,27 @@ router.post('/edit-task', function(req, res, next) {
 		} else {
 			res.send(id.toString());
 		}
-	})
+	});
+});
+
+router.post('/approve-task', function(req, res, next) {
+	var taskId = req.body.taskId;
+	var teamId = req.body.teamId;
+	if(taskId == null){
+		res.sendStatus(500);
+	}
+	if(teamId == null){
+		res.sendStatus(500);
+	}
+
+
+	tasks.approveTask(taskId, teamId, function (err, taskId,teamId) {
+		if (err) {
+			res.status(500).send(err);
+		} else {
+			res.send(taskId.toString());
+		}
+	});
 });
 
 router.delete('/delete-task/', function(req, res, next) {
