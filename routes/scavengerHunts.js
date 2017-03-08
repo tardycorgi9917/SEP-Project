@@ -63,7 +63,7 @@ router.put('/start-scunt', function(req, res, next) {
 router.put('/close-scunt', function (req, res, next) {
   var scuntId = req.body.scuntId;
   if(scuntId == null){
-    res.status(500).send(err);
+    res.sendStatus(500);
   }
   scunt.close(scuntId, function (err, scuntId) {
     if (err) {
