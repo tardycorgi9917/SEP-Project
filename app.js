@@ -46,12 +46,12 @@ else if (args.length && args[0] == "DB=down") {
     process.exit(0);
   });
 }
-else if(args.length && args[0] == "seed" && args[1] == "-c"){
+else if(args.length && args[0] == "seed" && args[1] == "clean"){
   console.log("****************************Cleaning and Seeding********************************");
   seed.down(function() {
    seed.up(function() {
      seed.populate(function(){
-       console.log("****************************FINISHED POPULATING DROPPING TABLES********************************");
+       console.log("****************************FINISHED POPULATING TABLES********************************");
        process.exit(0);
      })
    })
@@ -60,7 +60,7 @@ else if(args.length && args[0] == "seed" && args[1] == "-c"){
 else if(args.length && args[0] == "seed"){
   console.log("****************************POPULATING ALL TABLES********************************");
   seed.populate(function () {
-    console.log("****************************FINISHED POPULATING DROPPING TABLES********************************");
+    console.log("****************************FINISHED POPULATING TABLES********************************");
     process.exit(0);
   });
 }
