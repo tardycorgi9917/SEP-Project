@@ -88,6 +88,32 @@ scunt.start = function(id, done) {
     });
 }
 
+scunt.close = function(scuntId, done) {
+    async.waterfall([
+        function(callback){
+            var query = 'SELECT COUNT(*) AS uniqueScunt FROM scunt where id =?';
+            var values = [scuntId];
+            db.get().query(query , values, function(err,result){
+                if(err){
+                    callback(err);
+                }else if(result[0].uniqueScunt == 0 )
+                {
+                    callback('Scunt with this id doesn\'t exist')
+                }else{
+                    callback(null);
+                }
+            });
+        },
+        function(callback) {
+            scunt.setStatus(scuntId, 'FINISHED', function (err, res) {
+                callback(err,scuntId);
+            });
+        }
+    ], function (err,scuntId) {
+        done(err,scuntId);
+    });
+}
+
 scunt.findById = function (id, done) {
     var query = 'SELECT id, name, status, description, startTime AS start, endTime AS end, createdAt AS created, updatedAt AS updated FROM scunt WHERE id = ?';
     var values = [id];
@@ -114,6 +140,8 @@ scunt.update = function (id, name, description, startTime, endTime, done) {
     });
 }
 
+
+
 scunt.list = function (done) {
     var query = 'SELECT id, name, description, status, startTime AS start, endTime AS end, createdAt AS created, updatedAt AS updated '
         + 'FROM scunt';
@@ -121,11 +149,25 @@ scunt.list = function (done) {
     db.get().query(query, null, done);
 }
 
+scunt.getStatus = function(ScuntId, done)
+{
+    var value = [ScuntId];
+    var query = 'SELECT status FROM scunt WHERE id = ?';
+
+    db.get().query(query, value, done);
+}
+
 scunt.delete = function (id, done) {
     var query = 'DELETE FROM scunt WHERE id = ?';
     var values = [id];
 
-    db.get().query(query, values, done);
+    db.get().query(query, values,  function (err) {
+        if (err) {
+            done(err, undefined);
+        } else {
+            done(undefined, id);
+        }
+    });
 }
 
 module.exports = scunt;
