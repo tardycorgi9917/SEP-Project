@@ -33,13 +33,19 @@ data.tasks = [
         taskName: 'Throw a mouthgaurd at a fan',
         description: 'Throw a mouthgaurd at a fan',
         points: '50',
-        scuntId: '1',
+        scuntId: '2',
     },
     {    
         taskName: 'Leap Master',
         description: 'Have a player achieve a 40inch vertical or higher',
         points: '50',
-        scuntId: '1',
+        scuntId: '2',
+    },
+    {    
+        taskName: 'The Hulk',
+        description: 'Have 20 reps or more on the Bench Press',
+        points: '50',
+        scuntId: '2',
     }
 ]
 
