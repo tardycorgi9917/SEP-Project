@@ -60,6 +60,20 @@ router.put('/start-scunt', function(req, res, next) {
   });
 });
 
+router.put('/close-scunt', function (req, res, next) {
+  var scuntId = req.body.scuntId;
+  if(scuntId == null){
+    res.sendStatus(500);
+  }
+  scunt.close(scuntId, function (err, scuntId) {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.sendStatus(200).send(scuntId.toString());
+    }
+  });
+});
+
 router.put('/status-scunt', function (req, res, next) {
   var id = req.body.id;
   var status = req.body.status;
