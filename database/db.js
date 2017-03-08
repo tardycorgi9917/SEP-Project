@@ -1,5 +1,4 @@
 var env = process.env.NODE_ENV || 'development';
-//var env = "production";
 var mysql = require('mysql')
   , async = require('async')
   , config = require('./config')[env]
@@ -13,6 +12,7 @@ var state = {
 }
 
 db.connect = function(mode, done) {
+  console.log(env)
   if (state.pool != null) {
     return done();
   }
@@ -30,6 +30,11 @@ db.connect = function(mode, done) {
 
 db.get = function() {
   return state.pool
+}
+
+
+db.populate = function(done) {
+  done();
 }
 
 
