@@ -88,6 +88,15 @@ scunt.start = function(id, done) {
     });
 }
 
+scunt.findById = function (id, done) {
+    var query = 'SELECT id, name, status, description, startTime AS start, endTime AS end, createdAt AS created, updatedAt AS updated FROM scunt WHERE id = ?';
+    var values = [id];
+    db.get().query(query, values, function (err, result) {
+        if (err) done(err);
+        else done(null, result);
+    })
+}
+
 scunt.update = function (id, name, description, startTime, endTime, done) {
     var sTime = startTime.toISOString().slice(0, 19).replace('T', ' ');
     var eTime = endTime.toISOString().slice(0, 19).replace('T', ' ');
@@ -110,6 +119,14 @@ scunt.list = function (done) {
         + 'FROM scunt';
 
     db.get().query(query, null, done);
+}
+
+scunt.getStatus = function(ScuntId, done)
+{
+    var value = [ScuntId];
+    var query = 'SELECT status FROM scunt WHERE id = ?';
+
+    db.get().query(query, value, done);
 }
 
 scunt.delete = function (id, done) {

@@ -194,8 +194,14 @@ describe('Teams Tests', function () {
                     // Create scavenger hunt
                     var scuntName = 'scuntteamtest4';
                     var scuntDesc = 'desc';
+
+                    var dateOffset = 30;
                     var scuntStart = new Date();
                     var scuntEnd = new Date();
+
+                    scuntStart.setDate(scuntStart.getDate()+dateOffset);
+                    scuntEnd.setDate(scuntEnd.getDate()+dateOffset+10);
+
                     scunts.create(scuntName, scuntDesc, scuntStart, scuntEnd, callback);
                 },
                 function (scuntId, callback) {
@@ -246,7 +252,66 @@ describe('Teams Tests', function () {
                 done();
             });
         });
+
+        it('should not be able to delete if during scunt', function(done)
+        {
+            async.waterfall([
+                function(callback)
+                {
+                   var name = 'ScuntNumbaWan';
+                   var desc = 'BestNumba';
+                   var dateOffset = 6;
+                   var scuntStartDate = new Date();
+                   var scuntEndDate = new Date();
+
+                   scuntStartDate.setDate(scuntStartDate.getDate()-dateOffset);
+                   scuntEndDate.setDate(scuntEndDate.getDate()+dateOffset);
+
+                   scunts.create(name, desc, scuntStartDate, scuntEndDate,callback);
+                },
+                function(ScuntId,callback)
+                {
+                     // Create user
+                    var username = 'NumbaWan';
+                    var firstName = 'NumbaWanF';
+                    var lastName = 'NumbaWanL';
+                    var email = 'asdf1@gmail.com';
+                    var pwd = '123';
+                    var phonenumber = '213 546-7889';
+                    var isAdmin = false;
+                    var profilepic = '';
+                    var date = new Date();
+                    users.create(username, firstName, lastName, email, pwd, phonenumber,isAdmin, profilepic, date, function (err, id) {
+                        callback(err, ScuntId, id);
+                    });                   
+                } 
+                ,
+                function(scuntId, userId, callback)
+                {
+                    var name = 'teamNumbaWan';
+                    teams.create(name, 0, 2, scuntId, userId, function (err, id) {
+                        assert.strictEqual(err, null, 'teams create has some invalid sql ' + err);
+                        callback(err, id);
+                    });
+                }
+                ,
+                function(teamId,callback)
+                {
+                    teams.delete(teamId, function (err) {
+                        assert.StrictEqual(err,'Cannot Delete Teams during scunt');
+                        callback(err);
+                    });
+
+                }
+            ], function(err)
+            {
+                done();
+            });
+
+        });
+
     });
+
 
     describe('Adding user to team and joining', function () {
         it('Happy path adding to team', function (done) {
