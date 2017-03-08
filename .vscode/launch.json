@@ -12,6 +12,13 @@
             "cwd": "${workspaceRoot}"
         },
         {
+            "name": "Test Seed",
+            "type": "node2",
+            "request": "launch",
+            "program": "${workspaceRoot}/bin/www seed clean",
+            "cwd": "${workspaceRoot}"
+        },
+        {
             "name": "Attach to Process",
             "type": "node2",
             "request": "attach",
