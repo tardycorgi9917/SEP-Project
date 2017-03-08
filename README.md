@@ -36,3 +36,7 @@ In order to push the schema, run:  npm start DB=up
 In order to bring down the schema, run:  npm start DB=down
 
 NOTE: It seems that the default MySQL port it looks for os 3306. If yours is different, simply add a field in the array in the config file.
+
+## Populate Database With Sample Data
+
+For a small set of data a simple npm test will fill the database with some usefule data. for a more extensive set of data, you can run "npm start seed". This is will ad a more complete dataset to the DB.
