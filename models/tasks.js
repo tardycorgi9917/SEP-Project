@@ -4,10 +4,21 @@ var async = require('async');
 var tasks = {}
 
 tasks.list = function(scuntId, done) {
-	var query = 'SELECT id, name, description, points, scuntId, createdAt AS created, updatedAt AS updated'
-				+ ' FROM tasks WHERE scuntId = ?';
-	var values = [scuntId];
+	var query = 'SELECT t6.id, t6.name, t6.description, t6.points, t6.scuntId, '+
+				't5.teamId, t5.taskId, t5.status, t6.createdAt AS created, t6.updatedAt AS updated ' +
+				'FROM tasks t6 ' +
+				'JOIN ('+
+					'SELECT r1.teamId AS teamId, r1.taskId AS taskId, r1.status AS status '+
+					'FROM teamTaskRel r1 '+
+					'JOIN ('+
+						'SELECT t1.id AS teamId, t2.id AS taskId '+
+						'FROM teams t1 '+
+						'JOIN tasks t2 '+
+						'WHERE t1.scuntId = ? AND t2.scuntId = ?) t4 '+
+					'ON t4.teamId = r1.teamId AND t4.taskId = r1.taskId) t5 '+
+				'ON t6.id = t5.taskId'
 
+	var values = [scuntId,scuntId];
 	db.get().query(query, values, done);
 }
 
@@ -99,9 +110,9 @@ tasks.edit = function(taskId,editDict, done) {
 	});
 }
 
-tasks.setTeamTaskStatus = function(taskId, teamId,status, done) {
+tasks.setTeamTaskStatus = function(taskId, teamId, status, done) {
 
-	var validStatuses = ['PENDING', 'SUBMITTED', 'APPROVED'];
+	var validStatuses = ['INCOMPLETE', 'IN PROGRESS', 'REVIEW', 'APPROVED'];
 	if (validStatuses.indexOf(status) == -1) {
 		return done('An invalid status was used');
 	}
@@ -216,6 +227,15 @@ tasks.delete = function (taskId, done) {
 
 	db.get().query(query, values, function (err, result) {
 		done(err);
+	});
+}
+
+tasks.getTaskStatus = function(teamId, taskId, done){
+	var query = 'SELECT status FROM teamTaskRel WHERE taskId = ? AND teamId = ?';
+	var values = [taskId, teamId];
+
+	db.get().query(query, values, function(err, result){
+		done(err, result);
 	});
 }
 
