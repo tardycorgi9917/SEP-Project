@@ -1,6 +1,10 @@
 var schema = require('./schema');
 var db = require('./db');
 var async = require('async');
+var data = require('./data');
+var users = require('../models/users');
+var scunts = require('../models/scavengerHunts');
+var teams = require('../models/teams')
 var seed = {};
 
 // Defines the order in which these tables can be dropped without violating foreign key constraints
@@ -16,7 +20,7 @@ droplist = [
 
 seed.up = function (done) {
 	var tables = Object.keys(schema);
-	var qstr = "";
+	var qstr = "SET default_storage_engine=INNODB;";
 	async.each(tables, function (table) {
 		if (schema.hasOwnProperty(table)) {
 			qstr += "CREATE TABLE IF NOT EXISTS `" + schema[table].name + "` (";
@@ -58,7 +62,7 @@ seed.down = function (done) {
 	var query = "";
 	for(var i in droplist) {
 		query += "DROP TABLE IF EXISTS `" + droplist[i] + "` CASCADE; ";
-	} 
+	}
 
 	//console.log("****** query to drop tables: " + query);
 	db.get().query(query, [], function (err, result) {
@@ -69,6 +73,59 @@ seed.down = function (done) {
 		}
 		done();
 	});
+}
+
+seed.populate = function(done){
+	var now = new Date().toISOString().slice(0, 19).replace('T', ' ');
+	async.forEach(data.users, 
+		function(user, callback){ 
+			users.create(user.username, user.firstName, user.lastName, user.email, user.password, '5147373734', false,'ghjefnkenfef', now ,function(err, usr){
+				if(err){
+					console.log(err)
+					done();
+				} else {
+					callback()
+				}
+			});
+		},
+		function(err) {
+			async.forEach(data.scunts, 
+				function(scunt, callback){
+					scunts.createScunt(scunt.name, scunt.description, scunt.startTime, scunt.endTime, function(err, scnt){
+						if(err){
+							console.log(err);
+							done();
+						} else {
+							callback();
+						}
+					})
+				},
+				function(err){
+					if(err){
+						console.log(err)
+					} 
+					async.forEach(data.teams, 
+						function(team, callback){
+							teams.create(team.name, team.points, team.maxmembers, team.scuntId, team.leaderId, function(err, t){
+								if(err){
+									console.log(err)
+									done();
+								} else {
+									callback();
+								}
+							})
+						},
+						function(err){
+							if(err){
+								console.log(err)
+							}
+							done()
+						}
+					)
+				}
+			)
+		}
+	);
 }
 
 module.exports = seed;

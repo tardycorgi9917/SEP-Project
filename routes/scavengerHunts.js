@@ -18,6 +18,19 @@ router.get('/list-scunts', function (req, res) {
   })
 });
 
+router.get('/view-scuntStatus/:ScuntId', function(req,res){
+  var ScuntId = req.params.ScuntId;
+  scunt.getStatus(ScuntId,function(err,result){
+    if(err)
+    {
+      res.sendStatus(500);
+    }else
+    {
+      res.send(JSON.stringify(result));
+    }
+  })
+});
+
 router.post('/create-ScavengerHunt', function (req, res, next) {
   var ScuntName = req.body.name;
   var ScuntDesc = req.body.description;
@@ -47,6 +60,20 @@ router.put('/start-scunt', function(req, res, next) {
   });
 });
 
+router.put('/close-scunt', function (req, res, next) {
+  var scuntId = req.body.scuntId;
+  if(scuntId == null){
+    res.sendStatus(500);
+  }
+  scunt.close(scuntId, function (err, scuntId) {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.sendStatus(200).send(scuntId.toString());
+    }
+  });
+});
+
 router.put('/status-scunt', function (req, res, next) {
   var id = req.body.id;
   var status = req.body.status;
@@ -60,6 +87,7 @@ router.put('/status-scunt', function (req, res, next) {
   });
 });
 
+
 router.put('/time-scunt', function (req, res, next) {
   var id = req.body.id;
 
@@ -70,6 +98,16 @@ router.put('/time-scunt', function (req, res, next) {
       res.sendStatus(200);
     }
   });
+  });
+  
+
+router.get('/find-id/:id', function(req, res){
+    var id = req.params.id;
+    scunt.findById(id, function(err, result){
+        if(err) res.status(500).send(err);
+        else res.send(result[0]);
+    })
+
 });
 
 router.put('/modify-ScavengerHunt', function (req, res, next) {
