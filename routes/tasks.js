@@ -9,7 +9,7 @@ router.get('/', function(req, res, next) {
 
 router.get('/list-tasks', function(req, res, next) {
 	var scuntId = req.query.scuntId;
-	
+
 	tasks.list(scuntId, function(err, tasks) {
 		if (err) {
 			res.status(500).send(err);
@@ -86,6 +86,34 @@ router.delete('/delete-task/', function(req, res, next) {
 			res.sendStatus(200);
 		}
 	});
+});
+
+router.get('/get-task-status/', function(req, res, next){
+    var teamId = req.query.teamId;
+    var taskId = req.query.taskId;
+
+    tasks.getTaskStatus(teamId, taskId, function(err, result){
+        if(err) {
+            res.sendStatus(500);
+        } else {
+            res.send(result);
+        }
+    })
+});
+
+router.post('/change-task-status/', function(req, res, next){
+    var teamId = req.body.teamId;
+    var taskId = req.body.taskId;
+    var status = req.body.status;
+
+    tasks.setTeamTaskStatus(taskId, teamId, status, function(err, result){
+        if(err) {
+            console.log(err);
+            res.sendStatus(500);
+        } else {
+            res.sendStatus(200);
+        }
+    });
 });
 
 module.exports = router;
