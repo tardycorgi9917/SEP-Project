@@ -102,8 +102,8 @@ router.post('/update-team', function(req, res, next){
     });
 });
 
-router.post('/team-points', function (req, res, next) {
-  var teamId = req.body.teamId;
+router.get('/team-points/:teamId', function (req, res, next) {
+  var teamId = req.params.teamId;
 
   teams.getPoints(teamId, function (err, result) {
     if (err) {
