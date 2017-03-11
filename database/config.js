@@ -2,9 +2,9 @@ var config = {
     development: {
         database: {
             host:'127.0.0.1',
-            db: 'sep-project',
+            db: 'sep_db',
             user:'root',
-            password: '',
+            password: 'root',
         },
     },
    test : {
