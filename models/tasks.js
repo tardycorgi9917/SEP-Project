@@ -4,10 +4,13 @@ var async = require('async');
 var tasks = {}
 
 tasks.list = function(scuntId, done) {
-	var query = 'SELECT id, name, description, points, scuntId, createdAt AS created, updatedAt AS updated'
-				+ ' FROM tasks WHERE scuntId = ?';
-	var values = [scuntId];
+	var query =
+	'SELECT teamTaskRel.status, teamTaskRel.teamId, tasks.*'+
+	'FROM tasks'+
+	'JOIN teamTaskRel ON tasks.id = teamTaskRel.taskId'+
+	'WHERE tasks.scuntId = ?'
 
+	var values = [scuntId];
 	db.get().query(query, values, done);
 }
 
@@ -99,9 +102,9 @@ tasks.edit = function(taskId,editDict, done) {
 	});
 }
 
-tasks.setTeamTaskStatus = function(taskId, teamId,status, done) {
+tasks.setTeamTaskStatus = function(taskId, teamId, status, done) {
 
-	var validStatuses = ['PENDING', 'SUBMITTED', 'APPROVED'];
+	var validStatuses = ['INCOMPLETE', 'IN PROGRESS', 'REVIEW', 'APPROVED'];
 	if (validStatuses.indexOf(status) == -1) {
 		return done('An invalid status was used');
 	}
@@ -216,6 +219,15 @@ tasks.delete = function (taskId, done) {
 
 	db.get().query(query, values, function (err, result) {
 		done(err);
+	});
+}
+
+tasks.getTaskStatus = function(teamId, taskId, done){
+	var query = 'SELECT status FROM teamTaskRel WHERE taskId = ? AND teamId = ?';
+	var values = [taskId, teamId];
+
+	db.get().query(query, values, function(err, result){
+		done(err, result);
 	});
 }
 

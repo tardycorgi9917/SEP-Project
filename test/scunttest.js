@@ -82,9 +82,7 @@ describe('Scunt test', function () {
   }
   );
 
-
-
-  it('Scunt update Succressful', function (done) {
+  it('Scunt update Successful', function (done) {
     scunt.create('fish frosh', 'jesus loves you', new Date("September 1, 2016 11:13:00"), new Date("September 13, 2016 11:13:00"), function (err, id) {
       assert.strictEqual(err, undefined);
       var newName = 'NK Frosh';
@@ -294,22 +292,22 @@ describe('Scunt test', function () {
       function(id, callback) {
         // Create users + teams for the scunt, two users + two teams, created and updated dates will be messed up here to keep the code short
         var query = `
-          INSERT INTO users (username, firstName, lastName, email, password, phoneNumber, isAdmin, profilePicture, createdAt, updatedAt) VALUES 
+          INSERT INTO users (username, firstName, lastName, email, password, phoneNumber, isAdmin, profilePicture, createdAt, updatedAt) VALUES
           ("closeduser1", "closefname1", "closelname1", "closefname1@gmail.com", "1234", "1231231234", "1", "", "2017-01-01", "2017-01-01"),
           ("closeduser2", "closefname2", "closelname2", "closefname2@gmail.com", "1234", "1231231234", "1", "", "2017-01-01", "2017-01-01"),
           ("closeduser3", "closefname3", "closelname3", "closefname3@gmail.com", "1234", "1231231234", "1", "", "2017-01-01", "2017-01-01"),
           ("closeduser4", "closefname4", "closelname4", "closefname4@gmail.com", "1234", "1231231234", "1", "", "2017-01-01", "2017-01-01");
-      
-          INSERT INTO teams (name, points, maxmembers, scuntId, createdAt, updatedAt) VALUES 
+
+          INSERT INTO teams (name, points, maxmembers, scuntId, createdAt, updatedAt) VALUES
           ("closeteam1", "0", "3", ?, "2017-01-01", "2017-01-01"),
           ("closeteam2", "0", "3", ?, "2017-01-01", "2017-01-01");
-          
+
           INSERT INTO teamUserRel (teamId, userId, userType, createdAt, updatedAt)
           SELECT teams.id, users.id, "participant", "2017-01-01", "2017-01-01" FROM teams JOIN users ON 1 = 1 WHERE users.username IN ("closeduser1", "closeduser2") AND teams.name = "closeteam1"
           UNION
           SELECT teams.id, users.id, "participant", "2017-01-01", "2017-01-01" FROM teams JOIN users ON 1 = 1 WHERE users.username IN ("closeduser3", "closeduser4") AND teams.name = "closeteam2";
 
-          INSERT INTO tasks (name, description, points, scuntId, createdAt, updatedAt) VALUES 
+          INSERT INTO tasks (name, description, points, scuntId, createdAt, updatedAt) VALUES
           ("closedscunttask1", "closedscunttask1 desc", 5, ?, "2017-01-01", "2017-01-01"),
           ("closedscunttask2", "closedscunttask2 desc", 5, ?, "2017-01-01", "2017-01-01")
         `;
@@ -326,7 +324,7 @@ describe('Scunt test', function () {
           assert.equal(err, null);
           callback(err, id);
         });
-      }, 
+      },
       function(id, callback) {
         // Check that teamTaskRel table was was populated
         var query = 'SELECT COUNT(*) AS teamTasks from teamTaskRel JOIN teams ON teamTaskRel.teamId = teams.id WHERE teams.scuntId = ?';
@@ -344,7 +342,7 @@ describe('Scunt test', function () {
           assert.equal(err, null);
           callback(err, id);
         });
-      }, 
+      },
       function(id, callback) {
         // Check that teamTaskRel table was was populated
         var query = 'SELECT status from scunt WHERE id = ?';
@@ -374,7 +372,7 @@ describe('Scunt test', function () {
         scunt.create(Name, Desc, startTime, endTime, function (err, id) {
           callback(err, id);
         });
-      }, 
+      },
       function(id, callback) {
         // Check that teamTaskRel table was was populated
         scunt.delete(id, function (err, id) {
@@ -425,5 +423,5 @@ describe('Scunt test', function () {
       done();
     });
   });
-  
+
 });
