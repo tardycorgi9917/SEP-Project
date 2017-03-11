@@ -6,13 +6,15 @@ data.scunts = [
         name: 'NBA Finals',
         description: 'best of 7 games wins the NBA Titile',
         startTime: '2017-03-04 21:48:46',
-        endTime: '2018-03-04 21:48:46'
+        endTime: '2018-03-04 21:48:46',
+        id: 1
     },
     {
         name: 'Nba Combine',
         description: 'A complete test of athleticism',
         startTime: '2017-03-04 21:48:46',
-        endTime: '2018-03-04 21:48:46'
+        endTime: '2018-03-04 21:48:46',
+        id: 2
     }
 ]
 
@@ -33,13 +35,19 @@ data.tasks = [
         taskName: 'Throw a mouthgaurd at a fan',
         description: 'Throw a mouthgaurd at a fan',
         points: '50',
-        scuntId: '1',
+        scuntId: '2',
     },
     {    
         taskName: 'Leap Master',
         description: 'Have a player achieve a 40inch vertical or higher',
         points: '50',
-        scuntId: '1',
+        scuntId: '2',
+    },
+    {    
+        taskName: 'The Hulk',
+        description: 'Have 20 reps or more on the Bench Press',
+        points: '50',
+        scuntId: '2',
     }
 ]
 
@@ -130,6 +138,59 @@ data.teams = [
         maxmembers: 15,
         scuntId: 1,
         leaderId: 1 
+    },
+]
+
+data.userToTeam = [
+    {
+        userId: '1',
+        teamId: '1',
+        allowswitch: true    
+    },
+    {
+        userId: '2',
+        teamId: '1',
+        allowswitch: true    
+    },
+    {
+        userId: '3',
+        teamId: '1',
+        allowswitch: true    
+    },
+    {
+        userId: '4',
+        teamId: '1',
+        allowswitch: true    
+    },
+    {
+        userId: '5',
+        teamId: '1',
+        allowswitch: true    
+    },
+    {
+        userId: '6',
+        teamId: '2',
+        allowswitch: true    
+    },
+    {
+        userId: '7',
+        teamId: '2',
+        allowswitch: true    
+    },
+    {
+        userId: '8',
+        teamId: '2',
+        allowswitch: true    
+    },
+    {
+        userId: '9',
+        teamId: '2',
+        allowswitch: true    
+    },
+    {
+        userId: '10',
+        teamId: '2',
+        allowswitch: true    
     },
 ]
 
