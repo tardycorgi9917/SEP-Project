@@ -102,4 +102,17 @@ router.post('/update-team', function(req, res, next){
     });
 });
 
+router.post('/team-points', function (req, res, next) {
+  var teamId = req.body.teamId;
+
+  teams.getPoints(teamId, function (err, result) {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      // res.sendStatus(200);
+      res.send(result);
+    }
+  });
+  });
+
 module.exports = router;
