@@ -5,6 +5,7 @@ var data = require('./data');
 var users = require('../models/users');
 var scunts = require('../models/scavengerHunts');
 var teams = require('../models/teams')
+var tasks = require('../models/tasks')
 var seed = {};
 
 // Defines the order in which these tables can be dropped without violating foreign key constraints
@@ -119,7 +120,58 @@ seed.populate = function(done){
 							if(err){
 								console.log(err)
 							}
-							done()
+							async.forEach(data.userToTeam,
+								function(userMap, callabck) {
+									teams.join(userMap.userId, userMap.teamId, userMap.allowswitch, function(err, res){
+										if(err){
+											console.log(err);
+											done();
+										} else {
+											callabck();
+										}
+									})
+								},
+								function (err) {
+									if(err){
+										console.log(err)
+									}
+									async.forEach(data.tasks, 
+										function(task, callback) {
+											tasks.create(task.taskName, task.description, task.points, task.scuntId, function(err, res) {
+												if(err){
+													console.log(err)
+													done();
+												} else {
+													callback();
+												}
+											});
+										},
+										function(err) {
+											if(err){
+												console.log(err)
+											}
+											async.forEach(data.scunts,
+												function(scunt, callback) {
+													scunts.start(scunt.id, function(err){
+														if(err){
+															console.log(err)
+															done(); 
+														} else {
+															callback();
+														}
+													});
+												},
+												function(err) {
+													if(err){
+														console.log(err)
+													}
+													done(); 
+												}
+											)
+										}
+									);
+								}
+							)
 						}
 					)
 				}
