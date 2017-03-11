@@ -1,7 +1,7 @@
 language: node_js
 
 node_js:
-- '6'
+- '6.9.2'
 
 services:
   - mysql
@@ -9,7 +9,6 @@ services:
 before_install:
   - cp ./database/config.travis.js ./database/config.js
   - mysql -e 'CREATE DATABASE IF NOT EXISTS sep_test;'
-  - npm install
 
 install:
   - npm install
