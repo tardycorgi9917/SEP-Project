@@ -4,21 +4,13 @@ var async = require('async');
 var tasks = {}
 
 tasks.list = function(scuntId, done) {
-	var query = 'SELECT t6.id, t6.name, t6.description, t6.points, t6.scuntId, '+
-				't5.teamId, t5.taskId, t5.status, t6.createdAt AS created, t6.updatedAt AS updated ' +
-				'FROM tasks t6 ' +
-				'JOIN ('+
-					'SELECT r1.teamId AS teamId, r1.taskId AS taskId, r1.status AS status '+
-					'FROM teamTaskRel r1 '+
-					'JOIN ('+
-						'SELECT t1.id AS teamId, t2.id AS taskId '+
-						'FROM teams t1 '+
-						'JOIN tasks t2 '+
-						'WHERE t1.scuntId = ? AND t2.scuntId = ?) t4 '+
-					'ON t4.teamId = r1.teamId AND t4.taskId = r1.taskId) t5 '+
-				'ON t6.id = t5.taskId'
+	var query =
+	'SELECT teamTaskRel.status, teamTaskRel.teamId, tasks.*'+
+	'FROM tasks'+
+	'JOIN teamTaskRel ON tasks.id = teamTaskRel.taskId'+
+	'WHERE tasks.scuntId = ?'
 
-	var values = [scuntId,scuntId];
+	var values = [scuntId];
 	db.get().query(query, values, done);
 }
 
