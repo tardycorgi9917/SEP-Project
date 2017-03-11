@@ -67,11 +67,11 @@ scunt.start = function(id, done) {
             scunt.setStatus(id, 'STARTED', function (err, res) {
                 callback(err);
             });
-        }, 
+        },
         function(callback) {
             var query = `
                 INSERT INTO teamTaskRel (teamId, taskId, status, createdAt, updatedAt)
-                SELECT teams.id, tasks.id, 'PENDING', NOW(), NOW()
+                SELECT teams.id, tasks.id, 'INCOMPLETE', NOW(), NOW()
                 FROM tasks
                 JOIN scunt ON tasks.scuntId = scunt.id
                 JOIN teams ON teams.scuntId = tasks.scuntId
@@ -140,8 +140,6 @@ scunt.update = function (id, name, description, startTime, endTime, done) {
     });
 }
 
-
-
 scunt.list = function (done) {
     var query = 'SELECT id, name, description, status, startTime AS start, endTime AS end, createdAt AS created, updatedAt AS updated '
         + 'FROM scunt';
@@ -180,6 +178,5 @@ scunt.getTimeRemaining = function(id, done) {
 
 
 }
-
 
 module.exports = scunt;
