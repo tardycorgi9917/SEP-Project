@@ -262,4 +262,17 @@ teams.update = function(teamId, name, points, maxmembers, scuntId, done) {
     });
 }
 
+teams.getPoints = function(teamId, done) {
+    var query = 'SELECT SUM(t1.points) '
+                    + 'FROM tasks AS t1 '
+                    + 'JOIN teamTaskRel AS t2 ON t1.id = t2.taskId '
+                    + 'WHERE t2.teamId = ?'
+
+    var values = [teamId];
+
+    db.get().query(query, values, function(err, result) {
+        done(err, result);
+    });
+}
+
 module.exports = teams;
