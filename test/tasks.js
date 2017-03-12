@@ -222,8 +222,8 @@ describe('Tasks Tests', function () {
               function(callback) {
                 var Name = 'taskApprovalScunt';
                 var Desc = 'Task Approval scunt';
-                var startTime = new Date("September 1, 2017 11:13:00");
-                var endTime = new Date("September 13, 2017 11:13:00");
+                var startTime = new Date("September 1, 2016 11:13:00");
+                var endTime = new Date("September 13, 2016 11:13:00");
 
                 scunts.create(Name, Desc, startTime, endTime, function (err, id) {
                     callback(err, id);
