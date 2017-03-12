@@ -136,7 +136,7 @@ scunt.close = function(scuntId, done) {
 }
 
 scunt.findById = function (id, done) {
-    var query = 'SELECT id, name, description, status, startTime AS start, endTime AS end, createdAt AS created, updatedAt AS updated FROM scunt WHERE id = ?';
+    var query = 'SELECT id, name, status, description, startTime AS start, endTime AS end, createdAt AS created, updatedAt AS updated FROM scunt WHERE id = ?';
     var values = [id];
     db.get().query(query, values, function (err, result) {
         if (err) done(err);
