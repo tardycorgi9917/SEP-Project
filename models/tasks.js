@@ -10,9 +10,36 @@ tasks.list = function(scuntId, done) {
 		JOIN teamTaskRel ON tasks.id = teamTaskRel.taskId
 		WHERE tasks.scuntId = ?
 	`
-	
+
 	var values = [scuntId];
-	
+
+	db.get().query(query, values, done);
+}
+
+tasks.admin_list = function(scuntId, isAdmin, done){
+	if(isAdmin){
+		var query = `
+			SELECT *
+			FROM Tasks
+			WHERE scuntId = ?
+		`;
+		var values = [scuntId]
+		db.get().query(query, values, done);
+	} else {
+		return done('Unauthorized operation for non-admin');
+	}
+}
+
+tasks.team_list = function(scuntId, teamId, done){
+	var query = `
+		SELECT teamTaskRel.status, teamTaskRel.teamId, tasks.*
+		FROM tasks
+		JOIN teamTaskRel ON tasks.id = teamTaskRel.taskId
+		WHERE tasks.scuntId = ? AND teamTaskRel.teamId = ?
+	`
+
+	var values = [scuntId, teamId];
+
 	db.get().query(query, values, done);
 }
 
