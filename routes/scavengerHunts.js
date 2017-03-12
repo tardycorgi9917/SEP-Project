@@ -38,14 +38,18 @@ router.post('/create-ScavengerHunt', function (req, res, next) {
   var EndDate = req.body.endTime.replace(", ", " ");
   var ScuntStart = new Date(Date.parse(StartDate));
   var ScuntEnd = new Date(Date.parse(EndDate));
-  
-  scunt.create(ScuntName, ScuntDesc, ScuntStart, ScuntEnd, function (err, id) {
-    if (err) {
-      res.status(500).send(err);
-    } else {
-      res.send(id.toString());
-    }
-  });
+  var now = new Date();
+  if(ScuntEnd.getTime() < ScuntStart.getTime()) res.status(500).send('Dates are inverted')
+  else if (ScuntEnd.getTime() < now.getTime()) res.status(500).send("Can't finish before today");
+  else {
+      scunt.create(ScuntName, ScuntDesc, ScuntStart, ScuntEnd, function (err, id) {
+        if (err) {
+          res.status(500).send(err);
+        } else {
+          res.send(id.toString());
+        }
+      });
+  }
 });
 
 router.put('/start-scunt', function(req, res, next) {
@@ -99,7 +103,7 @@ router.put('/time-scunt', function (req, res, next) {
     }
   });
   });
-  
+
 
 router.get('/find-id/:id', function(req, res){
     var id = req.params.id;
