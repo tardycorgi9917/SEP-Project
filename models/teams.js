@@ -311,4 +311,18 @@ teams.getTeamId = function(userId, done){
     });
 }
 
+teams.getScuntTeams = function(scuntId, done){
+    var query = `
+        SELECT name, points
+        FROM teams
+        WHERE scuntId = ?
+    `
+    var values = [scuntId];
+    db.get().query(query, values, function(err, teams){
+        if(err) done(err);
+        else if(teams.length == 0) done('Empty Result')
+        else done(err, teams);
+    });
+}
+
 module.exports = teams;
