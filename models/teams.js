@@ -250,11 +250,11 @@ teams.list = function(done) {
         },
         function(teams, callback) {
             // Get team points
-                var query = 'SELECT teamId, SUM(t1.points) as teamPoints '
-                            + 'FROM tasks AS t1 ' 
-                            + 'JOIN teamTaskRel AS t2 ON t1.id = t2.taskId '
-                            + 'WHERE t2.status = "APPROVED" '
-                            + 'GROUP BY teamId'
+            var query = 'SELECT teamId, SUM(t1.points) as teamPoints '
+                        + 'FROM tasks AS t1 ' 
+                        + 'JOIN teamTaskRel AS t2 ON t1.id = t2.taskId '
+                        + 'WHERE t2.status = "APPROVED" '
+                        + 'GROUP BY teamId'
 
             db.get().query(query, [], function(err, res) {
                 for (var i in teams) {
@@ -265,7 +265,6 @@ teams.list = function(done) {
                         }
 
                     }
-                    // teams[i].teamPoints = res[i];
                 }
                 callback(err, teams);
             });
@@ -285,11 +284,11 @@ teams.update = function(teamId, name, points, maxmembers, scuntId, done) {
 }
 
 teams.getPoints = function(teamId, done) {
-    var query = 'SELECT SUM(t1.points) AS teamPoints '
-                    + 'FROM tasks AS t1 '
-                    + 'JOIN teamTaskRel AS t2 ON t1.id = t2.taskId '
-                    + 'WHERE t2.teamId = ?' 
-                    // AND t2.status = "APPROVED"''
+ var query = 'SELECT teamId, SUM(t1.points) as teamPoints '
+                            + 'FROM tasks AS t1 ' 
+                            + 'JOIN teamTaskRel AS t2 ON t1.id = t2.taskId '
+                            + 'WHERE t2.status = "APPROVED" '
+                            + 'GROUP BY teamId'
 
     var values = [teamId];
 
