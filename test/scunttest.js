@@ -116,8 +116,8 @@ describe('Scunt test', function () {
       function (callback) {
         var Name = 'SK Frosh';
         var Desc = 'South Korea best Korea';
-        var startTime = new Date("September 1, 2017 11:13:00");
-        var endTime = new Date("September 13, 2017 11:13:00");
+        var startTime = new Date("September 1, 2016 11:13:00");
+        var endTime = new Date("September 13, 2016 11:13:00");
 
         scunt.create(Name, Desc, startTime, endTime, function (err, id) {
           callback(err, id);
@@ -207,8 +207,8 @@ describe('Scunt test', function () {
       function(callback) {
         var Name = 'StartedScunt';
         var Desc = 'Started scunt';
-        var startTime = new Date("September 1, 2017 11:13:00");
-        var endTime = new Date("September 13, 2017 11:13:00");
+        var startTime = new Date("September 1, 2016 11:13:00");
+        var endTime = new Date("September 13, 2016 11:13:00");
 
         scunt.create(Name, Desc, startTime, endTime, function (err, id) {
           callback(err, id);
@@ -229,17 +229,17 @@ describe('Scunt test', function () {
           ("starteduser4", "startfname4", "startlname4", "startfname4@gmail.com", "1234", "1231231234", "1", "", "2017-01-01", "2017-01-01");
 
           INSERT INTO teams (name, points, maxmembers, scuntId, createdAt, updatedAt) VALUES
-          ("startteam1", "0", "3", ?, "2017-01-01", "2017-01-01"),
-          ("startteam2", "0", "3", ?, "2017-01-01", "2017-01-01");
+          ("startteam1", "0", "3", ?, "2016-01-01", "2017-01-01"),
+          ("startteam2", "0", "3", ?, "2016-01-01", "2017-01-01");
 
           INSERT INTO teamUserRel (teamId, userId, userType, createdAt, updatedAt)
-          SELECT teams.id, users.id, "participant", "2017-01-01", "2017-01-01" FROM teams JOIN users ON 1 = 1 WHERE users.username IN ("starteduser1", "starteduser2") AND teams.name = "startteam1"
+          SELECT teams.id, users.id, "participant", "2016-01-01", "2017-01-01" FROM teams JOIN users ON 1 = 1 WHERE users.username IN ("starteduser1", "starteduser2") AND teams.name = "startteam1"
           UNION
-          SELECT teams.id, users.id, "participant", "2017-01-01", "2017-01-01" FROM teams JOIN users ON 1 = 1 WHERE users.username IN ("starteduser3", "starteduser4") AND teams.name = "startteam2";
+          SELECT teams.id, users.id, "participant", "2016-01-01", "2017-01-01" FROM teams JOIN users ON 1 = 1 WHERE users.username IN ("starteduser3", "starteduser4") AND teams.name = "startteam2";
 
           INSERT INTO tasks (name, description, points, scuntId, createdAt, updatedAt) VALUES
-          ("startedscunttask1", "startedscunttask1 desc", 5, ?, "2017-01-01", "2017-01-01"),
-          ("startedscunttask2", "startedscunttask2 desc", 5, ?, "2017-01-01", "2017-01-01")
+          ("startedscunttask1", "startedscunttask1 desc", 5, ?, "2016-01-01", "2016-01-01"),
+          ("startedscunttask2", "startedscunttask2 desc", 5, ?, "2016-01-01", "2016-01-01")
         `;
         var values = [id, id, id, id];
 
@@ -277,8 +277,8 @@ describe('Scunt test', function () {
       function(callback) {
         var Name = 'closedScunt';
         var Desc = 'Closed scunt';
-        var startTime = new Date("September 1, 2017 11:13:00");
-        var endTime = new Date("September 13, 2017 11:13:00");
+        var startTime = new Date("September 1, 2016 11:13:00");
+        var endTime = new Date("September 13, 2016 11:13:00");
 
         scunt.create(Name, Desc, startTime, endTime, function (err, id) {
           callback(err, id);
@@ -293,23 +293,23 @@ describe('Scunt test', function () {
         // Create users + teams for the scunt, two users + two teams, created and updated dates will be messed up here to keep the code short
         var query = `
           INSERT INTO users (username, firstName, lastName, email, password, phoneNumber, isAdmin, profilePicture, createdAt, updatedAt) VALUES
-          ("closeduser1", "closefname1", "closelname1", "closefname1@gmail.com", "1234", "1231231234", "1", "", "2017-01-01", "2017-01-01"),
-          ("closeduser2", "closefname2", "closelname2", "closefname2@gmail.com", "1234", "1231231234", "1", "", "2017-01-01", "2017-01-01"),
-          ("closeduser3", "closefname3", "closelname3", "closefname3@gmail.com", "1234", "1231231234", "1", "", "2017-01-01", "2017-01-01"),
-          ("closeduser4", "closefname4", "closelname4", "closefname4@gmail.com", "1234", "1231231234", "1", "", "2017-01-01", "2017-01-01");
+          ("closeduser1", "closefname1", "closelname1", "closefname1@gmail.com", "1234", "1231231234", "1", "", "2016-01-01", "2016-01-01"),
+          ("closeduser2", "closefname2", "closelname2", "closefname2@gmail.com", "1234", "1231231234", "1", "", "2016-01-01", "2016-01-01"),
+          ("closeduser3", "closefname3", "closelname3", "closefname3@gmail.com", "1234", "1231231234", "1", "", "2016-01-01", "2016-01-01"),
+          ("closeduser4", "closefname4", "closelname4", "closefname4@gmail.com", "1234", "1231231234", "1", "", "2016-01-01", "2016-01-01");
 
           INSERT INTO teams (name, points, maxmembers, scuntId, createdAt, updatedAt) VALUES
-          ("closeteam1", "0", "3", ?, "2017-01-01", "2017-01-01"),
-          ("closeteam2", "0", "3", ?, "2017-01-01", "2017-01-01");
+          ("closeteam1", "0", "3", ?, "2016-01-01", "2016-01-01"),
+          ("closeteam2", "0", "3", ?, "2016-01-01", "2016-01-01");
 
           INSERT INTO teamUserRel (teamId, userId, userType, createdAt, updatedAt)
-          SELECT teams.id, users.id, "participant", "2017-01-01", "2017-01-01" FROM teams JOIN users ON 1 = 1 WHERE users.username IN ("closeduser1", "closeduser2") AND teams.name = "closeteam1"
+          SELECT teams.id, users.id, "participant", "2016-01-01", "2016-01-01" FROM teams JOIN users ON 1 = 1 WHERE users.username IN ("closeduser1", "closeduser2") AND teams.name = "closeteam1"
           UNION
-          SELECT teams.id, users.id, "participant", "2017-01-01", "2017-01-01" FROM teams JOIN users ON 1 = 1 WHERE users.username IN ("closeduser3", "closeduser4") AND teams.name = "closeteam2";
+          SELECT teams.id, users.id, "participant", "2016-01-01", "2016-01-01" FROM teams JOIN users ON 1 = 1 WHERE users.username IN ("closeduser3", "closeduser4") AND teams.name = "closeteam2";
 
           INSERT INTO tasks (name, description, points, scuntId, createdAt, updatedAt) VALUES
-          ("closedscunttask1", "closedscunttask1 desc", 5, ?, "2017-01-01", "2017-01-01"),
-          ("closedscunttask2", "closedscunttask2 desc", 5, ?, "2017-01-01", "2017-01-01")
+          ("closedscunttask1", "closedscunttask1 desc", 5, ?, "2016-01-01", "2016-01-01"),
+          ("closedscunttask2", "closedscunttask2 desc", 5, ?, "2016-01-01", "2016-01-01")
         `;
         var values = [id, id, id, id];
 

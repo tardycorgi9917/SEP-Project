@@ -24,12 +24,11 @@ scunt.create = function(name,description, startTime, endTime, done){
             var query = 'SELECT COUNT(*) AS duplicateScunt FROM scunt where name =?';
             var values = [name];
             db.get().query(query , values, function(err,result){
-                if(err){
+                if (err){
                     callback(err);
-                }else if(result[0].duplicateScunt > 0 )
-                {
+                } else if (result[0].duplicateScunt > 0 ) {
                     callback('Scunt with same name already exist')
-                }else{
+                } else{
                     callback(null);
                 }
             });
@@ -63,6 +62,28 @@ scunt.setStatus = function(id, status, done) {
 
 scunt.start = function(id, done) {
     async.waterfall([
+		function(callback) {
+            var query = `
+                SELECT startTime FROM scunt WHERE id = ?
+            `
+            var values = [id];
+
+            db.get().query(query, values, function(err, res) {
+                if (err) {
+                    callback(err);
+                } else if (!res[0]) {
+                    callback('Scavenger hunt not found');
+                } else {
+                    var startTime = new Date(Date.parse(res[0].startTime));
+                    var now = new Date();
+                    if (now < startTime) {
+                        callback("The Scavenger Hunt cannot be started yet, it begins on " + startTime.toString());
+                    } else {
+                        callback(null);
+                    }
+                }
+            })
+        },
 		function(callback) {
             scunt.setStatus(id, 'STARTED', function (err, res) {
                 callback(err);
