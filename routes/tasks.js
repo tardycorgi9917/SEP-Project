@@ -7,7 +7,7 @@ router.get('/', function(req, res, next) {
   res.send('this is the tasks app');
 });
 
-router.get('/list-tasks', function(req, res, next) {
+router.get('/task-list', function(req, res, next) {
 	var scuntId = req.query.scuntId;
 
 	tasks.list(scuntId, function(err, tasks) {
@@ -17,7 +17,19 @@ router.get('/list-tasks', function(req, res, next) {
 			res.send(tasks);
 		}
 	});
-})
+});
+
+router.get('/admin-task-list', function(req, res, next){
+    var scuntId = req.query.scuntId;
+    var isAdmin = req.query.isAdmin;
+    tasks.admin_list(scuntId, isAdmin, function(err, tasks){
+        if (err) {
+			res.status(500).send(err);
+		} else {
+			res.send(tasks);
+		}
+    });
+});
 
 router.post('/create-task', function(req, res, next) {
 	var taskName = req.body.taskName;
