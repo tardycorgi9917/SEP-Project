@@ -1,15 +1,19 @@
 var db = require("../database/db.js");
 var async = require('async');
+var bcrypt = require('bcrypt')
+var salt = bcrypt.genSaltSync(10);
 
 var users = {}
 
 users.login = function(username, password, done) {
-    var query = 'SELECT id, username, firstName, lastName, email, phoneNumber, isPhoneNumberVisible, isAdmin FROM users WHERE username = ? AND password = ?';
-    var values = [username.toString(), password.toString()];
+    var query = 'SELECT id, username, firstName, lastName, email, phoneNumber, isPhoneNumberVisible, isAdmin, password FROM users WHERE username = ?';
+    var values = [username.toString()];
 
     db.get().query(query, values, function(err, result) {
         if (err || result.length == 0) {
             done("Authorization failed: " + err);
+        } else if(!bcrypt.compareSync(password, result[0].password)) {
+            done("Authorization failed: Wrong Passord");
         } else {
             result[0].isAdmin = result[0].isAdmin == '1';
             done(null, result[0]);
@@ -22,11 +26,14 @@ users.create = function(username, firstName, lastName, email, password, phoneNum
         return done('Need to provide a username');
     }
 
+    //encrypt password
+    var hash = bcrypt.hashSync(password, salt);
+
     // Create user
     var query = 'INSERT INTO users (username, firstName, lastName, email, password, phoneNumber, isAdmin, profilePicture, createdAt, updatedAt) ' +
         'VALUES(?,?,?,?,?,?,?,?,?,?)';
 
-    var values = [username, firstName, lastName, email, password, phoneNumber, isAdmin, profilePicture, date, date]
+    var values = [username, firstName, lastName, email, hash, phoneNumber, isAdmin, profilePicture, date, date]
     db.get().query(query, values, function (err, result) {
         if (err) done(err, null);
         else done(null, result.insertId);
