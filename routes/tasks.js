@@ -101,12 +101,12 @@ router.get('/get-task-status/', function(req, res, next){
     })
 });
 
-router.post('/change-task-status/', function(req, res, next){
-    var teamId = req.body.teamId;
-    var taskId = req.body.taskId;
-    var status = req.body.status;
+router.post('/change-task-status', function(req, res, next){
+    var teamId = req.query.teamId;
+    var taskId = req.query.taskId;
+    var status = req.query.status;
 
-    tasks.setTeamTaskStatus(taskId, teamId, status, function(err, result){
+    tasks.setTeamTaskStatus(teamId, taskId, status, function(err, result){
         if(err) {
             console.log(err);
             res.sendStatus(500);
