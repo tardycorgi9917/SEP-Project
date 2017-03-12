@@ -15,7 +15,7 @@ users.login = function(username, password, done) {
         } else if(!bcrypt.compareSync(password, result[0].password)) {
             done("Authorization failed: Wrong Passord");
         } else {
-            result[0].isAdmin = result[0].isAdmin == '1';
+         //   result[0].isAdmin = result[0].isAdmin == 'true';
             done(null, result[0]);
         }
     });
