@@ -1,6 +1,6 @@
 var db = require("../database/db.js");
 var async = require('async');
-
+var teams = require('./teams');
 var tasks = {}
 
 tasks.admin_list = function(scuntId, isAdmin, done){
@@ -17,18 +17,29 @@ tasks.admin_list = function(scuntId, isAdmin, done){
 	}
 }
 
-tasks.team_list = function(scuntId, teamId, done){
-	var query = `
-		SELECT teamTaskRel.status, teamTaskRel.teamId, tasks.*
-		FROM tasks
-		JOIN teamTaskRel ON tasks.id = teamTaskRel.taskId
-		WHERE tasks.scuntId = ? AND teamTaskRel.teamId = ?
-	`
+tasks.team_list = function(scuntId, userId, done){
+	async.waterfall([
+		function(callback){
+			teams.getTeamId(userId, function(err, teamId){
+				if(err) callback(err)
+				else callback(null, teamId)
+			});
+		}, function(teamId, callback){
+			var query = `
+				SELECT teamTaskRel.status, teamTaskRel.teamId, tasks.*
+				FROM tasks
+				JOIN teamTaskRel ON tasks.id = teamTaskRel.taskId
+				WHERE tasks.scuntId = ? AND teamTaskRel.teamId = ?
+			`
+			var values = [scuntId, teamId];
+			db.get().query(query, values, function(err, result){
+				callback(err, result);
+			});
 
-	var values = [scuntId, teamId];
-
-	db.get().query(query, values, done);
-
+		}
+	], function(err, result){
+		done(err, result)
+	});
 }
 
 tasks.list = function (scuntId, done) {

@@ -31,6 +31,18 @@ router.get('/admin-task-list', function(req, res, next){
     });
 });
 
+router.get('/team-task-list', function(req, res, next){
+    var scuntId = req.query.scuntId;
+    var userId = req.query.userId;
+    tasks.team_list(scuntId, userId, function(err, tasks){
+        if(err){
+            res.status(500).send(err);
+        } else{
+            res.send(tasks);
+        }
+    });
+})
+
 router.post('/create-task', function(req, res, next) {
 	var taskName = req.body.taskName;
 	var description = req.body.description;
