@@ -3,17 +3,39 @@ var async = require('async');
 
 var tasks = {}
 
-tasks.list = function(scuntId, done) {
-	var query = `
-		SELECT teamTaskRel.status, teamTaskRel.teamId, tasks.*
-		FROM tasks
-		JOIN teamTaskRel ON tasks.id = teamTaskRel.taskId
-		WHERE tasks.scuntId = ?
-	`
-	
-	var values = [scuntId];
-	
-	db.get().query(query, values, done);
+tasks.list = function (scuntId, done) {
+	async.waterfall([
+		function (callback) {
+			var query = 'SELECT status FROM scunt WHERE id = ?';
+			var values = [scuntId];
+
+			db.get().query(query, values, function (err, res) {
+				if (res && res[0]) {
+					callback(err, res[0].status);
+				} else {
+					callback("The scavenger hunt was not found");
+				}
+			});
+		}, function (status, callback) {
+			if (status == 'STARTED' || status == 'FINISHED') {
+				var query = `
+				SELECT teamTaskRel.status, teams.id as teamId, teams.name as teamName, tasks.*
+				FROM tasks
+				JOIN teamTaskRel ON tasks.id = teamTaskRel.taskId
+				JOIN teams ON teamTaskRel.teamId = teams.id
+				WHERE tasks.scuntId = ?
+				ORDER BY teamId, tasks.name, teamTaskRel.status
+				`;
+			} else {
+				var query = "SELECT 'PENDING' AS status, -1 AS teamId, '' AS teamName, tasks.* FROM tasks WHERE tasks.scuntId = ?";
+			}
+
+			var values = [scuntId];
+			db.get().query(query, values, callback);
+		}
+	], function (err, result) {
+		done(err, result)
+	});
 }
 
 tasks.create = function(taskName, description, points, scuntId, done) {
