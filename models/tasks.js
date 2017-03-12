@@ -4,13 +4,12 @@ var async = require('async');
 var tasks = {}
 
 tasks.list = function(scuntId, done) {
-	var query = `
-		SELECT teamTaskRel.status, teamTaskRel.teamId, tasks.*
-		FROM tasks
-		JOIN teamTaskRel ON tasks.id = teamTaskRel.taskId
-		WHERE tasks.scuntId = ?
-	`
-	
+	var query =
+	'SELECT teamTaskRel.status, teamTaskRel.teamId, tasks.* '+
+	'FROM tasks '+
+	'JOIN teamTaskRel ON tasks.id = teamTaskRel.taskId '+
+	'WHERE tasks.scuntId = ?'
+
 	var values = [scuntId];
 	
 	db.get().query(query, values, done);
@@ -231,6 +230,48 @@ tasks.getTaskStatus = function(teamId, taskId, done){
 	db.get().query(query, values, function(err, result){
 		done(err, result);
 	});
+tasks.findsTeamTaskByuserandtask = function (uid, sid, done) {
+    var query = 'SELECT  status FROM teamtaskrel tt JOIN teamuserrel tu on tt.teamId = tu.teamId JOIN teams t ON tt.teamId = t.id WHERE tu.userId = ?  AND t.scuntId = ?';
+    var values = [uid, sid];
+    db.get().query(query, values, function (err, result) {
+        if (err) done(err);
+        else done(null, result[0]);
+    })
+}
+tasks.findsTeamTaskByuserandtask = function (uid, sid, done) {
+    var query = 'SELECT  status FROM teamtaskrel tt JOIN teamuserrel tu on tt.teamId = tu.teamId JOIN teams t ON tt.teamId = t.id WHERE tu.userId = ?  AND t.scuntId = ?';
+    var values = [uid, sid];
+    db.get().query(query, values, function (err, result) {
+        if (err) done(err);
+        else done(null, result[0]);
+    })
+}
+
+tasks.findsTeamTaskByuserandtask = function (uid, sid, done) {
+    var query = 'SELECT  status FROM teamtaskrel tt JOIN teamuserrel tu on tt.teamId = tu.teamId JOIN teams t ON tt.teamId = t.id WHERE tu.userId = ?  AND t.scuntId = ?';
+    var values = [uid, sid];
+    db.get().query(query, values, function (err, result) {
+        if (err) done(err);
+        else done(null, result[0]);
+    });
+}
+
+tasks.findsTeamTaskByuserandtask = function (uid, sid, done) {
+    var query = 'SELECT  status FROM teamtaskrel tt JOIN teamuserrel tu on tt.teamId = tu.teamId JOIN teams t ON tt.teamId = t.id WHERE tu.userId = ?  AND t.scuntId = ?';
+    var values = [uid, sid];
+    db.get().query(query, values, function (err, result) {
+        if (err) done(err);
+        else done(null, result[0]);
+    })
+}
+
+tasks.findsTeamTaskByuserandtask = function (uid, sid, done) {
+    var query = 'SELECT  status FROM teamtaskrel tt JOIN teamuserrel tu on tt.teamId = tu.teamId JOIN teams t ON tt.teamId = t.id WHERE tu.userId = ?  AND t.scuntId = ?';
+    var values = [uid, sid];
+    db.get().query(query, values, function (err, result) {
+        if (err) done(err);
+        else done(null, result[0]);
+    })
 }
 
 module.exports = tasks;
