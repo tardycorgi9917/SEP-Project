@@ -113,6 +113,17 @@ router.get('/team-points/:teamId', function (req, res, next) {
       res.send(result);
     }
   });
-  });
+});
+
+router.get('/points', function(req, res, next){
+    var scuntId = req.query.scuntId;
+    teams.getScuntTeams(scuntId, function(err, result){
+        if (err) {
+          res.status(500).send(err);
+        } else {
+          res.send(result);
+        }
+    })
+});
 
 module.exports = router;
