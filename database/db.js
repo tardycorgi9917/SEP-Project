@@ -18,10 +18,10 @@ db.connect = function(mode, done) {
   }
   
   state.pool = mysql.createPool({
-    host: config.database.host,
-    user: config.database.user,
-    password: config.database.password,
-    database: config.database.db,
+    host: process.env.DB_HOST || config.database.host,
+    user: process.env.DB_USER || config.database.user,
+    password: process.env.DB_PASS ||  config.database.password,
+    database: process.env.DB_NAME || config.database.db,
     multipleStatements: true
   });
   state.mode = mode;
