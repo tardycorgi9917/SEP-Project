@@ -253,7 +253,7 @@ tasks.findsTeamTaskByuserandtask = function (uid, sid, done) {
     db.get().query(query, values, function (err, result) {
         if (err) done(err);
         else done(null, result[0]);
-    })
+    });
 }
 
 tasks.findsTeamTaskByuserandtask = function (uid, sid, done) {
@@ -262,7 +262,7 @@ tasks.findsTeamTaskByuserandtask = function (uid, sid, done) {
     db.get().query(query, values, function (err, result) {
         if (err) done(err);
         else done(null, result[0]);
-    });
+    })
 }
 
 tasks.findsTeamTaskByuserandtask = function (uid, sid, done) {
