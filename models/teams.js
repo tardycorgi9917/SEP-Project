@@ -250,18 +250,12 @@ teams.list = function(done) {
         },
         function(teams, callback) {
             // Get team points
-                var query = 'SELECT teamId, SUM(t1.points) as teamPoints FROM tasks AS t1 ' 
+                var query = 'SELECT SUM(t1.points) as teamPoints FROM tasks AS t1 ' 
                             + 'JOIN teamTaskRel AS t2 ON t1.id = t2.taskId group by teamId'
 
             db.get().query(query, [], function(err, res) {
                 for (var i in teams) {
                     teams[i].teamPoints = res[i];
-                    // teams[i].teamPoints.push(res[i]);
-                    // for (var j in res) {
-                    //     if (res[j].teamId == teams[i].id) {
-                    //         teams[i].teamPoints.push(res[j]);
-                    //     }
-                    // }
                 }
                 callback(err, teams);
             });
