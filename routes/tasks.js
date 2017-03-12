@@ -68,4 +68,13 @@ router.delete('/delete-task/', function(req, res, next) {
 	});
 });
 
+router.get('/find-teamtask', function(req, res, next){
+    var uid = req.query.uid;
+    var sid = req.query.sid;
+    tasks.findsTeamTaskByuserandtask(uid, sid, function(err, result){
+        if(err) res.status(500).send(err);
+        else res.send(result['status'].toString());
+    })
+});
+
 module.exports = router;
