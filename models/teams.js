@@ -247,6 +247,27 @@ teams.list = function(done) {
                 }
                 callback(err, teams);
             });
+        },
+        function(teams, callback) {
+            // Get team points
+            var query = 'SELECT teamId, SUM(t1.points) as teamPoints '
+                        + 'FROM tasks AS t1 ' 
+                        + 'JOIN teamTaskRel AS t2 ON t1.id = t2.taskId '
+                        + 'WHERE t2.status = "APPROVED" '
+                        + 'GROUP BY teamId'
+
+            db.get().query(query, [], function(err, res) {
+                for (var i in teams) {
+                    teams[i].teamPoints = 0;
+                    for (var j in res){
+                        if (res[j].teamId == teams[i].id){
+                            teams[i].teamPoints = res[j].teamPoints;
+                        }
+
+                    }
+                }
+                callback(err, teams);
+            });
         }
     ], function(err, result) {
         done(err, result);
@@ -259,6 +280,20 @@ teams.update = function(teamId, name, points, maxmembers, scuntId, done) {
     var values = [name, points, maxmembers, scuntId, now, teamId];
     db.get().query(query, values, function(err, res){
         done(err);
+    });
+}
+
+teams.getPoints = function(teamId, done) {
+ var query = 'SELECT teamId, SUM(t1.points) as teamPoints '
+                            + 'FROM tasks AS t1 ' 
+                            + 'JOIN teamTaskRel AS t2 ON t1.id = t2.taskId '
+                            + 'WHERE t2.status = "APPROVED" '
+                            + 'GROUP BY teamId'
+
+    var values = [teamId];
+
+    db.get().query(query, values, function(err, result) {
+        done(err, result);
     });
 }
 
