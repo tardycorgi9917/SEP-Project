@@ -61,17 +61,17 @@ scunt.setStatus = function(id, status, done) {
     });
 }
 
-scunt.publish = function(id, done) {
+scunt.start = function(id, done) {
     async.waterfall([
 		function(callback) {
-            scunt.setStatus(id, 'PUBLISHED', function (err, res) {
+            scunt.setStatus(id, 'STARTED', function (err, res) {
                 callback(err);
             });
-        }, 
+        },
         function(callback) {
             var query = `
                 INSERT INTO teamTaskRel (teamId, taskId, status, createdAt, updatedAt)
-                SELECT teams.id, tasks.id, 'PENDING', NOW(), NOW()
+                SELECT teams.id, tasks.id, 'INCOMPLETE', NOW(), NOW()
                 FROM tasks
                 JOIN scunt ON tasks.scuntId = scunt.id
                 JOIN teams ON teams.scuntId = tasks.scuntId
@@ -88,16 +88,40 @@ scunt.publish = function(id, done) {
     });
 }
 
+scunt.close = function(scuntId, done) {
+    async.waterfall([
+        function(callback){
+            var query = 'SELECT COUNT(*) AS uniqueScunt FROM scunt where id =?';
+            var values = [scuntId];
+            db.get().query(query , values, function(err,result){
+                if(err){
+                    callback(err);
+                }else if(result[0].uniqueScunt == 0 )
+                {
+                    callback('Scunt with this id doesn\'t exist')
+                }else{
+                    callback(null);
+                }
+            });
+        },
+        function(callback) {
+            scunt.setStatus(scuntId, 'FINISHED', function (err, res) {
+                callback(err,scuntId);
+            });
+        }
+    ], function (err,scuntId) {
+        done(err,scuntId);
+    });
+}
 
 scunt.findById = function (id, done) {
-    var query = 'SELECT id, name, description, status, startTime AS start, endTime AS end, createdAt AS created, updatedAt AS updated FROM scunt WHERE id = ?';
+    var query = 'SELECT id, name, status, description, startTime AS start, endTime AS end, createdAt AS created, updatedAt AS updated FROM scunt WHERE id = ?';
     var values = [id];
     db.get().query(query, values, function (err, result) {
         if (err) done(err);
-        else done(null, result[0]);
+        else done(null, result);
     })
 }
-
 
 scunt.update = function (id, name, description, startTime, endTime, done) {
     var sTime = startTime.toISOString().slice(0, 19).replace('T', ' ');
@@ -123,11 +147,36 @@ scunt.list = function (done) {
     db.get().query(query, null, done);
 }
 
+scunt.getStatus = function(ScuntId, done)
+{
+    var value = [ScuntId];
+    var query = 'SELECT status FROM scunt WHERE id = ?';
+
+    db.get().query(query, value, done);
+}
+
 scunt.delete = function (id, done) {
     var query = 'DELETE FROM scunt WHERE id = ?';
     var values = [id];
 
-    db.get().query(query, values, done);
+    db.get().query(query, values,  function (err) {
+        if (err) {
+            done(err, undefined);
+        } else {
+            done(undefined, id);
+        }
+    });
+}
+
+scunt.getTimeRemaining = function(id, done) {
+    var query = 'SELECT startTime AS start, endTime AS end FROM scunt WHERE id = ?';
+    var values = [id];
+
+    db.get().query(query, values, function(err, result) {
+        done(err, result);
+    });
+
+
 }
 
 module.exports = scunt;
