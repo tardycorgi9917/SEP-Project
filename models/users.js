@@ -11,7 +11,7 @@ users.login = function(username, password, done) {
         if (err || result.length == 0) {
             done("Authorization failed: " + err);
         } else {
-            result[0].isAdmin = result[0].isAdmin == '1';
+         //   result[0].isAdmin = result[0].isAdmin == 'true';
             done(null, result[0]);
         }
     });

@@ -5,9 +5,9 @@ var tasks = {}
 
 tasks.list = function(scuntId, done) {
 	var query =
-	'SELECT teamTaskRel.status, teamTaskRel.teamId, tasks.*'+
-	'FROM tasks'+
-	'JOIN teamTaskRel ON tasks.id = teamTaskRel.taskId'+
+	'SELECT teamTaskRel.status, teamTaskRel.teamId, tasks.* '+
+	'FROM tasks '+
+	'JOIN teamTaskRel ON tasks.id = teamTaskRel.taskId '+
 	'WHERE tasks.scuntId = ?'
 
 	var values = [scuntId];
