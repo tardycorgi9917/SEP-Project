@@ -266,7 +266,7 @@ teams.getPoints = function(teamId, done) {
     var query = 'SELECT SUM(t1.points) '
                     + 'FROM tasks AS t1 '
                     + 'JOIN teamTaskRel AS t2 ON t1.id = t2.taskId '
-                    + 'WHERE t2.teamId = ?'
+                    + 'WHERE t2.teamId = ? AND t2.status = "APPROVED"'
 
     var values = [teamId];
 
