@@ -272,6 +272,61 @@ describe('Scunt test', function () {
     });
   });
 
+  it('Scunt Start when no Published', function(done) {
+    async.waterfall([
+      function(callback) {
+        var Name = 'StartedScuntNoPublished';
+        var Desc = 'Started scunt';
+        var startTime = new Date("September 1, 2016 11:13:00");
+        var endTime = new Date("September 13, 2016 11:13:00");
+
+        scunt.create(Name, Desc, startTime, endTime, function (err, id) {
+          callback(err, id);
+        });
+      },
+      function(id, callback) {
+        // Create users + teams for the scunt, two users + two teams, created and updated dates will be messed up here to keep the code short
+        var query = `
+          INSERT INTO users (username, firstName, lastName, email, password, phoneNumber, isAdmin, profilePicture, createdAt, updatedAt) VALUES
+          ("startnopublishededuser1", "startnopublishedfname1", "startnopublishedlname1", "startnopublishedfname1@gmail.com", "1234", "1231231234", "1", "", "2017-01-01", "2017-01-01"),
+          ("startnopublishededuser2", "startnopublishedfname2", "startnopublishedlname2", "startnopublishedfname2@gmail.com", "1234", "1231231234", "1", "", "2017-01-01", "2017-01-01"),
+          ("startnopublishededuser3", "startnopublishedfname3", "startnopublishedlname3", "startnopublishedfname3@gmail.com", "1234", "1231231234", "1", "", "2017-01-01", "2017-01-01"),
+          ("startnopublishededuser4", "startnopublishedfname4", "startnopublishedlname4", "startnopublishedfname4@gmail.com", "1234", "1231231234", "1", "", "2017-01-01", "2017-01-01");
+
+          INSERT INTO teams (name, points, maxmembers, scuntId, createdAt, updatedAt) VALUES
+          ("startnopublishedteam1", "0", "3", ?, "2016-01-01", "2017-01-01"),
+          ("startnopublishedteam2", "0", "3", ?, "2016-01-01", "2017-01-01");
+
+          INSERT INTO teamUserRel (teamId, userId, userType, createdAt, updatedAt)
+          SELECT teams.id, users.id, "participant", "2016-01-01", "2017-01-01" FROM teams JOIN users ON 1 = 1 WHERE users.username IN ("startnopublishededuser1", "startnopublishededuser2") AND teams.name = "startnopublishedteam1"
+          UNION
+          SELECT teams.id, users.id, "participant", "2016-01-01", "2017-01-01" FROM teams JOIN users ON 1 = 1 WHERE users.username IN ("startnopublishededuser3", "startnopublishededuser4") AND teams.name = "startnopublishedteam2";
+
+          INSERT INTO tasks (name, description, points, scuntId, createdAt, updatedAt) VALUES
+          ("startnopublishededscunttask1", "startnopublishededscunttask1 desc", 5, ?, "2016-01-01", "2016-01-01"),
+          ("startnopublishededscunttask2", "startnopublishededscunttask2 desc", 5, ?, "2016-01-01", "2016-01-01")
+        `;
+        var values = [id, id, id, id];
+
+        db.get().query(query, values, function(err, res) {
+          assert.equal(err, null); // Make sure insertion worked out
+          callback(err, id);
+        })
+      },
+      function(id, callback) {
+        // Start the scavenger hunt
+        scunt.start(id, function(err) {
+          assert.equal(err, "The Scavenger Hunt cannot be started, it is not PUBLISHED, it is PENDING");
+          callback(null);
+        });
+      }
+    ], function(err) {
+        assert.equal(err, null);
+        done();
+    });
+  });
+
+
   it('Scunt Close', function(done) {
     async.waterfall([
       function(callback) {
@@ -353,6 +408,65 @@ describe('Scunt test', function () {
           assert.equal(err, null);
           assert.equal(res[0].status, "FINISHED");
           callback(err);
+        });
+      }
+    ], function(err) {
+        assert.equal(err, null);
+        done();
+    });
+  });
+
+  it('Scunt Close when not Started', function(done) {
+    async.waterfall([
+      function(callback) {
+        var Name = 'closednostartedScunt';
+        var Desc = 'closednostarted scunt';
+        var startTime = new Date("September 1, 2016 11:13:00");
+        var endTime = new Date("September 13, 2016 11:13:00");
+
+        scunt.create(Name, Desc, startTime, endTime, function (err, id) {
+          callback(err, id);
+        });
+      },
+      function(id, callback) {
+        scunt.setStatus(id, 'PUBLISHED', function(err, res) {
+          callback(err, id);
+        });
+      },
+      function(id, callback) {
+        // Create users + teams for the scunt, two users + two teams, created and updated dates will be messed up here to keep the code short
+        var query = `
+          INSERT INTO users (username, firstName, lastName, email, password, phoneNumber, isAdmin, profilePicture, createdAt, updatedAt) VALUES
+          ("closednostarteduser1", "closefnostartedname1", "closelname1", "closefnostartedname1@gmail.com", "1234", "1231231234", "1", "", "2016-01-01", "2016-01-01"),
+          ("closednostarteduser2", "closefnostartedname2", "closelname2", "closefnostartedname2@gmail.com", "1234", "1231231234", "1", "", "2016-01-01", "2016-01-01"),
+          ("closednostarteduser3", "closefnostartedname3", "closelname3", "closefnostartedname3@gmail.com", "1234", "1231231234", "1", "", "2016-01-01", "2016-01-01"),
+          ("closednostarteduser4", "closefnostartedname4", "closelname4", "closefnostartedname4@gmail.com", "1234", "1231231234", "1", "", "2016-01-01", "2016-01-01");
+
+          INSERT INTO teams (name, points, maxmembers, scuntId, createdAt, updatedAt) VALUES
+          ("closeteam1", "0", "3", ?, "2016-01-01", "2016-01-01"),
+          ("closeteam2", "0", "3", ?, "2016-01-01", "2016-01-01");
+
+          INSERT INTO teamUserRel (teamId, userId, userType, createdAt, updatedAt)
+          SELECT teams.id, users.id, "participant", "2016-01-01", "2016-01-01" FROM teams JOIN users ON 1 = 1 WHERE users.username IN ("closednostarteduser1", "closednostarteduser2") AND teams.name = "closeteam1"
+          UNION
+          SELECT teams.id, users.id, "participant", "2016-01-01", "2016-01-01" FROM teams JOIN users ON 1 = 1 WHERE users.username IN ("closednostarteduser3", "closednostarteduser4") AND teams.name = "closeteam2";
+
+          INSERT INTO tasks (name, description, points, scuntId, createdAt, updatedAt) VALUES
+          ("closednostartedscunttask1", "closednostartedscunttask1 desc", 5, ?, "2016-01-01", "2016-01-01"),
+          ("closednostartedscunttask2", "closednostartedscunttask2 desc", 5, ?, "2016-01-01", "2016-01-01")
+        `;
+        var values = [id, id, id, id];
+
+        db.get().query(query, values, function(err, res) {
+          assert.equal(err, null); // Make sure insertion worked out
+          callback(err, id);
+        })
+      },
+      function(id, callback) {
+        // Close the scavenger hunt
+        scunt.close(id, function(err) {
+          assert.equal(err, "The Scavenger Hunt cannot be finished, it is not STARTED, it is PUBLISHED");
+          callback(null);
         });
       }
     ], function(err) {

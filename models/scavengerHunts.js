@@ -84,6 +84,28 @@ scunt.start = function(id, done) {
                 }
             })
         },
+        function(callback) {
+            var query = `
+                SELECT status FROM scunt WHERE id = ?
+            `
+            var values = [id];
+
+            db.get().query(query, values, function(err, res) {
+                if (err) {
+                    callback(err);
+                } else if (!res[0]) {
+                    callback('Scavenger hunt not found');
+                } else {
+                    var status = res[0].status;
+                    if (status != "PUBLISHED") {
+                        var errMsg = "The Scavenger Hunt cannot be started, it is not PUBLISHED, it is " +res[0].status;
+                        callback(errMsg);
+                    } else {
+                        callback(null);
+                    }
+                }
+            })
+        },
 		function(callback) {
             scunt.setStatus(id, 'STARTED', function (err, res) {
                 callback(err);
@@ -124,6 +146,28 @@ scunt.close = function(scuntId, done) {
                     callback(null);
                 }
             });
+        },
+        function(callback) {
+            var query = `
+                SELECT status FROM scunt WHERE id = ?
+            `
+            var values = [scuntId];
+
+            db.get().query(query, values, function(err, res) {
+                if (err) {
+                    callback(err);
+                } else if (!res[0]) {
+                    callback('Scavenger hunt not found');
+                } else {
+                    var status = res[0].status;
+                    if (status != "STARTED") {
+                        var errMsg = "The Scavenger Hunt cannot be finished, it is not STARTED, it is " +res[0].status;
+                        callback(errMsg);
+                    } else {
+                        callback(null);
+                    }
+                }
+            })
         },
         function(callback) {
             scunt.setStatus(scuntId, 'FINISHED', function (err, res) {
