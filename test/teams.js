@@ -6,6 +6,7 @@ var seed = require('../database/seeders');
 var teams = require('../models/teams');
 var users = require('../models/users');
 var scunts = require('../models/scavengerHunts');
+var tasks = require('../models/tasks');
 
 describe('Teams Tests', function () {
     before(function (done) {
@@ -609,6 +610,97 @@ describe('Teams Tests', function () {
                             callback(err);                 
                         }
                     );
+                }                
+            ], 
+                function(err){
+                    assert.strictEqual(err,null);
+                    done();
+            });
+        });
+        it('List points', function(done) {
+            async.waterfall([
+              function(callback) {
+                var Name = 'listPointsScunt';
+                var Desc = 'List Points scunt';
+                var startTime = new Date("September 1, 2016 11:13:00");
+                var endTime = new Date("September 13, 2016 11:13:00");
+
+                scunts.create(Name, Desc, startTime, endTime, function (err, id) {
+                    callback(err, id);
+                });
+              },
+              function(id, callback) {
+                scunts.setStatus(id, 'PUBLISHED', function(err, res) {
+                  callback(err, id);
+                });
+              },
+              function(id,callback) {
+                var username = "Marco";
+                var firstName = "Marco";
+                var lastName = "Mang";
+                var email = "marco.mang@gmail.com";
+                var password = "test";
+                var phoneNumber = "(514)911-1234";
+                var isAdmin = true;
+                var profilePicture = "";
+                var date = new Date().toISOString().slice(0, 19).replace('T', ' '); 
+                users.create(username, firstName, lastName, email, password, phoneNumber, isAdmin, profilePicture, date,
+                    function(err, result){
+                        assert.strictEqual(err, null);
+                        assert.notStrictEqual(result, null);
+                        callback(null, id,result);
+                    }
+                );
+              },
+              function(scuntId,leadId, callback) {
+                teams.create("listPointsTeam", 0, 3, scuntId, leadId, function(err, res) {
+                  callback(err, scuntId,res);
+                });
+              },
+              function(scuntId,teamId, callback) {
+                // Start the scavenger hunt
+                var taskName = 'task number 5';
+                var taskDescription = 'This is the task number 5';
+                var points = 2;
+                tasks.create(taskName, taskDescription, points, scuntId, function (err, id) {
+                    assert.notStrictEqual(id, null, 'Could not create tasks, id was null');
+                    assert.strictEqual(err, null, 'tasks create has some invalid sql ' + err);
+                    callback(err, scuntId, teamId, id);
+                });
+              },
+              function(scuntId,teamId,taskId, callback) {
+                // Start the scavenger hunt
+                scunts.start(scuntId, function(err) {
+                  assert.equal(err, null);
+                  callback(err,taskId,teamId);
+                });
+              },
+              function(taskId,teamId, callback) {
+                // Approve the task
+                tasks.approveTask(taskId, teamId, function(err) {
+                  assert.equal(err, null);
+                  callback(err, teamId);
+                });
+              },
+              function(teamId, callback) {
+                    teams.list(
+                        function(err,result){
+
+                            assert.notEqual(result.length, 0);
+                            var i = 0;
+
+                            while(i < result.length){
+                                id = result[i].teamId;
+                                if(id == teamId ){
+                                    teamPoints = result[i].teamPoints;
+
+                                    assert.equal(teamPoints, 2);
+
+                                }
+                                i++;
+                            }
+                            callback(err);                 
+                        });
                 }                
             ], 
                 function(err){
