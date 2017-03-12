@@ -231,4 +231,13 @@ tasks.getTaskStatus = function(teamId, taskId, done){
 	});
 }
 
+tasks.findsTeamTaskByuserandtask = function (uid, sid, done) {
+    var query = 'SELECT  status FROM teamtaskrel tt JOIN teamuserrel tu on tt.teamId = tu.teamId JOIN teams t ON tt.teamId = t.id WHERE tu.userId = ?  AND t.scuntId = ?';
+    var values = [uid, sid];
+    db.get().query(query, values, function (err, result) {
+        if (err) done(err);
+        else done(null, result[0]);
+    })
+}
+
 module.exports = tasks;
