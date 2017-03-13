@@ -22,7 +22,7 @@ db.connect = function(mode, done) {
     user: process.env.DB_USER || config.database.user,
     password: process.env.DB_PASS ||  config.database.password,
     database: process.env.DB_NAME || config.database.db,
-    multipleStatements: true
+    multipleStatements: true,
   });
   state.mode = mode;
   done();
