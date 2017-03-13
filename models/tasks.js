@@ -7,7 +7,7 @@ tasks.admin_list = function(scuntId, isAdmin, done){
 	if(isAdmin){
 		var query = `
 			SELECT *
-			FROM Tasks
+			FROM tasks
 			WHERE scuntId = ?
 		`;
 		var values = [scuntId]
@@ -270,12 +270,37 @@ tasks.approveTask = function(taskId, teamId, done) {
 				if (err) {
 					callback(err);
 				} else {
-					callback(undefined, taskId,teamId);
+					callback(undefined);
 				}
 			});
+		},
+		function(callback) {
+			var query = "SELECT points FROM tasks WHERE id = ?";
+			var values = [taskId];
+
+			db.get().query(query, values, function(err, res) {
+				if (err) {
+					callback(err);
+				} else if (!res || !res[0]) {
+					callback("Could not find points for task");
+				} else {
+					callback(null, res[0].points);
+				}
+			})
+		},
+		function(points, callback) {
+			var query = "UPDATE teams SET points = points + ? WHERE id = ?";
+			var values = [points, teamId];
+			db.get().query(query, values, function(err) {
+				if (err) {
+					callback(err);
+				} else {
+					callback(null);
+				}
+			})
 		}
-	], function (err, taskId,teamId) {
-		done(err, taskId,teamId);
+	], function (err) {
+		done(err, taskId, teamId);
 	});
 }
 

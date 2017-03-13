@@ -250,7 +250,7 @@ teams.list = function(done) {
         },
         function(teams, callback) {
             // Get team points
-            var query = 'SELECT teamId, SUM(t1.points) as teamPoints '
+            var query = 'SELECT teamId, SUM(t1.points) as points '
                         + 'FROM tasks AS t1 '
                         + 'JOIN teamTaskRel AS t2 ON t1.id = t2.taskId '
                         + 'WHERE t2.status = "APPROVED" '
@@ -284,7 +284,7 @@ teams.update = function(teamId, name, points, maxmembers, scuntId, done) {
 }
 
 teams.getPoints = function(teamId, done) {
- var query = 'SELECT teamId, SUM(t1.points) as teamPoints '
+ var query = 'SELECT teamId, SUM(t1.points) as points '
                             + 'FROM tasks AS t1 '
                             + 'JOIN teamTaskRel AS t2 ON t1.id = t2.taskId '
                             + 'WHERE t2.status = "APPROVED" '
@@ -312,11 +312,7 @@ teams.getTeamId = function(userId, done){
 }
 
 teams.getScuntTeams = function(scuntId, done){
-    var query = `
-        SELECT name, points
-        FROM teams
-        WHERE scuntId = ?
-    `
+    var query = "SELECT name, points FROM teams WHERE scuntId = ?";
     var values = [scuntId];
     db.get().query(query, values, function(err, teams){
         if(err) done(err);
