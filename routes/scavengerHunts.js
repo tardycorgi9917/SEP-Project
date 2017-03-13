@@ -41,6 +41,7 @@ router.post('/create-ScavengerHunt', function (req, res, next) {
   var now = new Date();
   if(ScuntEnd.getTime() < ScuntStart.getTime()) res.status(500).send('Dates are inverted')
   else if (ScuntEnd.getTime() < now.getTime()) res.status(500).send("Can't finish before today");
+  else if (ScuntStart.getTime() < now.getTime()) res.status(500).send("Can't start before today");
   else {
       scunt.create(ScuntName, ScuntDesc, ScuntStart, ScuntEnd, function (err, id) {
         if (err) {
