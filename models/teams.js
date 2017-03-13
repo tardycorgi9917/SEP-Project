@@ -6,7 +6,7 @@ var teams = {}
 teams.createTeamUserRel = function(teamId, userId, type, done) {
     var query = 'INSERT INTO teamUserRel (teamId, userId, userType, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?)';
     
-    var now = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    var now = new Date();
     var values = [teamId, userId, type, now, now];
 
     db.get().query(query, values, done);
@@ -22,7 +22,7 @@ teams.removeTeamUserRel = function(teamId, userId, done) {
 }
 
 teams.create = function(name, points, maxmembers, scuntId, leaderId, done) {
-    var now = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    var now = new Date();
 
     async.waterfall([
         function(callback) {
@@ -275,7 +275,7 @@ teams.list = function(done) {
 }
 
 teams.update = function(teamId, name, points, maxmembers, scuntId, done) {
-    var now = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    var now = new Date();
     var query = "UPDATE `teams` SET `name`=?,`points`=?,`maxMembers`=?,`scuntId`=?,`updatedAt`=? WHERE `id`=?";
     var values = [name, points, maxmembers, scuntId, now, teamId];
     db.get().query(query, values, function(err, res){

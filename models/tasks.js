@@ -61,8 +61,10 @@ tasks.create = function(taskName, description, points, scuntId, done) {
 		function(callback) {
 			// Create task entry
 			var query = 'INSERT INTO tasks (name, description, points, scuntId, createdAt, updatedAt) '
-						+ 'VALUES(?, ?, ?, ?, NOW(), NOW())';
-			var values = [taskName, description, points, scuntId];
+						+ 'VALUES(?, ?, ?, ?, ?, ?)';
+
+			var now = new Date();	
+			var values = [taskName, description, points, scuntId, now, now];
 			db.get().query(query, values, function (err, result) {
 				if (err) {
 					callback(err);
@@ -111,8 +113,9 @@ tasks.edit = function(taskId,editDict, done) {
 				}
 			}
 
-			query += " updatedAt = NOW() WHERE id = ?;"
-			var values = [taskId];
+			query += " updatedAt = ? WHERE id = ?;"
+			
+			var values = [new Date(), taskId];
 			db.get().query(query,values, function (err) {
 				if (err) {
 					callback(err);
@@ -169,8 +172,8 @@ tasks.setTeamTaskStatus = function(taskId, teamId, status, done) {
 		},
 		function (callback) {
 			// Create task entry
-			var query = "UPDATE teamTaskRel SET status = ? , updatedAt = NOW() WHERE teamId = ? AND taskId = ?;";
-			var values = [status,teamId,taskId];
+			var query = "UPDATE teamTaskRel SET status = ? , updatedAt = ? WHERE teamId = ? AND taskId = ?;";
+			var values = [status, new Date(), teamId,taskId];
 			db.get().query(query,values, function (err) {
 				if (err) {
 					callback(err);
@@ -222,8 +225,8 @@ tasks.approveTask = function(taskId, teamId, done) {
 		},
 		function (callback) {
 			// Create task entry
-			var query = "UPDATE teamTaskRel SET status='APPROVED', updatedAt = NOW() WHERE teamId = ? AND taskId = ?;";
-			var values = [teamId,taskId];
+			var query = "UPDATE teamTaskRel SET status='APPROVED', updatedAt = ? WHERE teamId = ? AND taskId = ?;";
+			var values = [new Date(), teamId, taskId];
 			db.get().query(query,values, function (err) {
 				if (err) {
 					callback(err);
