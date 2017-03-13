@@ -102,9 +102,8 @@ router.put('/time-scunt', function (req, res, next) {
       res.sendStatus(200);
     }
   });
-  });
-
-
+});
+  
 router.get('/find-id/:id', function(req, res){
     var id = req.params.id;
     scunt.findById(id, function(err, result){
