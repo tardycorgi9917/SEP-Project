@@ -3,9 +3,9 @@ var async = require('async');
 var scunt = {}
 
 scunt.createScunt = function(name, description, startTime, endTime, done) {
-    var date = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    var now = new Date()
 
-    var values = [name, description, 'PENDING', startTime ,endTime, date, date];
+    var values = [name, description, 'PENDING', startTime, endTime, now, now];
     var query = 'INSERT INTO scunt (name, description, status, startTime, endTime, createdAt, updatedAt) VALUES(?, ?, ?, ?, ?, ?, ?)';
 
     db.get().query(query, values, function(err, result) {
@@ -34,9 +34,7 @@ scunt.create = function(name,description, startTime, endTime, done){
             });
         },
         function(callback){
-            var sTime = startTime.toISOString().slice(0, 19).replace('T', ' ');
-            var eTime = endTime.toISOString().slice(0, 19).replace('T', ' ');
-            scunt.createScunt(name,description, sTime, eTime , done);
+            scunt.createScunt(name,description, startTime, endTime , done);
         }
     ],function(err, scuntId){
         done(err,scuntId);
@@ -45,7 +43,7 @@ scunt.create = function(name,description, startTime, endTime, done){
 }
 
 scunt.setStatus = function(id, status, done) {
-    var updatedAt = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    var updatedAt = new Date();
 
     var validStatuses = ['PENDING', 'PUBLISHED', 'STARTED', 'FINISHED'];
     if (validStatuses.indexOf(status) == -1) {
@@ -90,15 +88,16 @@ scunt.start = function(id, done) {
             });
         },
         function(callback) {
+            var now = new Date();
             var query = `
                 INSERT INTO teamTaskRel (teamId, taskId, status, createdAt, updatedAt)
-                SELECT teams.id, tasks.id, 'INCOMPLETE', NOW(), NOW()
+                SELECT teams.id, tasks.id, 'INCOMPLETE', ?, ?
                 FROM tasks
                 JOIN scunt ON tasks.scuntId = scunt.id
                 JOIN teams ON teams.scuntId = tasks.scuntId
                 WHERE scunt.id = ?
             `
-            var values = [id];
+            var values = [now, now, id];
 
             db.get().query(query, values, function(err, res) {
                callback(err);
@@ -117,8 +116,7 @@ scunt.close = function(scuntId, done) {
             db.get().query(query , values, function(err,result){
                 if(err){
                     callback(err);
-                }else if(result[0].uniqueScunt == 0 )
-                {
+                } else if(result[0].uniqueScunt == 0 ) {
                     callback('Scunt with this id doesn\'t exist')
                 }else{
                     callback(null);
@@ -145,11 +143,9 @@ scunt.findById = function (id, done) {
 }
 
 scunt.update = function (id, name, description, startTime, endTime, done) {
-    var sTime = startTime.toISOString().slice(0, 19).replace('T', ' ');
-    var eTime = endTime.toISOString().slice(0, 19).replace('T', ' ');
-    var UpdatedAt = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    var UpdatedAt = new Date();
 
-    var values = [name, description, sTime, eTime, UpdatedAt, id];
+    var values = [name, description, startTime, endTime, UpdatedAt, id];
     var query = 'UPDATE scunt SET name = ?, description = ? , startTime = ?, endTime = ?, updatedAt = ? WHERE id = ?'
 
     db.get().query(query, values, function (err, result) {
