@@ -91,4 +91,8 @@ router.get('/find-username/:username', function(req, res){
         else res.send(result);
     })
 })
+
+//TODO Profile Pic server routes
+// Inquire more about how to best do this
+
 module.exports = router;
