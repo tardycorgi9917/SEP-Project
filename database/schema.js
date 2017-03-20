@@ -121,4 +121,20 @@ schema.teamTaskRel = {
     ]
 }
 
+schema.comments = {
+    "name": "comments",
+    "fields": {
+        "id": "int(11) NOT NULL AUTO_INCREMENT",
+        "taskId": "int(11) NOT NULL",
+        "userId": "int(11) NOT NULL",
+        "comment": "text NOT NULL",
+        "createdAt": "datetime NOT NULL"
+    },
+    "constraints": [
+        "PRIMARY KEY (id)",
+        "FOREIGN KEY (taskId) REFERENCES tasks(id) ON DELETE CASCADE",
+        "FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE",
+    ],
+}
+
 module.exports = schema;
