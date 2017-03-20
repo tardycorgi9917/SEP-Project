@@ -100,6 +100,26 @@ router.post('/approve-task', function(req, res, next) {
 	});
 });
 
+router.post('/reject-task', function(req, res, next) {
+	var taskId = req.body.taskId;
+	var teamId = req.body.teamId;
+	if(taskId == null){
+		res.sendStatus(500);
+	}
+	if(teamId == null){
+		res.sendStatus(500);
+	}
+
+
+	tasks.rejectTask(taskId, teamId, function (err, taskId,teamId) {
+		if (err) {
+			res.status(500).send(err);
+		} else {
+			res.send(taskId.toString());
+		}
+	});
+});
+
 router.delete('/delete-task/', function(req, res, next) {
 	var taskId = req.query.taskId;
 

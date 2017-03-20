@@ -335,11 +335,9 @@ tasks.rejectTask = function(taskId, teamId, done) {
 			});
 		},
 		function (callback) {
-			// Create task entry
-			var query = "UPDATE teamTaskRel SET status='PENDING', updatedAt = ? WHERE teamId = ? AND taskId = ?;";
-			var values = [new Date(), teamId, taskId];
-			db.get().query(query,values, function (err) {
-				if (err) {
+			setTeamTaskStatus(taskId,teamId, 'PENDING', function(err, result){
+				if(err) {
+					console.log(err);
 					callback(err);
 				} else {
 					callback(undefined);
