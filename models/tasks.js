@@ -322,4 +322,18 @@ tasks.getTaskStatus = function(teamId, taskId, done){
 	});
 }
 
+tasks.addComment = function(taskId, userId, comment, done) {
+	var query = 'INSERT INTO comments (taskId, userId, comment, createdAt) VALUES (?, ?, ?, ?)';
+	var values = [taskId, userId, comment, new Date()];
+
+	db.get().query(query, values, function(err, result) {
+		if (err) {
+			done(err);
+		} else {
+			var commentId = result.insertId;
+			done(undefined, taskId);
+		}
+	});
+}
+
 module.exports = tasks;
