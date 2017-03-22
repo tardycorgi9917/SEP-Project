@@ -293,7 +293,7 @@ describe('Tasks Tests', function () {
 				},
 				function(taskId,teamId, callback) {
 					// Start the scavenger hunt
-					tasks.setTeamTaskStatus(taskId,teamId,'SUBMITTED', function(err) {
+					tasks.submitTask(taskId,teamId, function(err) {
 						assert.equal(err, null);
 						callback(err,taskId,teamId);
 					});
@@ -311,6 +311,77 @@ describe('Tasks Tests', function () {
 						assert.equal(err, null);
 						assert.equal(res,'COMPLETED');
 						callback(err);
+					});
+				}
+			], function(err) {
+				assert.equal(err, null);
+				done();
+			});
+		});
+
+		it('Unsuccessful Task Approval', function(done) {
+			async.waterfall([
+				function(callback) {
+					var Name = 'taskbadApprovalScunt';
+					var Desc = 'Task badApproval scunt';
+					var startTime = new Date("September 1, 2016 11:13:00");
+					var endTime = new Date("September 13, 2016 11:13:00");
+
+					scunts.create(Name, Desc, startTime, endTime, function (err, id) {
+						callback(err, id);
+					});
+				},
+				function(id, callback) {
+					scunts.setStatus(id, 'PUBLISHED', function(err, res) {
+						callback(err, id);
+					});
+				},
+				function(id,callback) {
+					var username = "Eduardo2 badAppro";
+					var firstName = "Eduardo Chupame";
+					var lastName = "Coronado";
+					var email = "eduardo2badAppro.coronado@gmail.com";
+					var password = "ilikethehabs";
+					var phoneNumber = "(514)911-1234";
+					var isAdmin = true;
+					var profilePicture = "";
+					var date = new Date().toISOString().slice(0, 19).replace('T', ' '); 
+					users.create(username, firstName, lastName, email, password, phoneNumber, isAdmin, profilePicture, date,
+						function(err, result){
+							assert.strictEqual(err, null);
+							assert.notStrictEqual(result, null);
+							callback(null, id,result);
+						}
+					);
+				},
+				function(scuntId,leadId, callback) {
+					teams.create("taskbadApproveteam1", 0,3,scuntId,leadId, function(err, res) {
+						callback(err, scuntId,res);
+					});
+				},
+				function(scuntId,teamId, callback) {
+					// Start the scavenger hunt
+					var taskName = 'task number 5';
+					var taskDescription = 'This is the task number 5';
+					var points = 2;
+					tasks.create(taskName, taskDescription, points, scuntId, function (err, id) {
+						assert.notStrictEqual(id, null, 'Could not create tasks, id was null');
+						assert.strictEqual(err, null, 'tasks create has some invalid sql ' + err);
+						callback(err, scuntId,id,teamId);
+					});
+				},
+				function(scuntId,taskId,teamId, callback) {
+					// Start the scavenger hunt
+					scunts.start(scuntId, function(err) {
+						assert.equal(err, null);
+						callback(err,taskId,teamId);
+					});
+				},
+				function(taskId,teamId, callback) {
+					// Start the scavenger hunt
+					tasks.approveTask(taskId,teamId, function(err) {
+						assert.equal(err, 'The status transition is not allowed according to the set up lifecycle');
+						callback(null);
 					});
 				}
 			], function(err) {
@@ -380,11 +451,11 @@ describe('Tasks Tests', function () {
 				});
 				},
 				function(taskId,teamId, callback) {
-				// Start the scavenger hunt
-				tasks.setTeamTaskStatus(taskId,teamId,'SUBMITTED', function(err) {
-					assert.equal(err, null);
-					callback(err,taskId,teamId);
-				});
+					// Start the scavenger hunt
+					tasks.submitTask(taskId,teamId, function(err) {
+						assert.equal(err, null);
+						callback(err,taskId,teamId);
+					});
 				},
 				function(taskId,teamId, callback) {
 				// Start the scavenger hunt
@@ -399,6 +470,77 @@ describe('Tasks Tests', function () {
 					assert.equal(err, null);
 					assert.equal(res,'PENDING');
 					callback(err);
+				});
+				}
+			], function(err,taskId,teamId) {
+				assert.equal(err, null);
+				done();
+			});
+		});
+
+		it('Unsuccessful Task Rejection', function(done) {
+			async.waterfall([
+				function(callback) {
+				var Name = 'taskbadRejectionScunt';
+				var Desc = 'Task badRejection scunt';
+				var startTime = new Date("September 1, 2016 11:13:00");
+				var endTime = new Date("September 13, 2016 11:13:00");
+
+				scunts.create(Name, Desc, startTime, endTime, function (err, id) {
+					callback(err, id);
+				});
+				},
+				function(id, callback) {
+				scunts.setStatus(id, 'PUBLISHED', function(err, res) {
+					callback(err, id);
+				});
+				},
+				function(id,callback) {
+				var username = "Eduardo2badRejection";
+				var firstName = "Eduardo badRejection Chupame";
+				var lastName = "Coronado";
+				var email = "eduardo2badRejection.coronado@gmail.com";
+				var password = "ilikethehabs";
+				var phoneNumber = "(514)911-1234";
+				var isAdmin = true;
+				var profilePicture = "";
+				var date = new Date().toISOString().slice(0, 19).replace('T', ' '); 
+				users.create(username, firstName, lastName, email, password, phoneNumber, isAdmin, profilePicture, date,
+					function(err, result){
+						assert.strictEqual(err, null);
+						assert.notStrictEqual(result, null);
+						callback(null, id,result);
+					}
+				);
+				},
+				function(scuntId,leadId, callback) {
+				teams.create("taskbadRejectteam1", 0,3,scuntId,leadId, function(err, res) {
+					callback(err, scuntId,res);
+				});
+				},
+				function(scuntId,teamId, callback) {
+				// Start the scavenger hunt
+				var taskName = 'task number 5';
+				var taskDescription = 'This is the task number 5';
+				var points = 2;
+				tasks.create(taskName, taskDescription, points, scuntId, function (err, id) {
+					assert.notStrictEqual(id, null, 'Could not create tasks, id was null');
+					assert.strictEqual(err, null, 'tasks create has some invalid sql ' + err);
+					callback(err, scuntId,id,teamId);
+				});
+				},
+				function(scuntId,taskId,teamId, callback) {
+				// Start the scavenger hunt
+				scunts.start(scuntId, function(err) {
+					assert.equal(err, null);
+					callback(err,taskId,teamId);
+				});
+				},
+				function(taskId,teamId, callback) {
+				// Start the scavenger hunt
+				tasks.rejectTask(taskId,teamId, function(err) {
+					assert.equal(err, 'The status transition is not allowed according to the set up lifecycle');
+					callback(null);
 				});
 				}
 			], function(err,taskId,teamId) {
@@ -480,6 +622,69 @@ describe('Tasks Tests', function () {
 						assert.equal(err, null);
 						assert.equal(res,'SUBMITTED');
 						callback(err);
+					});
+				}
+			], function(err,taskId,teamId) {
+				assert.equal(err, null);
+				done();
+			});
+		});
+
+		it('Unsuccessful Task Submission', function(done) {
+			async.waterfall([
+				function(callback) {
+					var Name = 'taskbadSubmissionScunt';
+						var Desc = 'Task badSubmission scunt';
+						var startTime = new Date("September 1, 2016 11:13:00");
+						var endTime = new Date("September 13, 2016 11:13:00");
+
+						scunts.create(Name, Desc, startTime, endTime, function (err, id) {
+							callback(err, id);
+						});
+				},
+				function(id, callback) {
+					scunts.setStatus(id, 'PUBLISHED', function(err, res) {
+						callback(err, id);
+					});
+				},
+				function(id,callback) {
+						var username = "Eduardo2badSubmission";
+						var firstName = "Eduardo badSubmission Chupame";
+						var lastName = "Coronado";
+						var email = "eduardo2badSubmission.coronado@gmail.com";
+						var password = "ilikethehabs";
+						var phoneNumber = "(514)911-1234";
+						var isAdmin = true;
+						var profilePicture = "";
+						var date = new Date().toISOString().slice(0, 19).replace('T', ' '); 
+						users.create(username, firstName, lastName, email, password, phoneNumber, isAdmin, profilePicture, date,
+							function(err, result){
+								assert.strictEqual(err, null);
+								assert.notStrictEqual(result, null);
+								callback(null, id,result);
+							}
+						);
+				},
+				function(scuntId,leadId, callback) {
+					teams.create("taskbadSubmitteam1", 0,3,scuntId,leadId, function(err, res) {
+						callback(err, scuntId,res);
+					});
+				},
+				function(scuntId,teamId, callback) {
+					var taskName = 'task number 5';
+					var taskDescription = 'This is the task number 5';
+					var points = 2;
+					tasks.create(taskName, taskDescription, points, scuntId, function (err, id) {
+						assert.notStrictEqual(id, null, 'Could not create tasks, id was null');
+						assert.strictEqual(err, null, 'tasks create has some invalid sql ' + err);
+						callback(err, id, teamId);
+					});
+				},
+				function(taskId,teamId, callback) {
+					// Start the scavenger hunt
+					tasks.submitTask(taskId,teamId, function(err) {
+						assert.equal(err, 'There is no relation between this task and team');
+						callback(null);
 					});
 				}
 			], function(err,taskId,teamId) {

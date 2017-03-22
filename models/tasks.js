@@ -228,24 +228,24 @@ tasks.setTeamTaskStatus = function(taskId, teamId, status, done) {
 		},
 		function (callback) {
 			tasks.getTaskStatus(taskId,teamId, function(err, result){
-				console.log("current status");
-				console.log(result);
 				if(err) {
 					callback(err);
 				} else {
-					callback(null);
+					callback(null,result);
 				}
 			});
 		},
-		function(callback){
-			console.log("setTeamTaskStatus");
-			console.log(validStatuses.indexOf(status));
-			if (validStatuses.indexOf(status) == -1) {
-				callback('An invalid status was used');
-			}else{
-				console.log(validStatuses[validStatuses.indexOf(status)]);
-				callback(null);
+		function(curStatus,callback){
+			for(var i in validStatusesNew){
+				if(validStatusesNew[i].status == status){
+					if (validStatusesNew[i].prevStatus.indexOf(curStatus) == -1) {
+						callback('The status transition is not allowed according to the set up lifecycle');
+					}else{
+						callback(null);
+					}
+				}
 			}
+
 		},
 		function(callback) {
 			// Check if there is a task with the same name
