@@ -113,7 +113,7 @@ scunt.start = function(id, done) {
             var now = new Date();
             var query = `
                 INSERT INTO teamTaskRel (teamId, taskId, status, createdAt, updatedAt)
-                SELECT teams.id, tasks.id, 'INCOMPLETE', ?, ?
+                SELECT teams.id, tasks.id, 'PENDING', ?, ?
                 FROM tasks
                 JOIN scunt ON tasks.scuntId = scunt.id
                 JOIN teams ON teams.scuntId = tasks.scuntId

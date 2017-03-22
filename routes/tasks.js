@@ -120,8 +120,31 @@ router.post('/reject-task', function(req, res, next) {
 	});
 });
 
+router.post('/submit-task', function(req, res, next) {
+	var taskId = req.body.taskId;
+	var teamId = req.body.teamId;
+	if(taskId == null){
+		res.sendStatus(500);
+	}
+	if(teamId == null){
+		res.sendStatus(500);
+	}
+
+
+	tasks.submitTask(taskId, teamId, function (err, taskId,teamId) {
+		if (err) {
+			res.status(500).send(err);
+		} else {
+			res.send(taskId.toString());
+		}
+	});
+});
+
 router.delete('/delete-task/', function(req, res, next) {
 	var taskId = req.query.taskId;
+	if(taskId == null){
+		res.sendStatus(500);
+	}
 
 	tasks.delete(taskId, function(err) {
 		if (err) {
@@ -136,7 +159,7 @@ router.get('/get-task-status/', function(req, res, next){
     var teamId = req.query.teamId;
     var taskId = req.query.taskId;
 
-    tasks.getTaskStatus(teamId, taskId, function(err, result){
+    tasks.getTaskStatus(taskId, teamId, function(err, result){
         if(err) {
             res.sendStatus(500);
         } else {
