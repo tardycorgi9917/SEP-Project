@@ -675,6 +675,13 @@ describe('Teams Tests', function () {
                 });
               },
               function(taskId,teamId, callback) {
+                    // Start the scavenger hunt
+                    tasks.setTeamTaskStatus(taskId,teamId,'SUBMITTED', function(err) {
+                        assert.equal(err, null);
+                        callback(err,taskId,teamId);
+                    });
+                },
+              function(taskId,teamId, callback) {
                 // Approve the task
                 tasks.approveTask(taskId, teamId, function(err) {
                   assert.equal(err, null);
