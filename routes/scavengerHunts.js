@@ -18,6 +18,17 @@ router.get('/list-scunts', function (req, res) {
   })
 });
 
+router.get('/list-published-scunts',function(req,res){
+  scunt.listPublished(function(err,result){
+    if(err)
+    {
+      res.sendStatus(500);
+    }else{
+      res.send(JSON.stringify(result));
+    }
+  })
+});
+
 router.get('/view-scuntStatus/:ScuntId', function(req,res){
   var ScuntId = req.params.ScuntId;
   scunt.getStatus(ScuntId,function(err,result){
