@@ -9,7 +9,7 @@ router.get('/', function(req, res, next) {
 
 router.get('/list-teams/:userId', function(req, res, next) {
     var userId = req.params.userId;
-    
+
     teams.list(userId, function(err, teams) {
         if (err) {
             res.status(500).send(err);
@@ -19,6 +19,19 @@ router.get('/list-teams/:userId', function(req, res, next) {
         }
     });
 });
+
+router.get('/scunt-teams/:scuntId'), function(req, res, next){
+    var scuntId = req.params.scuntId;
+
+    teams.scuntTeamsList(scuntId, function(err, teams){
+        if (err) {
+            res.status(500).send(err);
+            console.log(err);
+        } else {
+            res.send(teams);
+        }
+    })
+}
 
 router.post('/create-team', function(req, res, next) {
     var name = req.body.name;
