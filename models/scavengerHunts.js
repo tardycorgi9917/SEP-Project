@@ -190,7 +190,7 @@ scunt.update = function (id, name, description, startTime, endTime, done) {
     var UpdatedAt = new Date();
 
     var values = [name, description, startTime, endTime, UpdatedAt, id];
-    var query = 'UPDATE scunt SET name = ?, description = ? , startTime = ?, endTime = ?, updatedAt = ? WHERE id = ?'
+    var query = 'UPDATE scunt SET name = ?, description = ? , startTime = ?, endTime = ?, updatedAt = ? WHERE id = ?';
 
     db.get().query(query, values, function (err, result) {
         if (err) {
@@ -206,6 +206,18 @@ scunt.list = function (done) {
         + 'FROM scunt';
 
     db.get().query(query, null, done);
+}
+
+scunt.listPublished = function (done)
+{
+    var query = 'SELECT id, name FROM scunt WHERE status = \'PUBLISHED\'';
+    db.get().query(query, null, function(err,result){
+        if(err){
+            done(err,undefined);
+        }else{
+            done(undefined,result);
+        }
+    })
 }
 
 scunt.getStatus = function(ScuntId, done)
