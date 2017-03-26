@@ -9,7 +9,7 @@ router.get('/', function(req, res, next) {
 
 router.get('/list-teams/:userId', function(req, res, next) {
     var userId = req.params.userId;
-    
+
     teams.list(userId, function(err, teams) {
         if (err) {
             res.status(500).send(err);
