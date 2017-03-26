@@ -533,6 +533,12 @@ describe('Teams Tests', function () {
                     var scuntEnd = new Date();
                     scunts.create(scuntName, scuntDesc, scuntStart, scuntEnd, callback);
                 },
+                function(scuntId, callback) {
+                    // publish scavenger hunt
+                    scunts.setStatus(scuntId, 'PUBLISHED', function(err, res) {
+                        callback(err, scuntId);
+                    });
+                },
                 function(scuntId, callback)
                 {
                     var username = 'Freshmeat1';
@@ -552,7 +558,6 @@ describe('Teams Tests', function () {
 
                 },
                 function(scuntId, userId, callback ){
-
                     var username = 'Freshmeat2';
                     var firstName = 'fname9';
                     var lastName = 'lname';
@@ -582,10 +587,9 @@ describe('Teams Tests', function () {
                     });
                 },
                 function(userId, teamId, callback) {
-                    teams.list(
+                    teams.list(1,
                         function(err,result)
                         {
-
                             assert.notEqual(result.length, 0);
                             var i = 0;
 
@@ -689,7 +693,7 @@ describe('Teams Tests', function () {
                 });
               },
               function(teamId, callback) {
-                    teams.list(
+                    teams.list(1,
                         function(err,result){
 
                             assert.notEqual(result.length, 0);
@@ -707,6 +711,75 @@ describe('Teams Tests', function () {
                             }
                             callback(err);                 
                         });
+                }                
+            ], 
+                function(err){
+                    assert.strictEqual(err,null);
+                    done();
+            });
+        });
+
+        
+        it('non published scunt that is joined still shows in list', function(done){
+            async.waterfall([
+                function (callback) {
+                    // Create scavenger hunt
+                    var scuntName = 'nonpublishedlisttest';
+                    var scuntDesc = 'desc';
+                    var scuntStart = new Date();
+                    var scuntEnd = new Date();
+                    scunts.create(scuntName, scuntDesc, scuntStart, scuntEnd, callback);
+                },
+                function(scuntId, callback)
+                {
+                    var username = 'nonclosedteamlisttest';
+                    var firstName = 'fname9';
+                    var lastName = 'lname';
+                    var email = 'nonclosedteamlisttest@gmail.com';
+                    var pwd = '123';
+                    var phonenumber = '213 546-7889';
+                    var isAdmin = true;
+                    var profilepic = '';
+                    var date = new Date();
+                    users.create(username, firstName, lastName, email, pwd, phonenumber, isAdmin, profilepic, date, function (err, id) {
+                        userId = [];
+                        userId.push(id);
+                        callback(err, scuntId, userId);
+                    });                   
+                },
+                function (scuntId, userId, callback) {
+                    // create team 1
+                    var name = 'wanker1';
+                    teams.create(name, 0, 2, scuntId, userId, function (err, id) {
+                        assert.strictEqual(err, null, 'teams create has some invalid sql ' + err);
+                        callback(err,userId, id);
+                    });
+                },
+                function(userId, teamId, callback) {
+                    teams.list(userId,
+                        function(err,result)
+                        {
+                            assert.notEqual(result.length, 0);
+                            var i = 0;
+
+                            while(i< result.length)
+                            {
+                                id = result[i].id
+                                if(id == teamId )
+                                {
+                                    teamMember = result[i].teamUsers;
+
+                                    assert.equal(teamMember.length,1);
+
+                                    memberId1 = teamMember[0].userId;
+                                    assert.notEqual(userId.indexOf(memberId1),-1);
+                                }
+                                i++;
+                            }
+                            
+                            callback(err);                 
+                        }
+                    );
                 }                
             ], 
                 function(err){
