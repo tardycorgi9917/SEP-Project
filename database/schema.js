@@ -126,6 +126,7 @@ schema.comments = {
     "fields": {
         "id": "int(11) NOT NULL AUTO_INCREMENT",
         "taskId": "int(11) NOT NULL",
+        "teamId": "int(11) NOT NULL",
         "userId": "int(11) NOT NULL",
         "comment": "text NOT NULL",
         "createdAt": "datetime NOT NULL"
@@ -133,6 +134,7 @@ schema.comments = {
     "constraints": [
         "PRIMARY KEY (id)",
         "FOREIGN KEY (taskId) REFERENCES tasks(id) ON DELETE CASCADE",
+        "FOREIGN KEY (teamId) REFERENCES teams(id) ON DELETE CASCADE",
         "FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE",
     ],
 }

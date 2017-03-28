@@ -227,24 +227,41 @@ teams.join = function (userId, teamId, allowswitch, done) {
 teams.list = function(userId, done) {
     async.waterfall([
         function(callback) {
+            var query = "SELECT isAdmin FROM users WHERE id = ?";
+            var values = [userId];
+
+            db.get().query(query, values, function(err, res) {
+                if (res && res.length == 1) {
+                    res[0].isAdmin = res[0].isAdmin == '1';
+                    callback(null, res[0].isAdmin);
+                } else {
+                    callback("Could not find the user");
+                }
+            });
+        },
+        function(isAdmin, callback) {
             // Get all teams
-            var query = `
-			SELECT * FROM (
-                SELECT t.id, t.name, t.points, t.maxMembers, t.scuntId, t.createdAt, t.updatedAt, MIN(t.hasJoined) AS hasJoined
-                FROM (
-                    SELECT teams.*, 1 AS hasJoined
-                    FROM teams
-                    JOIN scunt ON teams.scuntId = scunt.id
-                    WHERE scunt.status = "PUBLISHED"
-                    UNION
-                    SELECT teams.*, 0 AS hasJoined
-                    FROM teams
-                    JOIN teamUserRel ON teams.id = teamUserRel.teamId
-                    WHERE teamUserRel.userId = ?
-                ) AS t
-                GROUP BY t.id, t.name, t.points, t.maxMembers, t.scuntId, t.createdAt, t.updatedAt
-            ) AS t2
-            ORDER BY t2.hasJoined`;
+            if (isAdmin) {
+                var query = "SELECT t.id, t.name, t.points, t.maxMembers, t.scuntId, t.createdAt, t.updatedAt, 1 as hasJoined FROM teams t";
+            } else {
+                var query = `
+                    SELECT * FROM (
+                        SELECT t.id, t.name, t.points, t.maxMembers, t.scuntId, t.createdAt, t.updatedAt, MIN(t.hasJoined) AS hasJoined
+                        FROM (
+                            SELECT teams.*, 1 AS hasJoined
+                            FROM teams
+                            JOIN scunt ON teams.scuntId = scunt.id
+                            WHERE scunt.status = "PUBLISHED"
+                            UNION
+                            SELECT teams.*, 0 AS hasJoined
+                            FROM teams
+                            JOIN teamUserRel ON teams.id = teamUserRel.teamId
+                            WHERE teamUserRel.userId = ?
+                        ) AS t
+                        GROUP BY t.id, t.name, t.points, t.maxMembers, t.scuntId, t.createdAt, t.updatedAt
+                    ) AS t2
+                    ORDER BY t2.hasJoined`;
+            }
 
             var values = [userId];
 

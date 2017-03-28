@@ -142,10 +142,11 @@ router.post('/change-task-status/', function(req, res, next){
 
 router.post('/add-comment', function(req, res, next) {
     var taskId = req.body.taskId;
+    var teamId = req.body.teamId;
     var userId = req.body.userId;
 	var comment = req.body.comment;
 
-	tasks.addComment(taskId, userId, comment, function(err, result) {
+	tasks.addComment(taskId, teamId, userId, comment, function(err, result) {
 		if (err) {
 			res.sendStatus(500);
 		} else {
