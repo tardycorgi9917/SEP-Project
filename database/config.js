@@ -1,7 +1,7 @@
 var config = {
     development: {
         database: {
-            host:'127.0.0.1',
+            host:'localhost',
             db: 'sep_db',
             user:'root',
             password: '',
