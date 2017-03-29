@@ -48,6 +48,7 @@ schema.teams = {
         "points": "int(10) NOT NULL",
         "maxMembers": "int(10) NOT NULL",
         "scuntId": "int(11) NOT NULL",
+        "driveLink": "varchar(500) NOT NULL",
         "createdAt" : "datetime NOT NULL",
         "updatedAt" : "datetime NOT NULL"
     },
