@@ -92,7 +92,27 @@ router.get('/find-username/:username', function(req, res){
     })
 })
 
-//TODO Profile Pic server routes
-// Inquire more about how to best do this
+router.get('/find-username/:username', function(req, res){
+    var username = req.params.username;
+    user.findByUsername(username, function(err, result){
+        if(err) res.status(500).send(err);
+        else res.send(result);
+    })
+})
+
+router.post('/set-profilepic', function(req, res, next){
+    var id = req.body.id;
+    var profilePicture = req.body.profilePicture;
+    user.update(id, profilePicture, function(err, result){
+        if(err) {
+            res.status(500).send(err);
+        } else {
+            console.log("Updated User Successfully");
+            res.send(result);
+        }
+    });
+});
+
+
 
 module.exports = router;
