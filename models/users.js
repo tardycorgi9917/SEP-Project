@@ -91,4 +91,13 @@ users.findByUsername = function (username, done){
     })
 }
 
+users.setProfilePic = function (id, profilePicture, done){
+    var query = 'UPDATE users SET profilePicture = ? WHERE id = ?';
+    var values = [profilePicture, id];
+    db.get().query(query, values, function (err, result) {
+        if (err) done(err);
+        else done(null, result);
+    })
+}
+
 module.exports = users;
