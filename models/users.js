@@ -6,7 +6,7 @@ var salt = bcrypt.genSaltSync(10);
 var users = {}
 
 users.login = function(username, password, done) {
-    var query = 'SELECT id, username, firstName, lastName, email, phoneNumber, isPhoneNumberVisible, isAdmin, password FROM users WHERE username = ?';
+    var query = 'SELECT id, username, firstName, lastName, email, phoneNumber, isPhoneNumberVisible, isAdmin, profilePicture password FROM users WHERE username = ?';
     var values = [username.toString()];
 
     db.get().query(query, values, function(err, result) {
