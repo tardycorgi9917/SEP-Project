@@ -12,7 +12,7 @@ schema.users = {
         "phoneNumber" : "varchar(50)",
         "isPhoneNumberVisible": "varchar(5) NOT NULL DEFAULT 'true'",
         "isAdmin": "varchar(5) NOT NULL",
-        "profilePicture" : "BLOB",
+        "profilePicture" : "MEDIUMBLOB",
         "createdAt" : "datetime NOT NULL",
         "updatedAt" : "datetime NOT NULL"
     },
