@@ -103,11 +103,11 @@ router.get('/find-username/:username', function(req, res){
 router.post('/set-profilepic', function(req, res, next){
     var id = req.body.id;
     var profilePicture = req.body.profilePicture;
-    user.update(id, profilePicture, function(err, result){
+    user.setProfilePic(id, profilePicture, function(err, result){
         if(err) {
             res.status(500).send(err);
         } else {
-            console.log("Updated User Successfully");
+            console.log("Updated Profile Picture Successfully");
             res.send(result);
         }
     });
