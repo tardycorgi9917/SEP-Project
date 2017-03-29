@@ -58,6 +58,56 @@ scunt.setStatus = function(id, status, done) {
     });
 }
 
+scunt.publish = function(id, done) {
+    async.waterfall([
+        function(callback) {
+            var query = `
+                SELECT COUNT(*) AS numScunt FROM scunt WHERE id = ?
+            `
+            var values = [id];
+
+            db.get().query(query, values, function(err, res) {
+                if (err) {
+                    callback(err);
+                } else if (res[0].numScunt == 0) {
+                    callback('There is no scunt with this id');
+                } else {
+                    callback(null);
+                }
+            })
+        },
+        function(callback) {
+            var query = `
+                SELECT status FROM scunt WHERE id = ?
+            `
+            var values = [id];
+
+            db.get().query(query, values, function(err, res) {
+                if (err) {
+                    callback(err);
+                } else if (!res[0]) {
+                    callback('Scavenger hunt not found');
+                } else {
+                    var status = res[0].status;
+                    if (status != "PENDING") {
+                        var errMsg = "The Scavenger Hunt cannot be PUBLISHED, it is not PENDING, it is " +res[0].status;
+                        callback(errMsg);
+                    } else {
+                        callback(null);
+                    }
+                }
+            })
+        },
+        function(callback) {
+            scunt.setStatus(id, 'PUBLISHED', function (err, res) {
+                callback(err);
+            });
+        }
+    ], function (err) {
+        done(err);
+    });
+}
+
 scunt.start = function(id, done) {
     async.waterfall([
 		function(callback) {
@@ -113,7 +163,7 @@ scunt.start = function(id, done) {
             var now = new Date();
             var query = `
                 INSERT INTO teamTaskRel (teamId, taskId, status, createdAt, updatedAt)
-                SELECT teams.id, tasks.id, 'INCOMPLETE', ?, ?
+                SELECT teams.id, tasks.id, 'PENDING', ?, ?
                 FROM tasks
                 JOIN scunt ON tasks.scuntId = scunt.id
                 JOIN teams ON teams.scuntId = tasks.scuntId
@@ -169,7 +219,7 @@ scunt.close = function(scuntId, done) {
         },
         function(callback) {
             scunt.setStatus(scuntId, 'FINISHED', function (err, res) {
-                callback(err,scuntId);
+                callback(err);
             });
         }
     ], function (err,scuntId) {
@@ -190,7 +240,7 @@ scunt.update = function (id, name, description, startTime, endTime, done) {
     var UpdatedAt = new Date();
 
     var values = [name, description, startTime, endTime, UpdatedAt, id];
-    var query = 'UPDATE scunt SET name = ?, description = ? , startTime = ?, endTime = ?, updatedAt = ? WHERE id = ?'
+    var query = 'UPDATE scunt SET name = ?, description = ? , startTime = ?, endTime = ?, updatedAt = ? WHERE id = ?';
 
     db.get().query(query, values, function (err, result) {
         if (err) {
@@ -206,6 +256,18 @@ scunt.list = function (done) {
         + 'FROM scunt';
 
     db.get().query(query, null, done);
+}
+
+scunt.listPublished = function (done)
+{
+    var query = 'SELECT id, name FROM scunt WHERE status = \'PUBLISHED\'';
+    db.get().query(query, null, function(err,result){
+        if(err){
+            done(err,undefined);
+        }else{
+            done(undefined,result);
+        }
+    })
 }
 
 scunt.getStatus = function(ScuntId, done)

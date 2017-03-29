@@ -224,12 +224,38 @@ teams.join = function (userId, teamId, allowswitch, done) {
     });
 }
 
-teams.list = function(done) {
+teams.list = function(userId, done) {
     async.waterfall([
         function(callback) {
             // Get all teams
-            var query = 'SELECT * FROM teams';
-            db.get().query(query, [], function(err, res) {
+            var query = `
+			SELECT * FROM (
+                SELECT t.id, t.name, t.points, t.maxMembers, t.scuntId, t.createdAt, t.updatedAt, MIN(t.hasJoined) AS hasJoined
+                FROM (
+                    SELECT teams.*, 1 AS hasJoined
+                    FROM teams
+                    JOIN scunt ON teams.scuntId = scunt.id
+                    WHERE scunt.status = "PUBLISHED"
+                    UNION
+                    SELECT teams.*, 0 AS hasJoined
+                    FROM teams
+                    JOIN teamUserRel ON teams.id = teamUserRel.teamId
+                    WHERE teamUserRel.userId = ?
+                ) AS t
+                GROUP BY t.id, t.name, t.points, t.maxMembers, t.scuntId, t.createdAt, t.updatedAt
+            ) AS t2
+            ORDER BY t2.hasJoined`;
+
+            var values = [userId];
+
+            db.get().query(query, values, function(err, res) {
+                for (var i in res) {
+                    if (res[i].hasJoined == '1') {
+                        res[i].hasJoined = false;
+                    } else {
+                        res[i].hasJoined = true;
+                    }
+                }
                 callback(err, res);
             });
         },
@@ -312,7 +338,12 @@ teams.getTeamId = function(userId, done){
 }
 
 teams.getScuntTeams = function(scuntId, done){
-    var query = "SELECT name, points FROM teams WHERE scuntId = ?";
+    var query = `
+        SELECT name, points
+        FROM teams
+        WHERE scuntId = ?
+        ORDER BY points DESC, name ASC
+        `;
     var values = [scuntId];
     db.get().query(query, values, function(err, teams){
         if(err) done(err);

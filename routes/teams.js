@@ -7,8 +7,10 @@ router.get('/', function(req, res, next) {
   res.send('this is the teams app');
 });
 
-router.get('/list-teams', function(req, res, next) {
-    teams.list(function(err, teams) {
+router.get('/list-teams/:userId', function(req, res, next) {
+    var userId = req.params.userId;
+
+    teams.list(userId, function(err, teams) {
         if (err) {
             res.status(500).send(err);
             console.log(err);

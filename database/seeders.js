@@ -10,13 +10,14 @@ var seed = {};
 
 // Defines the order in which these tables can be dropped without violating foreign key constraints
 droplist = [
+	schema.comments.name,
 	schema.teamTaskRel.name,
     schema.teamUserRel.name,
     schema.scuntUserRel.name,
     schema.teams.name,
     schema.users.name,
     schema.tasks.name,
-    schema.scunt.name
+    schema.scunt.name,
 ]
 
 seed.up = function (done) {
@@ -150,9 +151,9 @@ seed.populate = function(done){
 											if(err){
 												console.log(err)
 											}
-											async.forEach(data.scunts,
+											async.forEach(data.scunts, 
 												function(scunt, callback) {
-													scunts.start(scunt.id, function(err){
+													scunts.publish(scunt.id, function(err){
 														if(err){
 															console.log(err)
 															done(); 
@@ -165,9 +166,26 @@ seed.populate = function(done){
 													if(err){
 														console.log(err)
 													}
-													done(); 
+													async.forEach(data.scunts,
+														function(scunt, callback) {
+															scunts.start(scunt.id, function(err){
+																if(err){
+																	console.log(err)
+																	done(); 
+																} else {
+																	callback();
+																}
+															});
+														},
+														function(err) {
+															if(err){
+																console.log(err)
+															}
+															done(); 
+														}
+													)
 												}
-											)
+											);
 										}
 									);
 								}

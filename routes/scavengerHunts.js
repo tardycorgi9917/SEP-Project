@@ -18,6 +18,17 @@ router.get('/list-scunts', function (req, res) {
   })
 });
 
+router.get('/list-published-scunts',function(req,res){
+  scunt.listPublished(function(err,result){
+    if(err)
+    {
+      res.sendStatus(500);
+    }else{
+      res.send(JSON.stringify(result));
+    }
+  })
+});
+
 router.get('/view-scuntStatus/:ScuntId', function(req,res){
   var ScuntId = req.params.ScuntId;
   scunt.getStatus(ScuntId,function(err,result){
@@ -53,9 +64,27 @@ router.post('/create-ScavengerHunt', function (req, res, next) {
   }
 });
 
-router.put('/start-scunt', function(req, res, next) {
+router.put('/publish-scunt', function(req, res, next) {
   var id = req.body.id;
 
+  if(id == null){
+    res.sendStatus(500);
+  }
+
+  scunt.publish(id, function (err, result) {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.sendStatus(200);
+    }
+  });
+});
+
+router.put('/start-scunt', function(req, res, next) {
+  var id = req.body.id;
+  if(id == null){
+    res.sendStatus(500);
+  }
   scunt.start(id, function (err, result) {
     if (err) {
       res.status(500).send(err);
@@ -104,7 +133,7 @@ router.put('/time-scunt', function (req, res, next) {
     }
   });
 });
-  
+
 router.get('/find-id/:id', function(req, res){
     var id = req.params.id;
     scunt.findById(id, function(err, result){
