@@ -6,7 +6,7 @@ var salt = bcrypt.genSaltSync(10);
 var users = {}
 
 users.login = function(username, password, done) {
-    var query = 'SELECT id, username, firstName, lastName, email, phoneNumber, isPhoneNumberVisible, isAdmin, password FROM users WHERE username = ?';
+    var query = 'SELECT id, username, firstName, lastName, email, phoneNumber, isPhoneNumberVisible, isAdmin, password, profilePicture FROM users WHERE username = ?';
     var values = [username.toString()];
 
     db.get().query(query, values, function(err, result) {
@@ -87,6 +87,16 @@ users.findByUsername = function (username, done){
     var values = [username];
     db.get().query(query, values, function(err, result){
         if(err) done(err);
+        else done(null, result);
+    })
+}
+
+users.setProfilePic = function (id, profilePicture, done){
+    var query = 'UPDATE users SET profilePicture = ? WHERE id = ?';
+    var values = [profilePicture, id];
+
+    db.get().query(query, values, function (err, result) {
+        if (err) done(err);
         else done(null, result);
     })
 }

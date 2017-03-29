@@ -91,4 +91,28 @@ router.get('/find-username/:username', function(req, res){
         else res.send(result);
     })
 })
+
+router.get('/find-username/:username', function(req, res){
+    var username = req.params.username;
+    user.findByUsername(username, function(err, result){
+        if(err) res.status(500).send(err);
+        else res.send(result);
+    })
+})
+
+router.post('/set-profilepic', function(req, res, next){
+    var id = req.body.id;
+    var profilePicture = req.body.profilePicture;
+    user.setProfilePic(id, profilePicture, function(err, result){
+        if(err) {
+            res.status(500).send(err);
+        } else {
+            console.log("Updated Profile Picture Successfully");
+            res.send(result);
+        }
+    });
+});
+
+
+
 module.exports = router;
