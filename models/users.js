@@ -95,7 +95,17 @@ users.setProfilePic = function (id, profilePicture, done){
     var query = 'UPDATE users SET profilePicture = ? WHERE id = ?';
     // var values = [profilePicture, id];
 
-    var blob = new Blob([profilePicture], { type: 'image/png' });
+    var byteCharacters = atob(profilePicture);
+    var byteNumbers = new Array(byteCharacters.length);
+
+    for (var i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+
+    var byteArray = new Uint8Array(byteNumbers);
+    var blob = new Blob([byteArray], {type: 'image/png'});
+
+    // var blob = new Blob([profilePicture], { type: 'image/png' });
     var values = [blob, id];
 
 
