@@ -93,7 +93,12 @@ users.findByUsername = function (username, done){
 
 users.setProfilePic = function (id, profilePicture, done){
     var query = 'UPDATE users SET profilePicture = ? WHERE id = ?';
-    var values = [profilePicture, id];
+    // var values = [profilePicture, id];
+
+    var blob = new Blob([profilePicture], { type: 'image/png' });
+    var values = [blob, id];
+
+
     db.get().query(query, values, function (err, result) {
         if (err) done(err);
         else done(null, result);
