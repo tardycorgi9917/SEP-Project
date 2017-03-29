@@ -759,13 +759,104 @@ describe('Tasks Tests', function () {
 					// Comment on the scavenger hunt
 					var comment = "this is a test comment";
 					tasks.addComment(taskId, leadId, comment, function(err, id) {
-						console.log('comment id: ' + id);
 						assert.notStrictEqual(id, null, 'Could not create comment, id was null');
 						assert.notStrictEqual(err, null, 'comment creation has some invalid sql ' + err);
 						callback(err, id);
 					})
 				}
 			], function (err, taskId, teamId) {
+				assert.equal(err, null);
+				done();
+			});
+		});
+
+		it('List Comment', function (done) {
+			async.waterfall([
+				function (callback) {
+					var Name = 'taskComment2Scunt';
+					var Desc = 'Task Comment 2 scunt';
+					var startTime = new Date("September 1, 2016 11:13:00");
+					var endTime = new Date("September 13, 2016 11:13:00");
+
+					scunts.create(Name, Desc, startTime, endTime, function (err, id) {
+						callback(err, id);
+					});
+				},
+				function (id, callback) {
+					scunts.setStatus(id, 'PUBLISHED', function (err, res) {
+						callback(err, id);
+					});
+				},
+				function (id, callback) {
+					// Create the user
+					var username = "commenter2";
+					var firstName = "commenter 2";
+					var lastName = "commenter 2";
+					var email = "commenter2@gmail.com";
+					var password = "2234";
+					var phoneNumber = "2232232234";
+					var isAdmin = true;
+					var profilePicture = "";
+					var date = new Date();
+					users.create(username, firstName, lastName, email, password, phoneNumber, isAdmin, profilePicture, date,
+						function (err, result) {
+							assert.strictEqual(err, null);
+							assert.notStrictEqual(result, null);
+							callback(null, id, result);
+						}
+					);
+				},
+				function (scuntId, leadId, callback) {
+					// Create the team
+					teams.create("taskcommentteam2", 0, 3, scuntId, leadId, function (err, res) {
+						callback(err, scuntId, res, leadId);
+					});
+				},
+				function (scuntId, teamId, leadId, callback) {
+					// Create the task
+					var taskName = 'task number 6';
+					var taskDescription = 'This is the task number 6';
+					var points = 2;
+					tasks.create(taskName, taskDescription, points, scuntId, function (err, id) {
+						assert.notStrictEqual(id, null, 'Could not create tasks, id was null');
+						assert.strictEqual(err, null, 'tasks create has some invalid sql ' + err);
+						callback(err, scuntId, teamId, id, leadId);
+					});
+				},
+				function (scuntId, teamId, taskId, leadId, callback) {
+					// Start the scavenger hunt
+					scunts.start(scuntId, function (err) {
+						assert.equal(err, null);
+						callback(err, taskId, teamId, leadId);
+					});
+				},
+				function (taskId, teamId, leadId, callback) {
+					// Comment on the scavenger hunt
+					var comment = "this is a test comment for list";
+					tasks.addComment(taskId, leadId, comment, function(err, id) {
+						assert.notStrictEqual(id, null, 'Could not create comment, id was null');
+						assert.notStrictEqual(err, null, 'comment creation has some invalid sql ' + err);
+						callback(err, taskId,teamId,leadId);
+					})
+				},
+				function (taskId, teamId, leadId, callback) {
+					// Comment on the scavenger hunt
+					var comment = "this is a second test comment for list";
+					tasks.addComment(taskId, leadId, comment, function(err, id) {
+						assert.notStrictEqual(id, null, 'Could not create comment, id was null');
+						assert.notStrictEqual(err, null, 'comment creation has some invalid sql ' + err);
+						callback(err, taskId);
+					})
+				},
+				function (taskId, callback) {
+					// Comment on the scavenger hunt
+					tasks.listComment(taskId, function(err, res) {
+						assert.notStrictEqual(res, null, 'Could not list comment, res was null');
+						assert.notStrictEqual(err, undefined, 'Comment creation has some invalid sql ' + err);
+						callback(null);
+					})
+				}
+			], function (err) {
 				assert.equal(err, null);
 				done();
 			});

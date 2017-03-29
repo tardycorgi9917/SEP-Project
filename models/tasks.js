@@ -565,4 +565,17 @@ tasks.addComment = function(taskId, userId, comment, done) {
 	});
 }
 
+tasks.listComment = function(taskId, done) {
+	var query = 'SELECT * FROM comments WHERE taskId = ?';
+	var values = [taskId];
+
+	db.get().query(query, values, function(err, result) {
+		if (err) {
+			done(err);
+		} else {
+			done(err,result);
+		}
+	});
+}
+
 module.exports = tasks;
