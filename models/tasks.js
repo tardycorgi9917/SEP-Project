@@ -133,6 +133,24 @@ tasks.edit = function(taskId,editDict, done) {
 			});
 		},
 		function (callback) {
+
+			var query = 'SELECT COUNT(*) AS numTasks'
+				+ ' FROM tasks'
+				+ ' WHERE id = ?';
+
+			var values = [taskId];
+
+			db.get().query(query, values, function (err, result) {
+				if (err) {
+					callback(err);
+				} else if (result[0].numTasks == 0) {
+					callback('There is no task with this id');
+				} else {
+					callback(null);
+				}
+			});
+		},
+		function (callback) {
 			// Create task entry
 			var query = 'UPDATE tasks SET ';
 			for (var field in editDict) {
@@ -161,10 +179,26 @@ tasks.edit = function(taskId,editDict, done) {
 
 tasks.setTeamTaskStatus = function(taskId, teamId, status, done) {
 
-	var validStatuses = ['INCOMPLETE', 'IN PROGRESS', 'REVIEW', 'APPROVED'];
-	if (validStatuses.indexOf(status) == -1) {
-		return done('An invalid status was used');
-	}
+	// var validStatuses = ['INCOMPLETE', 'IN PROGRESS', 'REVIEW', 'APPROVED'];
+	var validStatuses = ['PENDING', 'SUBMITTED', 'COMPLETED', 'INCOMPLETE'];
+	var validStatusesNew = [
+		{
+			'status':'PENDING',
+			'prevStatus':['NEW','SUBMITTED']
+		},
+		{
+			'status':'SUBMITTED',
+			'prevStatus':['PENDING']
+		},
+		{
+			'status':'COMPLETED',
+			'prevStatus':['SUBMITTED']
+		},
+		{
+			'status':'INCOMPLETE',
+			'prevStatus':['PENDING']
+		}
+	];
 	async.waterfall([
 		function (callback) {
 			var query = 'SELECT COUNT(*) AS duplicateTasks'
@@ -182,6 +216,27 @@ tasks.setTeamTaskStatus = function(taskId, teamId, status, done) {
 					callback(null);
 				}
 			});
+		},
+		function (callback) {
+			tasks.getTaskStatus(taskId,teamId, function(err, result){
+				if(err) {
+					callback(err);
+				} else {
+					callback(null,result);
+				}
+			});
+		},
+		function(curStatus,callback){
+			for(var i in validStatusesNew){
+				if(validStatusesNew[i].status == status){
+					if (validStatusesNew[i].prevStatus.indexOf(curStatus) == -1) {
+						callback('The status transition is not allowed according to the set up lifecycle');
+					}else{
+						callback(null);
+					}
+				}
+			}
+
 		},
 		function(callback) {
 			// Check if there is a task with the same name
@@ -237,9 +292,6 @@ tasks.approveTask = function(taskId, teamId, done) {
 			});
 		},
 		function(callback) {
-			// Check if there is a task with the same name
-			// might be unnecessary
-			// TODO
 			var query = 'SELECT COUNT(*) AS duplicateTask FROM teamTaskRel WHERE taskId = ? AND teamId = ?';
 			var values = [taskId, teamId];
 
@@ -254,11 +306,8 @@ tasks.approveTask = function(taskId, teamId, done) {
 			});
 		},
 		function (callback) {
-			// Create task entry
-			var query = "UPDATE teamTaskRel SET status='APPROVED', updatedAt = ? WHERE teamId = ? AND taskId = ?;";
-			var values = [new Date(), teamId, taskId];
-			db.get().query(query,values, function (err) {
-				if (err) {
+			tasks.setTeamTaskStatus(taskId,teamId, 'COMPLETED', function(err, result){
+				if(err) {
 					callback(err);
 				} else {
 					callback(undefined);
@@ -295,22 +344,202 @@ tasks.approveTask = function(taskId, teamId, done) {
 	});
 }
 
-tasks.delete = function (taskId, done) {
-	var query = 'DELETE FROM tasks WHERE id = ?';
-	values = [taskId];
+tasks.rejectTask = function(taskId, teamId, done) {
+	async.waterfall([
+		function (callback) {
+			var query = 'SELECT COUNT(*) AS duplicateTasks'
+				+ ' FROM tasks t1'
+				+ ' JOIN tasks t2 ON t1.scuntId = t2.scuntId AND t1.id <> t2.id AND t1.id = ? AND t2.id = ?'
 
-	db.get().query(query, values, function (err, result) {
+			var values = [taskId, taskId];
+
+			db.get().query(query, values, function (err, result) {
+				if (err) {
+					callback(err);
+				} else if (result[0].duplicateTasks > 0) {
+					callback('A duplicate task exists');
+				} else {
+					callback(null);
+				}
+			});
+		},
+		function(callback) {
+			var query = 'SELECT COUNT(*) AS duplicateTask FROM teamTaskRel WHERE taskId = ? AND teamId = ?';
+			var values = [taskId, teamId];
+
+			db.get().query(query, values, function(err, result) {
+				if (err) {
+					callback(err);
+				} else if (result[0].duplicateTask == 0) {
+					callback('There is no relation between this task and team');
+				}else {
+					callback(null);
+				}
+			});
+		},
+		function (callback) {
+			tasks.setTeamTaskStatus(taskId,teamId, 'PENDING', function(err, result){
+				if(err) {
+					callback(err);
+				} else {
+					callback(undefined);
+				}
+			});
+		}
+	], function (err) {
+		done(err, taskId, teamId);
+	});
+}
+
+tasks.submitTask = function(taskId, teamId, done) {
+	async.waterfall([
+		function (callback) {
+			var query = 'SELECT COUNT(*) AS duplicateTasks'
+				+ ' FROM tasks t1'
+				+ ' JOIN tasks t2 ON t1.scuntId = t2.scuntId AND t1.id <> t2.id AND t1.id = ? AND t2.id = ?'
+
+			var values = [taskId, taskId];
+
+			db.get().query(query, values, function (err, result) {
+				if (err) {
+					callback(err);
+				} else if (result[0].duplicateTasks > 0) {
+					callback('A duplicate task exists');
+				} else {
+					callback(null);
+				}
+			});
+		},
+		function(callback) {
+			var query = 'SELECT COUNT(*) AS duplicateTask FROM teamTaskRel WHERE taskId = ? AND teamId = ?';
+			var values = [taskId, teamId];
+
+			db.get().query(query, values, function(err, result) {
+				if (err) {
+					callback(err);
+				} else if (result[0].duplicateTask == 0) {
+					callback('There is no relation between this task and team');
+				}else {
+					callback(null);
+				}
+			});
+		},
+		function (callback) {
+			tasks.setTeamTaskStatus(taskId,teamId, 'SUBMITTED', function(err, result){
+				if(err) {
+					callback(err);
+				} else {
+					callback(undefined);
+				}
+			});
+		}
+	], function (err) {
+		done(err, taskId, teamId);
+	});
+}
+
+tasks.delete = function (taskId, done) {
+
+
+	async.waterfall([
+		function (callback) {
+
+			var query = 'SELECT COUNT(*) AS duplicateTasks'
+				+ ' FROM tasks t1'
+				+ ' JOIN tasks t2 ON t1.scuntId = t2.scuntId AND t1.id <> t2.id AND t1.id = ?'
+
+			var values = [taskId];
+
+			db.get().query(query, values, function (err, result) {
+				if (err) {
+					callback(err);
+				} else if (result[0].duplicateTasks > 0) {
+					callback('A duplicate task exists');
+				} else {
+					callback(null);
+				}
+			});
+		},
+		function (callback) {
+
+			var query = 'SELECT COUNT(*) AS numTasks'
+				+ ' FROM tasks'
+				+ ' WHERE id = ?'
+
+			var values = [taskId];
+
+			db.get().query(query, values, function (err, result) {
+				if (err) {
+					callback(err);
+				} else if (result[0].numTasks == 0) {
+					callback('There is no task with this id');
+				} else {
+					callback(null);
+				}
+			});
+		},
+		function (callback) {
+			// Create task entry
+			var query = 'DELETE FROM tasks WHERE id = ?';
+			values = [taskId];
+			db.get().query(query,values, function (err) {
+				if (err) {
+					callback(err);
+				} else {
+					callback(undefined, taskId);
+				}
+			});
+		}
+	], function (err) {
 		done(err);
 	});
 }
 
-tasks.getTaskStatus = function(teamId, taskId, done){
-	var query = 'SELECT status FROM teamTaskRel WHERE taskId = ? AND teamId = ?';
-	var values = [taskId, teamId];
+tasks.getTaskStatus = function(taskId,teamId, done){
+	async.waterfall([
+		function (callback) {
+			var query = 'SELECT COUNT(*) AS duplicateTasks'
+				+ ' FROM tasks t1'
+				+ ' JOIN tasks t2 ON t1.scuntId = t2.scuntId AND t1.id <> t2.id AND t1.id = ? AND t2.id = ?'
 
-	db.get().query(query, values, function(err, result){
-		done(err, result);
+			var values = [taskId, taskId];
+
+			db.get().query(query, values, function (err, result) {
+				if (err) {
+					callback(err);
+				} else if (result[0].duplicateTasks > 0) {
+					callback('A duplicate task exists');
+				} else {
+					callback(null);
+				}
+			});
+		},
+		function(callback) {
+			var query = 'SELECT COUNT(*) AS numTask FROM teamTaskRel WHERE taskId = ? AND teamId = ?';
+			var values = [taskId, teamId];
+
+			db.get().query(query, values, function(err, result) {
+				if (err) {
+					callback(err);
+				} else if (result[0].numTask == 0) {
+					callback('There is no relation between this task and team');
+				}else {
+					callback(null);
+				}
+			});
+		},
+		function (callback) {
+			var query = 'SELECT status FROM teamTaskRel WHERE taskId = ? AND teamId = ?';
+			var values = [taskId, teamId];
+
+			db.get().query(query, values, function(err, result){
+				done(err, result[0].status);
+			});
+		}
+	], function (err) {
+		done(err, taskId, teamId);
 	});
+
 }
 
 tasks.addComment = function(taskId, teamId, userId, comment, done) {

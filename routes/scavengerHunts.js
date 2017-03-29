@@ -64,9 +64,27 @@ router.post('/create-ScavengerHunt', function (req, res, next) {
   }
 });
 
-router.put('/start-scunt', function(req, res, next) {
+router.put('/publish-scunt', function(req, res, next) {
   var id = req.body.id;
 
+  if(id == null){
+    res.sendStatus(500);
+  }
+
+  scunt.publish(id, function (err, result) {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.sendStatus(200);
+    }
+  });
+});
+
+router.put('/start-scunt', function(req, res, next) {
+  var id = req.body.id;
+  if(id == null){
+    res.sendStatus(500);
+  }
   scunt.start(id, function (err, result) {
     if (err) {
       res.status(500).send(err);
