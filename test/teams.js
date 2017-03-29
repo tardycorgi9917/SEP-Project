@@ -678,6 +678,13 @@ describe('Teams Tests', function () {
                   callback(err,taskId,teamId);
                 });
               },
+                function(taskId,teamId, callback) {
+                    // Start the scavenger hunt
+                    tasks.submitTask(taskId,teamId, function(err) {
+                        assert.equal(err, null);
+                        callback(err,taskId,teamId);
+                    });
+                },
               function(taskId,teamId, callback) {
                 // Approve the task
                 tasks.approveTask(taskId, teamId, function(err) {
