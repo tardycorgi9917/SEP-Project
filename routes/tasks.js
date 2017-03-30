@@ -200,12 +200,12 @@ router.post('/change-task-status/', function(req, res, next){
 
 router.get('/list-comment', function(req, res, next) {
 	var taskId = req.query.taskId;
+	var teamId = req.query.teamId;
 	if(taskId == null){
 		res.sendStatus(500);
 	}
-	console.log(taskId);
 
-	tasks.listComment(taskId, function(err, result) {
+	tasks.listComment(taskId, teamId, function(err, result) {
 		if (err) {
 			res.sendStatus(500);
 		} else {

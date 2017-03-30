@@ -847,12 +847,12 @@ describe('Tasks Tests', function () {
 					tasks.addComment(taskId, teamId, leadId, comment, function(err, id) {
 						assert.notStrictEqual(id, null, 'Could not create comment, id was null');
 						assert.notStrictEqual(err, null, 'comment creation has some invalid sql ' + err);
-						callback(err, taskId);
+						callback(err, taskId, teamId);
 					})
 				},
-				function (taskId, callback) {
+				function (taskId, teamId, callback) {
 					// Comment on the scavenger hunt
-					tasks.listComment(taskId, function(err, res) {
+					tasks.listComment(taskId, teamId, function(err, res) {
 						assert.notStrictEqual(res, null, 'Could not list comment, res was null');
 						assert.notStrictEqual(err, undefined, 'Comment creation has some invalid sql ' + err);
 						callback(null);
