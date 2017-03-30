@@ -20,27 +20,27 @@ router.get('/task-list', function(req, res, next) {
 });
 
 router.get('/admin-task-list', function(req, res, next){
-    var scuntId = req.query.scuntId;
-    var isAdmin = req.query.isAdmin;
-    tasks.admin_list(scuntId, isAdmin, function(err, tasks){
-        if (err) {
+	var scuntId = req.query.scuntId;
+	var isAdmin = req.query.isAdmin;
+	tasks.admin_list(scuntId, isAdmin, function(err, tasks){
+		if (err) {
 			res.status(500).send(err);
 		} else {
 			res.send(tasks);
 		}
-    });
+	});
 });
 
 router.get('/team-task-list', function(req, res, next){
-    var scuntId = req.query.scuntId;
-    var userId = req.query.userId;
-    tasks.team_list(scuntId, userId, function(err, tasks){
-        if(err){
-            res.status(500).send(err);
-        } else{
-            res.send(tasks);
-        }
-    });
+	var scuntId = req.query.scuntId;
+	var userId = req.query.userId;
+	tasks.team_list(scuntId, userId, function(err, tasks){
+		if(err){
+			res.status(500).send(err);
+		} else{
+			res.send(tasks);
+		}
+	});
 })
 
 router.post('/create-task', function(req, res, next) {
@@ -156,38 +156,79 @@ router.delete('/delete-task/', function(req, res, next) {
 });
 
 router.get('/get-task-status/', function(req, res, next){
-    var teamId = req.query.teamId;
-    var taskId = req.query.taskId;
+	var teamId = req.query.teamId;
+	var taskId = req.query.taskId;
+	if(teamId == null){
+		res.sendStatus(500);
+	}
+	if(taskId == null){
+		res.sendStatus(500);
+	}
 
-    tasks.getTaskStatus(taskId, teamId, function(err, result){
-        if(err) {
-            res.sendStatus(500);
-        } else {
-            res.send(result);
-        }
-    })
+	tasks.getTaskStatus(taskId, teamId, function(err, result){
+		if(err) {
+			res.sendStatus(500);
+		} else {
+			res.send(result);
+		}
+	})
 });
 
 router.post('/change-task-status/', function(req, res, next){
-    var teamId = req.body.teamId;
-    var taskId = req.body.taskId;
-    var status = req.body.status;
+	var teamId = req.body.teamId;
+	var taskId = req.body.taskId;
+	var status = req.body.status;
+	if(teamId == null){
+		res.sendStatus(500);
+	}
+	if(taskId == null){
+		res.sendStatus(500);
+	}
+	if(status == null){
+		res.sendStatus(500);
+	}
 
-    tasks.setTeamTaskStatus(taskId, teamId, status, function(err, result){
-        if(err) {
-            console.log(err);
-            res.sendStatus(500);
-        } else {
-            res.sendStatus(200);
-        }
-    });
+	tasks.setTeamTaskStatus(taskId, teamId, status, function(err, result){
+		if(err) {
+			console.log(err);
+			res.sendStatus(500);
+		} else {
+			res.sendStatus(200);
+		}
+	});
+});
+
+router.get('/list-comment', function(req, res, next) {
+	var taskId = req.query.taskId;
+	if(taskId == null){
+		res.sendStatus(500);
+	}
+	console.log(taskId);
+
+	tasks.listComment(taskId, function(err, result) {
+		if (err) {
+			res.sendStatus(500);
+		} else {
+			res.send(result);
+		}
+	});
 });
 
 router.post('/add-comment', function(req, res, next) {
-    var taskId = req.body.taskId;
-    var teamId = req.body.teamId;
-    var userId = req.body.userId;
+  var taskId = req.body.taskId;
+  var teamId = req.body.teamId;
+  var userId = req.body.userId;
 	var comment = req.body.comment;
+
+	if(taskId == null){
+		res.sendStatus(500);
+	}
+	if(userId == null){
+		res.sendStatus(500);
+	}
+	if(comment == null){
+		res.sendStatus(500);
+	}
 
 	tasks.addComment(taskId, teamId, userId, comment, function(err, result) {
 		if (err) {
