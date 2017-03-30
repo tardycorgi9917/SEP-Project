@@ -565,10 +565,11 @@ tasks.addComment = function(taskId, userId, comment, done) {
 	});
 }
 
-tasks.listComment = function(taskId, done) {
-	var query = 'SELECT * FROM comments WHERE taskId = ?';
-	var values = [taskId];
-
+tasks.listComment = function(taskId, teamId, done) {
+	var query = 'select C.* from comments C '
+		+ ' join teamuserrel TU on (TU.userID = C.userId) '
+		+ ' where (C.taskId = ? and Tu.teamId = ?)';
+	var values = [taskId, teamId];
 	db.get().query(query, values, function(err, result) {
 		if (err) {
 			done(err);
