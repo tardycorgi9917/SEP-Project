@@ -758,7 +758,8 @@ describe('Tasks Tests', function () {
 				function (taskId, teamId, leadId, callback) {
 					// Comment on the scavenger hunt
 					var comment = "this is a test comment";
-					tasks.addComment(taskId, leadId, comment, function(err, id) {
+
+					tasks.addComment(taskId, teamId, leadId, comment, function(err, id) {
 						console.log('comment id: ' + id);
 						assert.notStrictEqual(id, null, 'Could not create comment, id was null');
 						assert.notStrictEqual(err, null, 'comment creation has some invalid sql ' + err);
@@ -770,7 +771,7 @@ describe('Tasks Tests', function () {
 				done();
 			});
 		});
-		
+
 		it('List Comment', function (done) {
 			async.waterfall([
 				function (callback) {
