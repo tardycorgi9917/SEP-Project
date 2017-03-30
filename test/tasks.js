@@ -835,7 +835,7 @@ describe('Tasks Tests', function () {
 				function (taskId, teamId, leadId, callback) {
 					// Comment on the scavenger hunt
 					var comment = "this is a test comment for list";
-					tasks.addComment(taskId, leadId, comment, function(err, id) {
+					tasks.addComment(taskId, teamId, leadId, comment, function(err, id) {
 						assert.notStrictEqual(id, null, 'Could not create comment, id was null');
 						assert.notStrictEqual(err, null, 'comment creation has some invalid sql ' + err);
 						callback(err, taskId,teamId,leadId);
@@ -844,7 +844,7 @@ describe('Tasks Tests', function () {
 				function (taskId, teamId, leadId, callback) {
 					// Comment on the scavenger hunt
 					var comment = "this is a second test comment for list";
-					tasks.addComment(taskId, leadId, comment, function(err, id) {
+					tasks.addComment(taskId, teamId, leadId, comment, function(err, id) {
 						assert.notStrictEqual(id, null, 'Could not create comment, id was null');
 						assert.notStrictEqual(err, null, 'comment creation has some invalid sql ' + err);
 						callback(err, taskId);
