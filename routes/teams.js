@@ -106,7 +106,7 @@ router.post('/update-team', function(req, res, next){
     });
 });
 
-router.post('/update-team-task', function(req, res, next){
+router.post('/update-team-link', function(req, res, next){
     var teamId = req.body.teamId;
     var driveLink = req.body.link;
 
