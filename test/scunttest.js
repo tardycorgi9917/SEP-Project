@@ -228,9 +228,9 @@ describe('Scunt test', function () {
           ("starteduser3", "startfname3", "startlname3", "startfname3@gmail.com", "1234", "1231231234", "1", "", "2017-01-01", "2017-01-01"),
           ("starteduser4", "startfname4", "startlname4", "startfname4@gmail.com", "1234", "1231231234", "1", "", "2017-01-01", "2017-01-01");
 
-          INSERT INTO teams (name, points, maxmembers, scuntId, createdAt, updatedAt) VALUES
-          ("startteam1", "0", "3", ?, "2016-01-01", "2017-01-01"),
-          ("startteam2", "0", "3", ?, "2016-01-01", "2017-01-01");
+          INSERT INTO teams (name, points, maxmembers, scuntId, driveLink, createdAt, updatedAt) VALUES
+          ("startteam1", "0", "3", ?,"https://drive.google.com/drive/folders/", "2016-01-01", "2017-01-01"),
+          ("startteam2", "0", "3", ?,"https://drive.google.com/drive/folders/", "2016-01-01", "2017-01-01");
 
           INSERT INTO teamUserRel (teamId, userId, userType, createdAt, updatedAt)
           SELECT teams.id, users.id, "participant", "2016-01-01", "2017-01-01" FROM teams JOIN users ON 1 = 1 WHERE users.username IN ("starteduser1", "starteduser2") AND teams.name = "startteam1"
@@ -293,9 +293,9 @@ describe('Scunt test', function () {
           ("startnopublishededuser3", "startnopublishedfname3", "startnopublishedlname3", "startnopublishedfname3@gmail.com", "1234", "1231231234", "1", "", "2017-01-01", "2017-01-01"),
           ("startnopublishededuser4", "startnopublishedfname4", "startnopublishedlname4", "startnopublishedfname4@gmail.com", "1234", "1231231234", "1", "", "2017-01-01", "2017-01-01");
 
-          INSERT INTO teams (name, points, maxmembers, scuntId, createdAt, updatedAt) VALUES
-          ("startnopublishedteam1", "0", "3", ?, "2016-01-01", "2017-01-01"),
-          ("startnopublishedteam2", "0", "3", ?, "2016-01-01", "2017-01-01");
+          INSERT INTO teams (name, points, maxmembers, scuntId, driveLink, createdAt, updatedAt) VALUES
+          ("startnopublishedteam1", "0", "3", ?,"https://drive.google.com/drive/folders/", "2016-01-01", "2017-01-01"),
+          ("startnopublishedteam2", "0", "3", ?,"https://drive.google.com/drive/folders/", "2016-01-01", "2017-01-01");
 
           INSERT INTO teamUserRel (teamId, userId, userType, createdAt, updatedAt)
           SELECT teams.id, users.id, "participant", "2016-01-01", "2017-01-01" FROM teams JOIN users ON 1 = 1 WHERE users.username IN ("startnopublishededuser1", "startnopublishededuser2") AND teams.name = "startnopublishedteam1"
@@ -353,9 +353,9 @@ describe('Scunt test', function () {
           ("closeduser3", "closefname3", "closelname3", "closefname3@gmail.com", "1234", "1231231234", "1", "", "2016-01-01", "2016-01-01"),
           ("closeduser4", "closefname4", "closelname4", "closefname4@gmail.com", "1234", "1231231234", "1", "", "2016-01-01", "2016-01-01");
 
-          INSERT INTO teams (name, points, maxmembers, scuntId, createdAt, updatedAt) VALUES
-          ("closeteam1", "0", "3", ?, "2016-01-01", "2016-01-01"),
-          ("closeteam2", "0", "3", ?, "2016-01-01", "2016-01-01");
+          INSERT INTO teams (name, points, maxmembers, scuntId, driveLink, createdAt, updatedAt) VALUES
+          ("closeteam1", "0", "3", ?, "https://drive.google.com/drive/folders/","2016-01-01", "2016-01-01"),
+          ("closeteam2", "0", "3", ?, "https://drive.google.com/drive/folders/","2016-01-01", "2016-01-01");
 
           INSERT INTO teamUserRel (teamId, userId, userType, createdAt, updatedAt)
           SELECT teams.id, users.id, "participant", "2016-01-01", "2016-01-01" FROM teams JOIN users ON 1 = 1 WHERE users.username IN ("closeduser1", "closeduser2") AND teams.name = "closeteam1"
@@ -442,9 +442,9 @@ describe('Scunt test', function () {
           ("closednostarteduser3", "closefnostartedname3", "closelname3", "closefnostartedname3@gmail.com", "1234", "1231231234", "1", "", "2016-01-01", "2016-01-01"),
           ("closednostarteduser4", "closefnostartedname4", "closelname4", "closefnostartedname4@gmail.com", "1234", "1231231234", "1", "", "2016-01-01", "2016-01-01");
 
-          INSERT INTO teams (name, points, maxmembers, scuntId, createdAt, updatedAt) VALUES
-          ("closeteam1", "0", "3", ?, "2016-01-01", "2016-01-01"),
-          ("closeteam2", "0", "3", ?, "2016-01-01", "2016-01-01");
+          INSERT INTO teams (name, points, maxmembers, scuntId, driveLink, createdAt, updatedAt) VALUES
+          ("closeteam1", "0", "3", ?, "https://drive.google.com/drive/folders/", "2016-01-01", "2016-01-01"),
+          ("closeteam2", "0", "3", ?, "https://drive.google.com/drive/folders/", "2016-01-01", "2016-01-01");
 
           INSERT INTO teamUserRel (teamId, userId, userType, createdAt, updatedAt)
           SELECT teams.id, users.id, "participant", "2016-01-01", "2016-01-01" FROM teams JOIN users ON 1 = 1 WHERE users.username IN ("closednostarteduser1", "closednostarteduser2") AND teams.name = "closeteam1"

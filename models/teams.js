@@ -21,7 +21,7 @@ teams.removeTeamUserRel = function(teamId, userId, done) {
     });
 }
 
-teams.create = function(name, points, maxmembers, scuntId, leaderId, done) {
+teams.create = function(name, points, maxmembers, scuntId, leaderId, driveLink, done) {
     var now = new Date();
 
     async.waterfall([
@@ -61,9 +61,9 @@ teams.create = function(name, points, maxmembers, scuntId, leaderId, done) {
         },
         function(callback) {
             // Create teams entry
-            var query = 'INSERT INTO teams (name, points, maxmembers, scuntId, createdAt, updatedAt) '
-                        + 'VALUES(?, ?, ?, ?, ?, ?)';
-            var values = [name, points, maxmembers, scuntId, now, now];
+            var query = 'INSERT INTO teams (name, points, maxmembers, scuntId, driveLink, createdAt, updatedAt) '
+                        + 'VALUES(?, ?, ?, ?, ?, ?, ?)';
+            var values = [name, points, maxmembers, scuntId, driveLink, now, now];
 
             db.get().query(query, values, function (err, result) {
                 if (err) {
@@ -317,10 +317,19 @@ teams.list = function(userId, done) {
     })
 }
 
-teams.update = function(teamId, name, points, maxmembers, scuntId, done) {
+teams.update = function(teamId, name, points, maxmembers, scuntId, driveLink, done) {
     var now = new Date();
-    var query = "UPDATE `teams` SET `name`=?,`points`=?,`maxMembers`=?,`scuntId`=?,`updatedAt`=? WHERE `id`=?";
-    var values = [name, points, maxmembers, scuntId, now, teamId];
+    var query = "UPDATE `teams` SET `name`=?,`points`=?,`maxMembers`=?,`scuntId`=?,`driveLink`=?, `updatedAt`=? WHERE `id`=?";
+    var values = [name, points, maxmembers, scuntId,driveLink, now, teamId];
+    db.get().query(query, values, function(err, res){
+        done(err);
+    });
+}
+
+teams.updateDriveLink = function(teamId, driveLink, done) {
+    var now = new Date();
+    var query = "UPDATE `teams` SET `driveLink`=?, `updatedAt`=? WHERE `id`=?";
+    var values = [driveLink, now, teamId];
     db.get().query(query, values, function(err, res){
         done(err);
     });

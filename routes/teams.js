@@ -26,8 +26,9 @@ router.post('/create-team', function(req, res, next) {
     var maxmembers = req.body.maxmembers;
     var scuntId = req.body.scuntId;
     var leaderId = req.body.leaderId;
+    var driveLink = req.body.link;
 
-    teams.create(name, points, maxmembers, scuntId, leaderId, function (err, id) {
+    teams.create(name, points, maxmembers, scuntId, leaderId, driveLink, function (err, id) {
         if (err) {
             res.status(500).send(err);
             console.log(err);
@@ -94,8 +95,22 @@ router.post('/update-team', function(req, res, next){
     var points = req.body.points;
     var maxmembers = req.body.maxmembers;
     var scuntId = req.body.scuntId;
+    var driveLink = req.body.link;
 
-    teams.update(teamId, name, points, maxmembers, scuntId, function(err){
+    teams.update(teamId, name, points, maxmembers, scuntId, driveLink, function(err){
+        if(err){
+            res.status(500).send(err);
+        } else {
+            res.sendStatus(200);
+        }
+    });
+});
+
+router.post('/update-team-task', function(req, res, next){
+    var teamId = req.body.teamId;
+    var driveLink = req.body.link;
+
+    teams.update(teamId, driveLink, function(err){
         if(err){
             res.status(500).send(err);
         } else {
