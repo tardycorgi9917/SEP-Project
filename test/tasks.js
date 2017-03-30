@@ -847,7 +847,7 @@ describe('Tasks Tests', function () {
 					tasks.addComment(taskId, teamId, leadId, comment, function(err, id) {
 						assert.notStrictEqual(id, null, 'Could not create comment, id was null');
 						assert.notStrictEqual(err, null, 'comment creation has some invalid sql ' + err);
-						callback(err, taskId);
+						callback(err, taskId, teamId);
 					})
 				},
 				function (taskId, teamId, callback) {
