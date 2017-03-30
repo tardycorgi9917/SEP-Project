@@ -18,27 +18,18 @@ tasks.admin_list = function(scuntId, isAdmin, done){
 }
 
 tasks.team_list = function(scuntId, userId, done){
-	async.waterfall([
-		function(callback){
-			teams.getTeamId(userId, function(err, teamId){
-				if(err) callback(err)
-				else callback(null, teamId)
-			});
-		}, function(teamId, callback){
-			var query = `
+	var query = `
 				SELECT teamTaskRel.status, teamTaskRel.teamId, tasks.*
 				FROM tasks
 				JOIN teamTaskRel ON tasks.id = teamTaskRel.taskId
-				WHERE tasks.scuntId = ? AND teamTaskRel.teamId = ?
-			`
-			var values = [scuntId, teamId];
-			db.get().query(query, values, function(err, result){
-				callback(err, result);
-			});
-
-		}
-	], function(err, result){
-		done(err, result)
+				JOIN teamUserRel ON teamTaskRel.teamId = teamUserRel.teamId
+				WHERE tasks.scuntId = ? AND teamUserRel.userId = ?				
+				`;
+				
+	var values = [scuntId, userId];
+	
+	db.get().query(query, values, function (err, result) {
+		done(err, result);
 	});
 }
 
@@ -551,9 +542,9 @@ tasks.getTaskStatus = function(taskId,teamId, done){
 
 }
 
-tasks.addComment = function(taskId, userId, comment, done) {
-	var query = 'INSERT INTO comments (taskId, userId, comment, createdAt) VALUES (?, ?, ?, ?)';
-	var values = [taskId, userId, comment, new Date()];
+tasks.addComment = function(taskId, teamId, userId, comment, done) {
+	var query = 'INSERT INTO comments (taskId, teamId, userId, comment, createdAt) VALUES (?, ?, ?, ?, ?)';
+	var values = [taskId, teamId, userId, comment, new Date()];
 
 	db.get().query(query, values, function(err, result) {
 		if (err) {

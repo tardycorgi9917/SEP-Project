@@ -215,9 +215,11 @@ router.get('/list-comment', function(req, res, next) {
 });
 
 router.post('/add-comment', function(req, res, next) {
-	var taskId = req.body.taskId;
-	var userId = req.body.userId;
+  var taskId = req.body.taskId;
+  var teamId = req.body.teamId;
+  var userId = req.body.userId;
 	var comment = req.body.comment;
+
 	if(taskId == null){
 		res.sendStatus(500);
 	}
@@ -228,7 +230,7 @@ router.post('/add-comment', function(req, res, next) {
 		res.sendStatus(500);
 	}
 
-	tasks.addComment(taskId, userId, comment, function(err, result) {
+	tasks.addComment(taskId, teamId, userId, comment, function(err, result) {
 		if (err) {
 			res.sendStatus(500);
 		} else {
