@@ -1,10 +1,10 @@
 var config = {
     development: {
         database: {
-            host:'localhost',
-            db: 'sep_db',
-            user:'root',
-            password: '',
+            host:'192.168.123.10',
+            db: 'dbname',
+            user:'dbuser',
+            password: 'test123',
         },
     },
    test : {
