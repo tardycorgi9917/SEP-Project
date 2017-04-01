@@ -1,5 +1,6 @@
 var db = require("../database/db.js");
 var async = require('async');
+var users = require("./users");
 
 var teams = {}
 
@@ -21,11 +22,21 @@ teams.removeTeamUserRel = function(teamId, userId, done) {
     });
 }
 
-teams.create = function(name, points, maxmembers, scuntId, leaderId, driveLink, done) {
+teams.create = function(name, points, maxmembers, scuntId, leaderUsername, driveLink, done) {
     var now = new Date();
 
     async.waterfall([
         function(callback) {
+            // get user id from username
+            users.findByUsername(leaderUsername, function(err, res) {
+                if (res.length <= 0 || err) {
+                    callback(err || "user not found", null);
+                } else {
+                    callback(null, res[0].id);
+                }
+            });
+        },
+        function(leaderId, callback) {
             // Check if there is a team with the same name
             var query = 'SELECT COUNT(*) AS duplicateTeam FROM teams WHERE name = ? AND scuntId = ?';
             var values = [name, scuntId];
@@ -36,11 +47,11 @@ teams.create = function(name, points, maxmembers, scuntId, leaderId, driveLink, 
                 } else if (result[0].duplicateTeam > 0) {
                     callback('A team with this name already exists in this scavenger hunt');
                 } else {
-                    callback(null);
+                    callback(null, leaderId);
                 }
             });
         },
-        function(callback) {
+        function(leaderId, callback) {
             // Check if user that already has a team is creating another team
             var query = 'SELECT COUNT(*) AS userAlreadyInTeam '
                         + 'FROM teamUserRel '
@@ -55,14 +66,17 @@ teams.create = function(name, points, maxmembers, scuntId, leaderId, driveLink, 
                 } else if (result[0].userAlreadyInTeam > 0) {
                     callback('User already has a team');
                 } else {
-                    callback(null);
+                    callback(null, leaderId);
                 }
             });
         },
-        function(callback) {
+        function(leaderId, callback) {
             // Create teams entry
             var query = 'INSERT INTO teams (name, points, maxmembers, scuntId, driveLink, createdAt, updatedAt) '
                         + 'VALUES(?, ?, ?, ?, ?, ?, ?)';
+					  
+            if (!driveLink) driveLink = "test";
+                      
             var values = [name, points, maxmembers, scuntId, driveLink, now, now];
 
             db.get().query(query, values, function (err, result) {
@@ -70,11 +84,11 @@ teams.create = function(name, points, maxmembers, scuntId, leaderId, driveLink, 
                     callback(err);
                 } else {
                     var teamId = result.insertId;
-                    callback(undefined, teamId)
+                    callback(undefined, teamId, leaderId);
                 }
             });
         },
-        function(teamId, callback) {
+        function(teamId, leaderId, callback) {
             // Add the user to his team
             teams.createTeamUserRel(teamId, leaderId, 'leader', function (err, result) {
                 callback(err, teamId);

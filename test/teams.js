@@ -40,13 +40,13 @@ describe('Teams Tests', function () {
                     var profilepic = '';
                     var date = new Date();
                     users.create(username, firstName, lastName, email, pwd, phonenumber, isAdmin, profilepic, date, function (err, id) {
-                        callback(err, scuntId, id);
+                        callback(err, scuntId, id, username);
                     });
                 },
-                function (scuntId, userId, callback) {
+                function (scuntId, userId, username, callback) {
                     // Create team
                     var name = 'testteam';
-                    teams.create(name, 0, 2, scuntId, userId,"https://drive.google.com/drive/folders/", function (err, id) {
+                    teams.create(name, 0, 2, scuntId, username,"https://drive.google.com/drive/folders/", function (err, id) {
                         assert.notStrictEqual(id, null, 'Could not create team, id was null');
                         assert.strictEqual(err, null, 'teams create has some invalid sql ' + err);
 
@@ -68,10 +68,10 @@ describe('Teams Tests', function () {
         it('Team should not be created successfully when scavenger hunt does not exist', function (done) {
             var name = 'testteamname';
             var scuntId = '-1';
-            var leaderId = '1';
+            var leadername = 'qfdffkqlemf';
 
-            teams.create(name, 0, 2, scuntId, leaderId,"https://drive.google.com/drive/folders/", function (err, id) {
-                assert.strictEqual(id, undefined);
+            teams.create(name, 0, 2, scuntId, leadername,"https://drive.google.com/drive/folders/", function (err, id) {
+                assert.strictEqual(id, null);
                 done();
             });
         });
@@ -98,10 +98,10 @@ describe('Teams Tests', function () {
                     var isAdmin = true;
                     var date = new Date();
                     users.create(username, firstName, lastName, email, pwd, phonenumber, isAdmin, profilepic, date, function (err, id) {
-                        callback(err, scuntId, id);
+                        callback(err, scuntId, id, username);
                     });
                 },
-                function (scuntId, user1Id, callback) {
+                function (scuntId, user1Id, user1name, callback) {
                     // Create user 2
                     var username = 'user2';
                     var firstName = 'fname2';
@@ -113,21 +113,21 @@ describe('Teams Tests', function () {
                     var profilepic = '';
                     var date = new Date();
                     users.create(username, firstName, lastName, email, pwd, phonenumber, isAdmin, profilepic, date, function (err, id) {
-                        callback(err, scuntId, user1Id, id);
+                        callback(err, scuntId, user1Id, user1name, id, username);
                     });
                 },
-                function (scuntid, user1id, user2id, callback) {
+                function (scuntid, user1id, user1name, user2id, user2name, callback) {
                     // create team 1
                     var name = 'testteam';
-                    teams.create(name, 0, 2, scuntid, user1id,"https://drive.google.com/drive/folders/", function (err, id) {
+                    teams.create(name, 0, 2, scuntid, user1name,"https://drive.google.com/drive/folders/", function (err, id) {
                         assert.strictEqual(err, null, 'teams create has some invalid sql ' + err);
-                        callback(err, scuntid, user2id);
+                        callback(err, scuntid, user2id, user2name);
                     });
                 },
-                function (scuntId, user2Id, callback) {
+                function (scuntId, user2Id, user2name, callback) {
                     // Create team 2 with the same name
                     var name = 'testteam';
-                    teams.create(name, 0, 2, scuntId, user2Id,"https://drive.google.com/drive/folders/", function (err, id) {
+                    teams.create(name, 0, 2, scuntId, user2name,"https://drive.google.com/drive/folders/", function (err, id) {
                         assert.strictEqual(err, 'A team with this name already exists in this scavenger hunt');
                         assert.strictEqual(id, undefined, 'Team should not have been created');
                         callback(null);
@@ -161,21 +161,21 @@ describe('Teams Tests', function () {
                     var profilepic = '';
                     var date = new Date();
                     users.create(username, firstName, lastName, email, pwd, phonenumber, isAdmin, profilepic, date, function (err, id) {
-                        callback(err, scuntId, id);
+                        callback(err, scuntId, id, username);
                     });
                 },
-                function (scuntId, userId, callback) {
+                function (scuntId, userId, username, callback) {
                     // create team 3
                     var name = 'teamtest3';
-                    teams.create(name, 0, 2, scuntId, userId,"https://drive.google.com/drive/folders/", function (err, id) {
+                    teams.create(name, 0, 2, scuntId, username,"https://drive.google.com/drive/folders/", function (err, id) {
                         assert.strictEqual(err, null, 'teams create has some invalid sql ' + err);
-                        callback(err, scuntId, userId);
+                        callback(err, scuntId, userId, username);
                     });
                 },
-                function (scuntId, userId, callback) {
+                function (scuntId, userId, username, callback) {
                     // create team 4
                     var name = 'teamtest4';
-                    teams.create(name, 0, 2, scuntId, userId,"https://drive.google.com/drive/folders/", function (err, id) {
+                    teams.create(name, 0, 2, scuntId, username,"https://drive.google.com/drive/folders/", function (err, id) {
                         assert.strictEqual(err, "User already has a team");
                         callback(null);
                     });
@@ -216,13 +216,13 @@ describe('Teams Tests', function () {
                     var profilepic = '';
                     var date = new Date();
                     users.create(username, firstName, lastName, email, pwd, phonenumber, isAdmin, profilepic, date, function (err, id) {
-                        callback(err, scuntId, id);
+                        callback(err, scuntId, id, username);
                     });
                 },
-                function (scuntId, userId, callback) {
+                function (scuntId, userId, username, callback) {
                     // create team 4
                     var name = 'teamtest4';
-                    teams.create(name, 0, 2, scuntId, userId,"https://drive.google.com/drive/folders/", function (err, id) {
+                    teams.create(name, 0, 2, scuntId, username,"https://drive.google.com/drive/folders/", function (err, id) {
                         assert.strictEqual(err, null, 'teams create has some invalid sql ' + err);
                         callback(err, id);
                     });
@@ -281,14 +281,14 @@ describe('Teams Tests', function () {
                     var profilepic = '';
                     var date = new Date();
                     users.create(username, firstName, lastName, email, pwd, phonenumber,isAdmin, profilepic, date, function (err, id) {
-                        callback(err, ScuntId, id);
+                        callback(err, ScuntId, id, username);
                     });                   
                 } 
                 ,
-                function(scuntId, userId, callback)
+                function(scuntId, userId, username, callback)
                 {
                     var name = 'teamNumbaWan';
-                    teams.create(name, 0, 2, scuntId, userId,"https://drive.google.com/drive/folders/", function (err, id) {
+                    teams.create(name, 0, 2, scuntId, username,"https://drive.google.com/drive/folders/", function (err, id) {
                         assert.strictEqual(err, null, 'teams create has some invalid sql ' + err);
                         callback(err, id);
                     });
@@ -334,10 +334,10 @@ describe('Teams Tests', function () {
                     var profilepic = '';
                     var date = new Date();
                     users.create(username, firstName, lastName, email, pwd, phonenumber, isAdmin, profilepic, date, function (err, id) {
-                        callback(err, scuntId, id);
+                        callback(err, scuntId, id, username);
                     });
                 },
-                function (scuntId, user1Id, callback) {
+                function (scuntId, user1Id, user1name, callback) {
                     // Create user 2
                     var username = 'user6';
                     var firstName = 'fname6';
@@ -349,13 +349,13 @@ describe('Teams Tests', function () {
                     var profilepic = '';
                     var date = new Date();
                     users.create(username, firstName, lastName, email, pwd, phonenumber, isAdmin, profilepic, date, function (err, id) {
-                        callback(err, scuntId, user1Id, id);
+                        callback(err, scuntId, user1Id, user1name, id);
                     });
                 },
-                function (scuntId, user1Id, user2Id, callback) {
+                function (scuntId, user1Id, user1name, user2Id, callback) {
                     // create team 3
                     var name = 'teamtest6';
-                    teams.create(name, 0, 2, scuntId, user1Id,"https://drive.google.com/drive/folders/", function (err, id) {
+                    teams.create(name, 0, 2, scuntId, user1name,"https://drive.google.com/drive/folders/", function (err, id) {
                         assert.strictEqual(err, null, 'teams create has some invalid sql ' + err);
                         callback(err, id, user2Id);
                     });
@@ -394,10 +394,10 @@ describe('Teams Tests', function () {
                     var profilepic = '';
                     var date = new Date();
                     users.create(username, firstName, lastName, email, pwd, phonenumber, isAdmin, profilepic, date, function (err, id) {
-                        callback(err, scuntId, id);
+                        callback(err, scuntId, id, username);
                     });
                 },
-                function (scuntId, user1Id, callback) {
+                function (scuntId, user1Id, user1name, callback) {
                     // Create user 2
                     var username = 'user8';
                     var firstName = 'fname8';
@@ -409,21 +409,21 @@ describe('Teams Tests', function () {
                     var profilepic = '';
                     var date = new Date();
                     users.create(username, firstName, lastName, email, pwd, phonenumber, isAdmin, profilepic, date, function (err, id) {
-                        callback(err, scuntId, user1Id, id);
+                        callback(err, scuntId, user1Id, user1name, id, username);
                     });
                 },
-                function (scuntId, user1Id, user2Id, callback) {
+                function (scuntId, user1Id, user1name, user2Id, user2name, callback) {
                     // create team 1
                     var name = 'teamtest7';
-                    teams.create(name, 0, 2, scuntId, user1Id,"https://drive.google.com/drive/folders/", function (err, id) {
+                    teams.create(name, 0, 2, scuntId, user1name,"https://drive.google.com/drive/folders/", function (err, id) {
                         assert.strictEqual(err, null, 'teams create has some invalid sql ' + err);
-                        callback(err, scuntId, user1Id, user2Id, id);
+                        callback(err, scuntId, user1Id, user1name, user2Id, user2name, id);
                     });
                 },
-                function (scuntId, user1Id, user2Id, team1Id, callback) {
+                function (scuntId, user1Id, user1name, user2Id, user2name, team1Id, callback) {
                     // create team 2
                     var name = 'teamtest8';
-                    teams.create(name, 0, 2, scuntId, user2Id,"https://drive.google.com/drive/folders/", function (err, id) {
+                    teams.create(name, 0, 2, scuntId, user2name,"https://drive.google.com/drive/folders/", function (err, id) {
                         assert.strictEqual(err, null, 'teams create has some invalid sql ' + err);
                         callback(err, user1Id, user2Id, team1Id, id);
                     });
@@ -462,10 +462,10 @@ describe('Teams Tests', function () {
                     var profilepic = '';
                     var date = new Date();
                     users.create(username, firstName, lastName, email, pwd, phonenumber, isAdmin, profilepic, date, function (err, id) {
-                        callback(err, scuntId, id);
+                        callback(err, scuntId, id, username);
                     });
                 },
-                function (scuntId, user1Id, callback) {
+                function (scuntId, user1Id, user1name, callback) {
                     // Create user 2
                     var username = 'user10';
                     var firstName = 'fname10';
@@ -477,21 +477,21 @@ describe('Teams Tests', function () {
                     var profilepic = '';
                     var date = new Date();
                     users.create(username, firstName, lastName, email, pwd, phonenumber, isAdmin, profilepic, date, function (err, id) {
-                        callback(err, scuntId, user1Id, id);
+                        callback(err, scuntId, user1Id, user1name, id, username);
                     });
                 },
-                function (scuntId, user1Id, user2Id, callback) {
+                function (scuntId, user1Id, user1name, user2Id, user2name, callback) {
                     // create team 1
                     var name = 'teamtest7';
-                    teams.create(name, 0, 2, scuntId, user1Id,"https://drive.google.com/drive/folders/", function (err, id) {
+                    teams.create(name, 0, 2, scuntId, user1name,"https://drive.google.com/drive/folders/", function (err, id) {
                         assert.strictEqual(err, null, 'teams create has some invalid sql ' + err);
-                        callback(err, scuntId, user1Id, user2Id, id);
+                        callback(err, scuntId, user1Id, user1name, user2Id, user2name, id);
                     });
                 },
-                function (scuntId, user1Id, user2Id, team1Id, callback) {
+                function (scuntId, user1Id, user1name, user2Id, user2name, team1Id, callback) {
                     // create team 2
                     var name = 'teamtest8';
-                    teams.create(name, 0, 2, scuntId, user2Id,"https://drive.google.com/drive/folders/", function (err, id) {
+                    teams.create(name, 0, 2, scuntId, user2name,"https://drive.google.com/drive/folders/", function (err, id) {
                         assert.strictEqual(err, null, 'teams create has some invalid sql ' + err);
                         callback(err, user1Id, user2Id, team1Id, id);
                     });
@@ -548,12 +548,16 @@ describe('Teams Tests', function () {
                     var date = new Date();
                     users.create(username, firstName, lastName, email, pwd, phonenumber, isAdmin, profilepic, date, function (err, id) {
                         userId = [];
+                        usernames = [];
+						
                         userId.push(id);
-                        callback(err, scuntId, userId);
+                        usernames.push(username)
+                        
+                        callback(err, scuntId, userId, usernames);
                     });                   
 
                 },
-                function(scuntId, userId, callback ){
+                function(scuntId, userId, usernames, callback){
                     var username = 'Freshmeat2';
                     var firstName = 'fname9';
                     var lastName = 'lname';
@@ -565,18 +569,19 @@ describe('Teams Tests', function () {
                     var date = new Date();
                     users.create(username, firstName, lastName, email, pwd, phonenumber, isAdmin, profilepic, date, function (err, id2) {
                         userId.push(id2);
-                        callback(err, scuntId, userId);
+                        usernames.push(username);
+                        callback(err, scuntId, userId, usernames);
                     });                    
                 },
-                function (scuntId, userId, callback) {
+                function (scuntId, userId, usernames, callback) {
                     // create team 1
                     var name = 'wanker1';
-                    teams.create(name, 0, 2, scuntId, userId[0], "https://drive.google.com/drive/folders/",function (err, id) {
+                    teams.create(name, 0, 2, scuntId, usernames[0], "https://drive.google.com/drive/folders/",function (err, id) {
                         assert.strictEqual(err, null, 'teams create has some invalid sql ' + err);
-                        callback(err,userId, id);
+                        callback(err,userId, usernames, id);
                     });
                 },
-                function(userId,teamId , callback) {
+                function(userId, usernames, teamId , callback) {
                     teams.join("Freshmeat2", teamId, false, function(err) {
                         assert.strictEqual(err, null);
                         callback(err, userId, teamId);
@@ -648,12 +653,12 @@ describe('Teams Tests', function () {
                     function(err, result){
                         assert.strictEqual(err, null);
                         assert.notStrictEqual(result, null);
-                        callback(null, id,result);
+                        callback(null, id, result, username);
                     }
                 );
               },
-              function(scuntId,leadId, callback) {
-                teams.create("listPointsTeam", 0, 3, scuntId, leadId,"https://drive.google.com/drive/folders/", function(err, res) {
+              function(scuntId, leadId, leadname, callback) {
+                teams.create("listPointsTeam", 0, 3, scuntId, leadname,"https://drive.google.com/drive/folders/", function(err, res) {
                   callback(err, scuntId,res);
                 });
               },
@@ -740,15 +745,15 @@ describe('Teams Tests', function () {
                     users.create(username, firstName, lastName, email, pwd, phonenumber, isAdmin, profilepic, date, function (err, id) {
                         userId = [];
                         userId.push(id);
-                        callback(err, scuntId, userId);
+                        callback(err, scuntId, userId, username);
                     });                   
                 },
-                function (scuntId, userId, callback) {
+                function (scuntId, userId, username, callback) {
                     // create team 1
                     var name = 'wanker1';
-                    teams.create(name, 0, 2, scuntId, userId,"https://drive.google.com/drive/folders/", function (err, id) {
+                    teams.create(name, 0, 2, scuntId, username,"https://drive.google.com/drive/folders/", function (err, id) {
                         assert.strictEqual(err, null, 'teams create has some invalid sql ' + err);
-                        callback(err,userId, id);
+                        callback(err, userId, id);
                     });
                 },
                 function(userId, teamId, callback) {
