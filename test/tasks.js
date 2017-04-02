@@ -263,12 +263,12 @@ describe('Tasks Tests', function () {
 						function(err, result){
 							assert.strictEqual(err, null);
 							assert.notStrictEqual(result, null);
-							callback(null, id,result);
+							callback(null, id, result, username);
 						}
 					);
 				},
-				function(scuntId,leadId, callback) {
-					teams.create("taskApproveteam1", 0,3,scuntId,leadId,"https://drive.google.com/drive/folders/", function(err, res) {
+				function(scuntId,leadId, leadname, callback) {
+					teams.create("taskApproveteam1", 0,3,scuntId,leadname,"https://drive.google.com/drive/folders/", function(err, res) {
 						callback(err, scuntId,res);
 					});
 				},
@@ -349,12 +349,12 @@ describe('Tasks Tests', function () {
 						function(err, result){
 							assert.strictEqual(err, null);
 							assert.notStrictEqual(result, null);
-							callback(null, id,result);
+							callback(null, id, result, username);
 						}
 					);
 				},
-				function(scuntId,leadId, callback) {
-					teams.create("taskbadApproveteam1", 0,3,scuntId,leadId,"https://drive.google.com/drive/folders/", function(err, res) {
+				function(scuntId, leadId, leadname, callback) {
+					teams.create("taskbadApproveteam1", 0,3,scuntId,leadname,"https://drive.google.com/drive/folders/", function(err, res) {
 						callback(err, scuntId,res);
 					});
 				},
@@ -422,12 +422,12 @@ describe('Tasks Tests', function () {
 					function(err, result){
 						assert.strictEqual(err, null);
 						assert.notStrictEqual(result, null);
-						callback(null, id,result);
+						callback(null, id,result, username);
 					}
 				);
 				},
-				function(scuntId,leadId, callback) {
-				teams.create("taskRejectteam1", 0,3,scuntId,leadId,"https://drive.google.com/drive/folders/", function(err, res) {
+				function(scuntId,leadId, leadname, callback) {
+				teams.create("taskRejectteam1", 0,3,scuntId,leadname,"https://drive.google.com/drive/folders/", function(err, res) {
 					callback(err, scuntId,res);
 				});
 				},
@@ -508,32 +508,32 @@ describe('Tasks Tests', function () {
 					function(err, result){
 						assert.strictEqual(err, null);
 						assert.notStrictEqual(result, null);
-						callback(null, id,result);
+						callback(null, id,result, username);
 					}
 				);
 				},
-				function(scuntId,leadId, callback) {
-				teams.create("taskbadRejectteam1", 0,3,scuntId,leadId,"https://drive.google.com/drive/folders/", function(err, res) {
-					callback(err, scuntId,res);
-				});
+				function(scuntId,leadId, leadname, callback) {
+					teams.create("taskbadRejectteam1", 0, 3, scuntId, leadname, "https://drive.google.com/drive/folders/", function (err, res) {
+						callback(err, scuntId, res);
+					});
 				},
 				function(scuntId,teamId, callback) {
-				// Start the scavenger hunt
-				var taskName = 'task number 5';
-				var taskDescription = 'This is the task number 5';
-				var points = 2;
-				tasks.create(taskName, taskDescription, points, scuntId, function (err, id) {
-					assert.notStrictEqual(id, null, 'Could not create tasks, id was null');
-					assert.strictEqual(err, null, 'tasks create has some invalid sql ' + err);
-					callback(err, scuntId,id,teamId);
-				});
+					// Start the scavenger hunt
+					var taskName = 'task number 5';
+					var taskDescription = 'This is the task number 5';
+					var points = 2;
+					tasks.create(taskName, taskDescription, points, scuntId, function (err, id) {
+						assert.notStrictEqual(id, null, 'Could not create tasks, id was null');
+						assert.strictEqual(err, null, 'tasks create has some invalid sql ' + err);
+						callback(err, scuntId, id, teamId);
+					});
 				},
 				function(scuntId,taskId,teamId, callback) {
-				// Start the scavenger hunt
-				scunts.start(scuntId, function(err) {
-					assert.equal(err, null);
-					callback(err,taskId,teamId);
-				});
+					// Start the scavenger hunt
+					scunts.start(scuntId, function (err) {
+						assert.equal(err, null);
+						callback(err, taskId, teamId);
+					});
 				},
 				function(taskId,teamId, callback) {
 				// Start the scavenger hunt
@@ -582,12 +582,12 @@ describe('Tasks Tests', function () {
 							function(err, result){
 								assert.strictEqual(err, null);
 								assert.notStrictEqual(result, null);
-								callback(null, id,result);
+								callback(null, id,result, username);
 							}
 						);
 				},
-				function(scuntId,leadId, callback) {
-					teams.create("taskSubmitteam1", 0,3,scuntId,leadId,"https://drive.google.com/drive/folders/", function(err, res) {
+				function(scuntId,leadId, leadname, callback) {
+					teams.create("taskSubmitteam1", 0,3,scuntId,leadname,"https://drive.google.com/drive/folders/", function(err, res) {
 						callback(err, scuntId,res);
 					});
 				},
@@ -660,12 +660,12 @@ describe('Tasks Tests', function () {
 							function(err, result){
 								assert.strictEqual(err, null);
 								assert.notStrictEqual(result, null);
-								callback(null, id,result);
+								callback(null, id,result, username);
 							}
 						);
 				},
-				function(scuntId,leadId, callback) {
-					teams.create("taskbadSubmitteam1", 0,3,scuntId,leadId,"https://drive.google.com/drive/folders/", function(err, res) {
+				function(scuntId,leadId, leadname, callback) {
+					teams.create("taskbadSubmitteam1", 0,3,scuntId,leadname,"https://drive.google.com/drive/folders/", function(err, res) {
 						callback(err, scuntId,res);
 					});
 				},
@@ -727,13 +727,13 @@ describe('Tasks Tests', function () {
 						function (err, result) {
 							assert.strictEqual(err, null);
 							assert.notStrictEqual(result, null);
-							callback(null, id, result);
+							callback(null, id, result, username);
 						}
 					);
 				},
-				function (scuntId, leadId, callback) {
+				function (scuntId, leadId, leadname, callback) {
 					// Create the team
-					teams.create("taskcommentteam1", 0, 3, scuntId, leadId,"https://drive.google.com/drive/folders/", function (err, res) {
+					teams.create("taskcommentteam1", 0, 3, scuntId, leadname,"https://drive.google.com/drive/folders/", function (err, res) {
 						callback(err, scuntId, res, leadId);
 					});
 				},
@@ -804,13 +804,13 @@ describe('Tasks Tests', function () {
 						function (err, result) {
 							assert.strictEqual(err, null);
 							assert.notStrictEqual(result, null);
-							callback(null, id, result);
+							callback(null, id, result, username);
 						}
 					);
 				},
-				function (scuntId, leadId, callback) {
+				function (scuntId, leadId, leadname, callback) {
 					// Create the team
-					teams.create("taskcommentteam2", 0, 3, scuntId, leadId,"https://drive.google.com/drive/folders/", function (err, res) {
+					teams.create("taskcommentteam2", 0, 3, scuntId, leadname,"https://drive.google.com/drive/folders/", function (err, res) {
 						callback(err, scuntId, res, leadId);
 					});
 				},

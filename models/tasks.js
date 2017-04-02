@@ -557,8 +557,13 @@ tasks.addComment = function(taskId, teamId, userId, comment, done) {
 }
 
 tasks.listComment = function(taskId, teamId, done) {
-	var query = 'select * from comments '
-		+ ' where (taskId = ? and teamId = ?)';
+	var query = `
+		SELECT comments.*, users.username
+		FROM comments
+		JOIN users ON comments.userId = users.id
+		WHERE comments.taskId = ? and comments.teamId = ?
+	`;
+	
 	var values = [taskId, teamId];
 	db.get().query(query, values, function(err, result) {
 		if (err) {
