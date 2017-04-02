@@ -256,11 +256,11 @@ teams.list = function(userId, done) {
         function(isAdmin, callback) {
             // Get all teams
             if (isAdmin) {
-                var query = "SELECT t.id, t.name, t.points, t.maxMembers, t.scuntId, t.createdAt, t.updatedAt, 1 as hasJoined FROM teams t";
+                var query = "SELECT t.id, t.name, t.points, t.maxMembers, t.scuntId, t.driveLink, t.createdAt, t.updatedAt, 1 as hasJoined FROM teams t";
             } else {
                 var query = `
                     SELECT * FROM (
-                        SELECT t.id, t.name, t.points, t.maxMembers, t.scuntId, t.createdAt, t.updatedAt, MIN(t.hasJoined) AS hasJoined
+                        SELECT t.id, t.name, t.points, t.maxMembers, t.scuntId, t.driveLink, t.createdAt, t.updatedAt, MIN(t.hasJoined) AS hasJoined
                         FROM (
                             SELECT teams.*, 1 AS hasJoined
                             FROM teams
@@ -272,7 +272,7 @@ teams.list = function(userId, done) {
                             JOIN teamUserRel ON teams.id = teamUserRel.teamId
                             WHERE teamUserRel.userId = ?
                         ) AS t
-                        GROUP BY t.id, t.name, t.points, t.maxMembers, t.scuntId, t.createdAt, t.updatedAt
+                        GROUP BY t.id, t.name, t.points, t.maxMembers, t.scuntId, t.driveLink, t.createdAt, t.updatedAt
                     ) AS t2
                     ORDER BY t2.hasJoined`;
             }
